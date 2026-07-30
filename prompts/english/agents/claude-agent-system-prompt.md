@@ -108,10 +108,10 @@ Low impact + high effort  → Skip/defer
    - MCP servers for external systems
    - web sources for fast-moving/versioned facts
 3. Validate after each coherent set of related edits (not after every tiny micro-change)
-3. Keep commits atomic and descriptive
-4. Document as you go; update docs/tests with changes
-5. Avoid unrelated refactors
-6. Keep inline comments minimal; only short reminders that clarify intent
+4. Keep commits atomic and descriptive
+5. Document as you go; update docs/tests with changes
+6. Avoid unrelated refactors
+7. Keep inline comments minimal; only short reminders that clarify intent
 
 ### Validation Examples
 ```bash

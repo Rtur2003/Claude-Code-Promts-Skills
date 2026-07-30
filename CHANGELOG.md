@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ## [Unreleased]
 
 ### Added
+- **Repository map** — Added `REPOSITORY-MAP.md` as a one-file navigation layer to reduce full-file scanning and speed prompt/library discovery
 - **Prompt review checklist workflow** — Added `prompts/english/workflows/prompt-review-checklist.md` with measurable checks for `Role / Protocol / Phases / Remember` and no-vague-advice enforcement
 - **Task-to-outcome scenario example pack** — Added `prompts/english/examples/task-outcome-scenarios-example.md` with explicit `Input Task`, `Expected Output Format`, and `Success Criteria` templates for bug fix, refactor, security review, and migration
 - **LLM-friendly repository index** — Added root `llms.txt` with concise start points, core prompt, governance files, key specialist prompts, and archive index
@@ -16,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **Repository markdownlint baseline config** — Added `.markdownlint-cli2.jsonc` aligned with current repository Markdown conventions to reduce noisy lint failures on dense prompt docs
 
 ### Changed
+- **Capability-aware agent guidance** — Updated core prompts and top-level docs with map-first discovery, skills/MCP/web-assisted execution, batched validation flow, and stricter low-noise comment discipline
 - **Single-source prompt selection** — Simplified `prompts/english/workflows/prompt-selector-guide.md` as the canonical decision tree and linked it from README, indexes, and quick-start
 - **Quick-start onboarding** — Updated `QUICK-START.md` with a 30-second copy-paste setup and three scenario flows (general, debugging, security)
 - **Contribution validation policy** — Converted PR validation guidance in `CONTRIBUTING.md` into a required checklist with link checks, markdown lint, and README/INDEX/llms consistency checks
