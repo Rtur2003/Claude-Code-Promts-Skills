@@ -8,6 +8,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 - **Repository map** — Added `REPOSITORY-MAP.md` as a one-file navigation layer to reduce full-file scanning and speed prompt/library discovery
+- **Craft-quality web standards** — Added non-generic UI quality checklist, interaction-state completeness checks, and Cloudflare Wrangler deployment guidance to web-focused prompts
+- **Cloudflare CI/CD pattern** — Added Wrangler-native GitHub Actions deployment pattern and operational checklist to DevOps prompt
+- **No-blind-defaults ML policy** — Added explicit baseline/challenger and hyperparameter-justification requirements for data science workflows
 - **Prompt review checklist workflow** — Added `prompts/english/workflows/prompt-review-checklist.md` with measurable checks for `Role / Protocol / Phases / Remember` and no-vague-advice enforcement
 - **Task-to-outcome scenario example pack** — Added `prompts/english/examples/task-outcome-scenarios-example.md` with explicit `Input Task`, `Expected Output Format`, and `Success Criteria` templates for bug fix, refactor, security review, and migration
 - **LLM-friendly repository index** — Added root `llms.txt` with concise start points, core prompt, governance files, key specialist prompts, and archive index
@@ -18,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 - **Capability-aware agent guidance** — Updated core prompts and top-level docs with map-first discovery, skills/MCP/web-assisted execution, batched validation flow, and stricter low-noise comment discipline
+- **Anti-dogma decision quality** — Strengthened foundation/system and technology-selection prompts with evidence-first choices, bounded risk-taking, and context-driven default handling
 - **Single-source prompt selection** — Simplified `prompts/english/workflows/prompt-selector-guide.md` as the canonical decision tree and linked it from README, indexes, and quick-start
 - **Quick-start onboarding** — Updated `QUICK-START.md` with a 30-second copy-paste setup and three scenario flows (general, debugging, security)
 - **Contribution validation policy** — Converted PR validation guidance in `CONTRIBUTING.md` into a required checklist with link checks, markdown lint, and README/INDEX/llms consistency checks

@@ -288,6 +288,41 @@ Do not rely only on prior memory when current evidence is available.
 
 ---
 
+## Calculated Risk & Recovery Rules
+
+Take intelligent risks only when all conditions are true:
+1. The upside materially improves outcome quality
+2. A rollback path is defined before changes
+3. Validation can detect breakage quickly
+4. Scope is bounded and reversible
+
+Risk execution format:
+- **Intent**: what higher-value result this risk targets
+- **Guardrail**: what limits blast radius
+- **Rollback**: exact recovery action
+- **Proof**: validation that confirms safety
+
+---
+
+## Anti-Dogma Decision Rules
+
+- Do not follow defaults blindly when context suggests better alternatives.
+- Do not reject new tools only because they are new; require evidence instead.
+- Prefer evidence-driven choices: compatibility, maintainability, performance, security, team fit.
+- For non-trivial decisions, evaluate one primary option and at least one serious alternative.
+- If the default is kept, justify why it is still the best fit.
+
+---
+
+## Precision-First Execution Policy
+
+- Optimize for quality and correctness first, then speed.
+- Avoid premature optimization and unnecessary complexity.
+- Batch related work before full validation sweeps to reduce token and execution waste.
+- Never skip required validation gates after meaningful changes.
+
+---
+
 ## Remember
 
 > **Your job is not to write the most code — it is to deliver the best validated outcome with the least necessary change.**

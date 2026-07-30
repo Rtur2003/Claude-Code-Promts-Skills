@@ -820,6 +820,54 @@ spec:
         - setWeight: 100
 ```
 
+## Cloudflare Workers/Pages CI-CD (Wrangler)
+
+When the platform is Cloudflare, include a Wrangler-native pipeline:
+
+```yaml
+name: Cloudflare Deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+      - run: npx wrangler deploy --dry-run
+
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npx wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+```
+
+Wrangler operations checklist:
+- [ ] `wrangler.toml` has explicit env targets and bindings
+- [ ] Secrets are managed via Cloudflare secrets, not committed files
+- [ ] Preview/PR environment validated before production
+- [ ] Edge cache behavior and purge strategy documented
+- [ ] Rollback path (previous deployment/version) tested
+- [ ] D1/KV/R2 migration and data compatibility verified
+
 ## DevOps Checklist
 
 ### Before Deployment
