@@ -8,6 +8,7 @@ Production-ready prompt library for Claude AI and coding agents, built on the **
 
 ## Start Here
 
+0. Open **[REPOSITORY-MAP.md](REPOSITORY-MAP.md)** for one-file navigation.
 1. Use **Agent System** as the core prompt.
 2. Add **one** specialist prompt only when the task clearly needs it.
 3. Validate outputs against explicit success criteria.
@@ -130,5 +131,6 @@ prompts/
 - [llms.txt](llms.txt)
 - [Agent Index](prompts/english/agents/INDEX.md)
 - [Prompt Index](prompts/english/INDEX.md)
+- [Repository Map](REPOSITORY-MAP.md)
 - [Prompt Selector Guide](prompts/english/workflows/prompt-selector-guide.md)
 - [Prompt Review Checklist](prompts/english/workflows/prompt-review-checklist.md)

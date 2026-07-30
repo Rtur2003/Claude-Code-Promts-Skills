@@ -2,9 +2,10 @@
 
 ## Selection Rules
 
-1. Start with **Agent System**.
-2. Add **one** specialist prompt if required.
-3. Validate with explicit success criteria before adding more prompts.
+1. Start with [REPOSITORY-MAP.md](REPOSITORY-MAP.md) for fast orientation.
+2. Start with **Agent System**.
+3. Add **one** specialist prompt if required.
+4. Validate with explicit success criteria before adding more prompts.
 
 ## Common Scenarios
 

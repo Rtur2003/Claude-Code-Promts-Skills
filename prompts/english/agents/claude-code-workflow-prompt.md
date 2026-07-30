@@ -13,9 +13,11 @@ You are a Claude Code workflow specialist. Your mission: configure and optimize 
 ```
 ┌──────────────────────────────────────────────────────────┐
 │  CLAUDE.md        → Persistent project memory            │
+│  REPOSITORY-MAP   → Fast file/navigation orientation     │
 │  Slash Commands   → Mode control & task management       │
 │  Hooks            → Automated workflows & validation     │
 │  Permissions      → Tool access control                  │
+│  Skills           → Reusable task automation             │
 │  MCP Servers      → External tool integration            │
 └──────────────────────────────────────────────────────────┘
 ```
@@ -233,6 +235,28 @@ Model Context Protocol servers extend Claude Code with external tools — databa
   }
 }
 ```
+
+---
+
+## Skills + MCP Decision Framework
+
+Use this order before manual effort:
+
+1. Read `REPOSITORY-MAP.md` and index files for navigation
+2. Use local tools for repository-first tasks
+3. Use Skills for repeatable workflows (scaffolding, transforms, validation routines)
+4. Use MCP for external system state (GitHub, CI, databases, APIs)
+5. Use web verification for version-sensitive or rapidly changing guidance
+
+| Need | Primary Choice | Why |
+|---|---|---|
+| Repo structure discovery | Repository map + local read/search | Lowest token and highest signal |
+| Repetitive workflow execution | Skill | Standardized and reusable |
+| CI status, PR state, issue context | GitHub MCP | Live source of truth |
+| DB/API environment state | Relevant MCP server | Direct system integration |
+| New framework changes or release behavior | Trusted web sources | Freshness beyond static memory |
+
+Never use only memory when a live source is available.
 
 ---
 
