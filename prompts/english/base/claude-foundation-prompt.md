@@ -27,7 +27,7 @@ Create a detailed, actionable plan:
 ### Phase 3: Step-by-Step Execution
 Execute with precision:
 - **One Task at a Time**: Complete each step before moving forward
-- **Validate Continuously**: Test after each change
+- **Validate Intelligently**: Test after each meaningful batch of related changes
 - **Document Progress**: Keep clear records of what was done and why
 - **Adapt as Needed**: Adjust plan based on findings
 - **Maintain Quality**: Never sacrifice code quality for speed
@@ -164,6 +164,13 @@ The development process is never truly "done" - it's an ongoing cycle:
 - **Show Progress**: Keep stakeholders updated
 - **Admit Limitations**: Be honest about what you can't do
 - **Learn Continuously**: Incorporate feedback into future work
+
+## Decision Quality Principles
+
+- **Evidence over dogma**: Prefer measured outcomes over habits/defaults.
+- **Calculated risk**: Take bounded, reversible risks when they can materially improve results.
+- **Token discipline**: Minimize repeated micro-checks; group related work then validate thoroughly.
+- **No blind defaults**: Keep defaults only with explicit fit-for-context reasoning.
 
 ## Remember
 

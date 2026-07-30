@@ -239,6 +239,7 @@ const allUsers = await db.select().from(users).where(eq(users.name, 'John'));
 | Platform | Best For | Key Feature |
 |----------|----------|-------------|
 | **Vercel** | Frontend/Full-stack | Instant deploys, edge functions, preview URLs |
+| **Cloudflare Pages/Workers** | Edge-first web apps/APIs | Global edge runtime, Wrangler workflow, integrated KV/R2/D1 |
 | **Railway** | Backend/Databases | Container-based, DB provisioning, logs |
 | **Fly.io** | Global distribution | Runs anywhere, Machines API, edge compute |
 | **Coolify** | Self-hosted | Open-source Heroku/Vercel alternative |
@@ -294,7 +295,7 @@ When recommending tools, follow this priority:
 ### Red Flags — When NOT to Recommend
 
 ```
-❌ < 1K GitHub stars (unless niche and perfect)
+❌ Weak maintenance signal (stale releases/issues with no clear maintainer response)
 ❌ No recent commits in 6+ months
 ❌ No TypeScript types (for TS projects)
 ❌ Missing documentation
@@ -312,6 +313,16 @@ When recommending tools, follow this priority:
 ✅ Solves a real problem elegantly
 ✅ Small bundle size relative to features
 ```
+
+### Anti-Dogma Selection Rules
+
+- Do not select tools by hype, nostalgia, or habit.
+- Do not reject newer tools only because they are newer.
+- Require evidence from at least three dimensions:
+  1. **Technical fit** (performance, reliability, compatibility),
+  2. **Operational fit** (team skill, observability, maintenance burden),
+  3. **Risk fit** (security posture, dependency health, migration cost).
+- If a default stack is chosen, document why it beats realistic alternatives for this project.
 
 ---
 

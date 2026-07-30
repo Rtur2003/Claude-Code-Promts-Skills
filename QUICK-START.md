@@ -4,6 +4,8 @@
 
 **Start minimal, then add one specialist only if quality gates fail.**
 
+Before selection, read [REPOSITORY-MAP.md](REPOSITORY-MAP.md) for one-file navigation.
+
 ---
 
 ## 30-Second Copy-Paste Start
@@ -91,3 +93,4 @@ ANALYZE → PLAN → EXECUTE → ITERATE
 - [Archived Prompt Index](prompts/english/agents/archive/INDEX.md)
 - [Global Prompt Index](prompts/english/INDEX.md)
 - [LLM Index](llms.txt)
+- [Repository Map](REPOSITORY-MAP.md)

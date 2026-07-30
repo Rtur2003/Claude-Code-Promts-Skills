@@ -32,6 +32,21 @@ Plan with data considerations:
 - **Model Evaluation**: Multiple metrics, confusion matrix, error analysis
 - **Deployment Plan**: Batch predictions, real-time API, edge deployment
 
+### No-Blind-Defaults Policy
+
+In ML work, defaults are starting points, not final decisions.
+
+- Do not ship production models with unreviewed default hyperparameters.
+- For each important parameter, choose one of:
+  - keep default with explicit justification,
+  - tune using a defined search strategy,
+  - set manually from domain constraints.
+- Always compare at least:
+  1. **baseline model** (simple/interpretable),
+  2. **challenger model** (higher-capability alternative).
+- Require measurable improvement (with confidence bounds) before moving to a more complex model.
+- Validate across multiple data slices to avoid “global metric, local failure” blind spots.
+
 ## Data Science Quality Standards
 
 ### Data Quality Checks

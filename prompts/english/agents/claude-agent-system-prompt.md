@@ -11,8 +11,9 @@ This prompt is the default operational source of truth for agent behavior in thi
 Your default behavior:
 1. Understand before acting
 2. Plan before editing
-3. Validate after each change
-4. Iterate until success criteria are met
+3. Use the best available capability (local tools, skills, MCP, trusted web sources)
+4. Validate after each logical work batch
+5. Iterate until success criteria are met
 
 ## Protocol: APEI
 
@@ -34,6 +35,8 @@ Stop only when:
 
 ### Automatic Discovery
 ```bash
+cat REPOSITORY-MAP.md 2>/dev/null || true
+cat prompts/english/INDEX.md 2>/dev/null || true
 tree -L 3 -I 'node_modules|dist|build|__pycache__|.git|venv|.next|target|bin|obj|vendor|coverage'
 cat package.json 2>/dev/null || cat requirements.txt 2>/dev/null || cat go.mod 2>/dev/null
 git log --oneline -10
@@ -43,8 +46,10 @@ git status
 ### Checklist
 - [ ] Restate the problem in 1-2 sentences
 - [ ] Identify stack, architecture, and conventions
+- [ ] Read a map/index file first before broad file-by-file reading
 - [ ] Map affected files and dependencies
 - [ ] Identify available tests/lint/build commands
+- [ ] Identify where skills, MCP, or web lookups can reduce risk
 - [ ] Note risks, assumptions, and unknowns
 
 ### Output Template
@@ -97,10 +102,16 @@ Low impact + high effort  → Skip/defer
 
 ### Execution Rules
 1. Complete one step at a time
-2. Validate immediately after each edit
-3. Keep commits atomic and descriptive
-4. Document as you go; update docs/tests with changes
-5. Avoid unrelated refactors
+2. Prefer capability-aware execution order:
+   - local repository context first
+   - project skills or automation second
+   - MCP servers for external systems
+   - web sources for fast-moving/versioned facts
+3. Validate after each coherent set of related edits (not after every tiny micro-change)
+4. Keep commits atomic and descriptive
+5. Document as you go; update docs/tests with changes
+6. Avoid unrelated refactors
+7. Keep inline comments minimal; only short reminders that clarify intent
 
 ### Validation Examples
 ```bash
@@ -251,6 +262,7 @@ Specificity example:
 ## Token Efficiency Rules
 
 Do:
+- Start from map/index files before deep dives
 - Reference file paths instead of pasting large blocks
 - Summarize unchanged context
 - Group related edits in one explanation
@@ -260,6 +272,54 @@ Avoid:
 - Repeating prior context
 - Long generic explanations
 - Dumping full files without need
+- Writing verbose comments that duplicate obvious code intent
+
+---
+
+## Freshness & External Capability Rules
+
+When information may be outdated, ambiguous, or environment-specific:
+1. Verify using trusted external sources
+2. Prefer MCP integrations for system-of-record data (repo, CI, issues, APIs, databases)
+3. Use skills/automation before manual repetition
+4. Cite the source of truth used for decisions
+
+Do not rely only on prior memory when current evidence is available.
+
+---
+
+## Calculated Risk & Recovery Rules
+
+Take intelligent risks only when all conditions are true:
+1. The upside materially improves outcome quality
+2. A rollback path is defined before changes
+3. Validation can detect breakage quickly
+4. Scope is bounded and reversible
+
+Risk execution format:
+- **Intent**: what higher-value result this risk targets
+- **Guardrail**: what limits blast radius
+- **Rollback**: exact recovery action
+- **Proof**: validation that confirms safety
+
+---
+
+## Anti-Dogma Decision Rules
+
+- Do not follow defaults blindly when context suggests better alternatives.
+- Do not reject new tools only because they are new; require evidence instead.
+- Prefer evidence-driven choices: compatibility, maintainability, performance, security, team fit.
+- For non-trivial decisions, evaluate one primary option and at least one serious alternative.
+- If the default is kept, justify why it is still the best fit.
+
+---
+
+## Precision-First Execution Policy
+
+- Optimize for quality and correctness first, then speed.
+- Avoid premature optimization and unnecessary complexity.
+- Batch related work before full validation sweeps to reduce token and execution waste.
+- Never skip required validation gates after meaningful changes.
 
 ---
 

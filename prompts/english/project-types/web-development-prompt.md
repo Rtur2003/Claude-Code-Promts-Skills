@@ -17,7 +17,7 @@ When analyzing web projects:
 - **Routing**: Client-side, server-side, or hybrid routing
 - **API Integration**: REST, GraphQL, WebSocket patterns
 - **Browser Compatibility**: Target browsers and required polyfills
-- **Performance Metrics**: Core Web Vitals (LCP, FID, CLS)
+- **Performance Metrics**: Core Web Vitals (LCP, INP, CLS)
 - **Accessibility**: WCAG compliance level
 - **SEO Requirements**: Meta tags, SSR/SSG needs
 
@@ -61,9 +61,9 @@ Plan with web considerations:
 - Proper dependency arrays in useEffect
 - Memoization (useMemo, useCallback) when beneficial
 - Key props in lists
-- PropTypes or TypeScript for type safety
+- TypeScript-first type safety for modern React codebases
 - Error boundaries for graceful failure
-- Avoid inline function definitions in JSX
+- Keep render paths predictable; optimize only when profiling shows impact
 
 ### Performance Optimization
 - Code splitting by route
@@ -73,7 +73,7 @@ Plan with web considerations:
 - Web Workers for heavy computations
 - Optimize Core Web Vitals:
   - LCP < 2.5s
-  - FID < 100ms
+  - INP < 200ms
   - CLS < 0.1
 
 ### Accessibility (A11y)
@@ -122,6 +122,7 @@ npm test
 4. **Responsive Testing**: Use device emulation
 5. **Accessibility Testing**: Use Lighthouse/axe DevTools
 6. **Network Testing**: Throttle to test slow connections
+7. **Visual Quality Review**: Review contrast, spacing rhythm, typography hierarchy, and interaction polish at multiple breakpoints
 
 ### Pre-Commit Checklist
 - [ ] No debug console.log() statements left in production code
@@ -133,6 +134,30 @@ npm test
 - [ ] Accessibility checks pass
 - [ ] Build succeeds without warnings
 - [ ] Bundle size acceptable
+- [ ] Core user journeys feel intentional (not template/AI-generic)
+- [ ] Interaction states (hover/focus/active/loading/error/empty) are covered
+
+## Craft-Quality Web Experience Standards
+
+When the request demands standout web quality:
+
+- Build a **design system mindset**: spacing scale, typography scale, color roles, motion rhythm.
+- Avoid “AI-generic” output by defining unique visual identity constraints before implementation.
+- Ensure each key page has:
+  - a clear visual hierarchy,
+  - purposeful interaction states,
+  - meaningful microcopy,
+  - accessible motion and feedback.
+- Validate with real scenarios (empty, slow network, partial failure, long content, mobile).
+- Prefer coherent system-level polish over one-off flashy effects.
+
+### Non-Generic UI Checklist
+
+- [ ] Layout has a clear composition strategy (grid, rhythm, alignment)
+- [ ] Components share consistent tokens (spacing, radius, elevation, color roles)
+- [ ] Motion supports comprehension, not decoration noise
+- [ ] Copy tone is specific to product context (not placeholder generic text)
+- [ ] No default-library look left uncustomized on core surfaces
 
 ### Commit Standards for Web
 ```
@@ -264,6 +289,39 @@ Always consider:
 - [ ] HTTPS enforced
 - [ ] CSP headers configured
 - [ ] CORS policies set
+
+### Cloudflare & Wrangler Deployment (when applicable)
+
+```bash
+# Install Wrangler
+npm install -D wrangler
+
+# Authenticate and initialize
+npx wrangler login
+npx wrangler init
+
+# Validate configuration
+npx wrangler deploy --dry-run
+
+# Deploy
+npx wrangler deploy
+```
+
+Cloudflare release checklist:
+- [ ] `wrangler.toml` matches environment and route bindings
+- [ ] Secrets configured with `wrangler secret put` (no plaintext in repo)
+- [ ] KV/R2/D1 bindings validated in staging/preview first
+- [ ] Preview deployment verified before production promotion
+- [ ] Cache headers, edge behavior, and rollback path documented
+
+## Skills, MCP, and Web Verification
+
+For complex web delivery:
+
+1. Use repository map/index files first to reduce token waste.
+2. Use skills/automation for repeatable setup, scaffold, and validation workflows.
+3. Use MCP for live repo/CI/issue state and external platform truth.
+4. Verify rapidly changing framework/platform behavior from trusted web sources.
 
 ## Remember
 
