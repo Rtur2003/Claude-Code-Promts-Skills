@@ -5,6 +5,7 @@ English-only, Markdown-only prompt library for Claude coding agents. Built on AP
 Do not read every file. Resolve your task to one file below, open it, act.
 
 ## Entry points
+- Running Claude Code here: invoke /find-prompt <task> (skill at ./.claude/skills/find-prompt/) — routes any task to the exact prompt in one step
 - Orientation (read first): ./REPOSITORY-MAP.md
 - Global task router: ./prompts/english/INDEX.md
 - Default operational prompt: ./prompts/english/agents/claude-agent-system-prompt.md

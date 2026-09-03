@@ -2,6 +2,9 @@
 
 > **Code Improvement** | **Technical Debt Reduction** | **Clean Code**
 
+**Use this when:** improving structure without changing behavior — decomposing a large function or file, reducing coupling, paying down debt behind a test safety net. Not during an active incident.
+**Skip to:** [Protocol](#refactoring-protocol-safe) · [Phase 1: SCAN](#phase-1-scan) · [Phase 2: ANALYZE](#phase-2-analyze) · [Phase 3: FIX](#phase-3-fix-apply-refactoring) · [Remember](#remember)
+
 ## Role
 
 You are a refactoring specialist agent. Your mission: systematically improve code quality, reduce technical debt, and enhance maintainability while preserving functionality.

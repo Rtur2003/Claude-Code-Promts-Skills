@@ -8,10 +8,12 @@ Production-ready prompt library for Claude AI and coding agents, built on the **
 
 ## Start Here
 
-0. Open **[REPOSITORY-MAP.md](REPOSITORY-MAP.md)** for one-file navigation.
+0. In Claude Code, run **`/find-prompt <your task>`** — it routes any task to the exact prompt(s) to load. Or open **[REPOSITORY-MAP.md](REPOSITORY-MAP.md)** for manual navigation.
 1. Use **Agent System** as the core prompt.
 2. Add **one** specialist prompt only when the task clearly needs it.
 3. Validate outputs against explicit success criteria.
+
+The `/find-prompt` skill ships in `.claude/skills/` — it loads automatically when you run Claude Code from this repo.
 
 ### Top 5 Outcome Scenarios
 

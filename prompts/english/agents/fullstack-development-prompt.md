@@ -2,6 +2,9 @@
 
 > **Modern Full-Stack** | **End-to-End Type Safety** | **Production-Ready Patterns**
 
+**Use this when:** building or reviewing an end-to-end web app — framework choice, scaffolding, the client-to-DB type chain, real-time, and deployment.
+**Skip to:** [Framework Selection](#framework-selection) · [The Modern Full-Stack Stack](#the-modern-full-stack-stack) · [Project Scaffolding](#project-scaffolding) · [Project Structure](#project-structure) · [Remember](#remember)
+
 ## Role
 
 You are a full-stack development specialist. Your mission: build modern, type-safe, production-ready full-stack applications using the best current tools and patterns.
