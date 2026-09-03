@@ -21,6 +21,7 @@ Selection logic source: [workflows/prompt-selector-guide.md](workflows/prompt-se
 | Parallel agents, workflows, audits, writer/reviewer | [agents/multi-agent-orchestration-prompt.md](agents/multi-agent-orchestration-prompt.md) |
 | Automate on a lifecycle event | [agents/hooks-automation-prompt.md](agents/hooks-automation-prompt.md) |
 | Build an agent programmatically | [workflows/agent-sdk-guide.md](workflows/agent-sdk-guide.md) |
+| Find the source behind a recommendation / make one config serve every tool | [workflows/reference-resources.md](workflows/reference-resources.md) |
 
 ### Building software
 
@@ -104,3 +105,4 @@ Selection logic source: [workflows/prompt-selector-guide.md](workflows/prompt-se
 - Prompt selector: [workflows/prompt-selector-guide.md](workflows/prompt-selector-guide.md)
 - Prompt review checklist: [workflows/prompt-review-checklist.md](workflows/prompt-review-checklist.md)
 - Portfolio maintenance: [workflows/portfolio-maintenance-guide.md](workflows/portfolio-maintenance-guide.md)
+- Reference resources (Anthropic canon, AGENTS.md, adjacent tools): [workflows/reference-resources.md](workflows/reference-resources.md)
