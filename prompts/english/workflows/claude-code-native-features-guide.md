@@ -167,6 +167,20 @@ tail -200 app.log | claude -p "flag any anomalies"
 
 ---
 
+## Cost control
+
+Claude Code's cost can run away in agentic loops — the most common community complaint in 2026. Guardrails:
+
+- Watch `/context` (fill level) and `/usage` (spend) on long runs.
+- Cap unattended runs: `--max-turns`, a `/goal` that stops on a condition, a size guideline for dynamic workflows.
+- Test a fan-out on one directory before the whole repo.
+- A `Stop` hook that logs session token cost to CSV makes spend visible over time.
+- Pin `effortLevel` in settings so a product-side default change doesn't silently move it.
+
+The Pro plan ($20/mo) hits its ceiling fast under heavy agent use; sustained agentic work needs Max.
+
+---
+
 ## Surfaces
 
 | Surface | Use |
@@ -184,6 +198,8 @@ tail -200 app.log | claude -p "flag any anomalies"
 | **Agent SDK** | Claude Code as a library — see [agent-sdk-guide](agent-sdk-guide.md) |
 
 Every surface shares the same engine, so CLAUDE.md, settings, and MCP servers carry across.
+
+For how Claude Code compares to Cursor, Codex, Aider, and Cline — and how to make one config serve all of them via `AGENTS.md` — see [reference-resources.md](reference-resources.md).
 
 ---
 

@@ -13,10 +13,12 @@ Use this checklist for periodic prompt quality reviews.
 
 ## Mandatory Structure Check
 
-- [ ] `## Role` exists
-- [ ] `## Protocol / Core Loop` exists
-- [ ] `## Phases` exists with actionable checklists
+- [ ] A `**Use this when:**` line and `**Skip to:**` anchor list under the title
+- [ ] `## Role` exists (one or two sentences)
+- [ ] A protocol section exists — `## Protocol: <ACRONYM>` or `## <Name> Protocol` — mapping to the phases
+- [ ] Phase sections exist (`## Phase 1: …`, `## Phase 2: …`, or a single `## Phases`) with actionable `- [ ]` checklists or step lists
 - [ ] `## Remember` exists and is the final section
+- [ ] No stale versions or Claude model IDs stated from memory (see the Currency Rule in CONTRIBUTING.md)
 
 ---
 
@@ -50,10 +52,15 @@ Fail the review if a recommendation is generic without an action.
 **Decision**: keep / update / merge / archive
 
 ### Structure
+- Use this when / Skip to header: pass/fail
 - Role: pass/fail
 - Protocol: pass/fail
-- Phases: pass/fail
+- Phase sections: pass/fail
 - Remember final: pass/fail
+
+### Currency
+- No stale versions or model IDs: pass/fail
+- Notes:
 
 ### No Vague Advice
 - Pass/Fail

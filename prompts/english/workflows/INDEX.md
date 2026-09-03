@@ -17,6 +17,7 @@ Guides for running Claude Code and maintaining this library. Each is a standalon
 | Place prompts in `.claude/commands/` or CLAUDE.md | [claude-code-setup-guide.md](claude-code-setup-guide.md) |
 | Review a prompt against the repo standard | [prompt-review-checklist.md](prompt-review-checklist.md) |
 | Run the 90-day portfolio review | [portfolio-maintenance-guide.md](portfolio-maintenance-guide.md) |
+| Find the primary source behind a recommendation, or make one config work across tools | [reference-resources.md](reference-resources.md) |
 
 ## Catalog
 
@@ -32,3 +33,4 @@ Guides for running Claude Code and maintaining this library. Each is a standalon
 | [best-practices-customization-guide.md](best-practices-customization-guide.md) | Per-team and per-stack customization, effectiveness metrics |
 | [prompt-review-checklist.md](prompt-review-checklist.md) | Structure and no-vague-advice checks |
 | [portfolio-maintenance-guide.md](portfolio-maintenance-guide.md) | Monthly and quarterly governance, keep/merge/archive |
+| [reference-resources.md](reference-resources.md) | The Anthropic canon this library is built on, AGENTS.md cross-tool interop, community catalogs, adjacent-agent comparison |
