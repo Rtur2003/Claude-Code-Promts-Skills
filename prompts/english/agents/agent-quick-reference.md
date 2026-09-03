@@ -3,6 +3,7 @@
 > **Token-Optimized Cheat Sheet** | **Copy & Use**
 
 **Use this when:** the token budget is very tight and you need the loop, templates, and checklists without specialist depth. Otherwise use the Agent System prompt.
+**Skip to:** [Core Loop](#-core-loop-apei) · [Templates](#-templates) · [Reasoning & context](#-claude-code--reasoning--context) · [Commands](#-commands) · [Remember](#remember)
 
 ## Role
 

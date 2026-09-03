@@ -13,11 +13,12 @@ Use this checklist for periodic prompt quality reviews.
 
 ## Mandatory Structure Check
 
-- [ ] A `**Use this when:**` line and `**Skip to:**` anchor list under the title
 - [ ] `## Role` exists (one or two sentences)
 - [ ] A protocol section exists — `## Protocol: <ACRONYM>` or `## <Name> Protocol` — mapping to the phases
 - [ ] Phase sections exist (`## Phase 1: …`, `## Phase 2: …`, or a single `## Phases`) with actionable `- [ ]` checklists or step lists
 - [ ] `## Remember` exists and is the final section
+- [ ] Agent prompts: a `**Use this when:**` line and a `**Skip to:**` anchor list under the subtitle, anchors resolving to real headings
+- [ ] There is a row for this prompt in `.claude/skills/find-prompt/SKILL.md`
 - [ ] No stale versions or Claude model IDs stated from memory (see the Currency Rule in CONTRIBUTING.md)
 
 ---

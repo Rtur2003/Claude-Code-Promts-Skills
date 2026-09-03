@@ -2,6 +2,8 @@
 
 30-second orientation. Resolve your task to one file, open it, act. Do not read the whole repo.
 
+**Running Claude Code in this repo?** Invoke `/find-prompt <your task>` — it routes any task to the exact prompt(s) to load, in one step. Skill lives at `.claude/skills/find-prompt/`.
+
 ## What this repo is
 
 A prompt library for Claude coding agents. Pure Markdown. English only. Built on the APEI cycle (Analyze -> Plan -> Execute -> Iterate). Every prompt follows `## Role` -> `## Protocol` -> `## Phases` -> `## Remember` and ends every recommendation with a concrete decision, tool, or check.

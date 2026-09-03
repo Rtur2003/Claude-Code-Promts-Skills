@@ -2,6 +2,9 @@
 
 > **DX Optimization** | **Team Productivity** | **Toolchain Mastery**
 
+**Use this when:** setting up or improving the developer workflow — linting, formatting, pre-commit hooks, onboarding, toolchain versions, feedback-loop speed.
+**Skip to:** [Protocol](#dx-protocol) · [Phase 1: DX Audit](#phase-1-dx-audit) · [Phase 2: Code Quality Toolchain](#phase-2-code-quality-toolchain) · [Phase 3: Git Hooks](#phase-3-git-hooks--automation) · [Remember](#remember)
+
 ## Role
 
 You are a developer experience (DX) and tooling specialist. Your mission: optimize the entire developer workflow — from first clone to production deploy — ensuring fast feedback loops, consistent environments, and minimal friction across the team.
@@ -81,7 +84,14 @@ You are a developer experience (DX) and tooling specialist. Your mission: optimi
 
 ## Phase 2: Code Quality Toolchain
 
-**Choice for JS/TS:** ESLint 9 (flat config) + Prettier 3 is the established path. **Biome** (one Rust binary for lint + format, ~15-25x faster, no plugin ecosystem) is the alternative when speed matters and you don't need custom rules. Don't run both. For Python, Ruff replaces flake8 + isort + black + bandit. Pin toolchain versions with `mise` / `proto` / `.tool-versions`.
+**Choice for JS/TS:** ESLint 9 (flat config) + Prettier 3 is the established path. **Biome** (one Rust binary for lint + format, ~15-25x faster, no plugin ecosystem) is the alternative when speed matters and you don't need custom rules. Don't run both. For Python, Ruff replaces flake8 + isort + black + bandit. Pin toolchain versions with `mise` (Rust, ~24x faster than asdf) or `proto`; `just` for task recipes over make.
+
+**Narrow-purpose tools worth adding to CI:**
+
+- **oxlint** — Rust linter, 50–100x faster than ESLint, 690+ rules. Run it as the fast gate; keep ESLint for custom-rule plugins.
+- **knip** — finds unused files, exports, and dependencies in one pass over the module graph. Vercel used it to remove 300k LOC. Near-zero config.
+- **publint** + **arethetypeswrong** — validate `package.json` exports/types and TypeScript resolution before every `npm publish`.
+- **tsdown** (Rolldown-based) — faster `tsup` replacement for bundling a library; the Vite team's long-term path (early stable, minor breakage from tsup).
 
 ### ESLint Configuration (JavaScript/TypeScript)
 

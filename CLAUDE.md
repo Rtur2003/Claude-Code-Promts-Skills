@@ -8,6 +8,10 @@
 - **License**: MIT
 - **Language**: English only
 
+## Routing skill
+
+`.claude/skills/find-prompt/SKILL.md` ships with the repo. It routes any task to the right prompt(s). Keep its routing table in sync whenever a prompt is added, removed, or renamed (it is part of the "add a new prompt" checklist below).
+
 ## Repository Structure
 
 ```
@@ -110,8 +114,9 @@ No build system — this is a pure Markdown repository.
 1. Create `prompts/english/agents/your-topic-prompt.md` using the template above; open with a "Use this when" line and a "Skip to" anchor list
 2. Update `prompts/english/agents/INDEX.md` — the task router and the catalog table (with a ~token estimate)
 3. Update `prompts/english/INDEX.md` task router
-4. Add entry to the portfolio table and, if it is a recurring pairing, the Common Combinations table in `README.md`
-5. Add a line to `llms.txt` and `REPOSITORY-MAP.md`
+4. Add a row to `.claude/skills/find-prompt/SKILL.md` routing table
+5. Add entry to the portfolio table and, if it is a recurring pairing, the Common Combinations table in `README.md`
+6. Add a line to `llms.txt` and `REPOSITORY-MAP.md`
 
 ### Add a new project-type prompt
 1. Create `prompts/english/project-types/your-domain-prompt.md`

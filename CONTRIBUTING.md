@@ -16,11 +16,18 @@ This repository is **English-only** and **Markdown-only**.
 ## Prompt Quality Standard
 
 Every prompt must contain:
-- A `**Use this when:**` line and a `**Skip to:**` anchor list right under the title
-- `## Role`
-- `## Protocol / Core Loop`
-- `## Phases`
+- `## Role` (one or two sentences)
+- A protocol section — `## Protocol: <ACRONYM>` or `## <Name> Protocol`
+- Phase sections (`## Phase 1: …`, or a single `## Phases`) with `- [ ]` checklists or ordered steps
 - `## Remember` (final section)
+
+**Agent prompts** (`prompts/english/agents/`) also need, right under the `> **subtitle**` line:
+- A `**Use this when:**` line — the concrete situation this prompt is for
+- A `**Skip to:**` list of 3–5 anchor links that resolve to real headings in the file
+
+Project-type prompts (`prompts/english/project-types/`) may keep their `## Overview` opener; the `## Role` and protocol sections are still required.
+
+The routing table in `.claude/skills/find-prompt/SKILL.md` must have a row for every prompt.
 
 ### No Vague Advice Rule
 
