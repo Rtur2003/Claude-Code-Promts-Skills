@@ -49,6 +49,7 @@ Coverage of the current Claude Code / Claude ecosystem (models, Skills, Plugins,
 | Project `.claude/` config and settings | [Claude Code Workflow](prompts/english/agents/claude-code-workflow-prompt.md) |
 | Thinking depth, effort, plan mode | [Thinking & Planning](prompts/english/agents/claude-code-modes-prompt.md) |
 | Build an agent programmatically | [Agent SDK Guide](prompts/english/workflows/agent-sdk-guide.md) |
+| The sources behind this library + cross-tool `AGENTS.md` + adjacent agents | [Reference Resources](prompts/english/workflows/reference-resources.md) |
 
 ---
 
