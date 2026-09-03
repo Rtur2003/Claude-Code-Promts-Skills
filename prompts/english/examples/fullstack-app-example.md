@@ -24,7 +24,7 @@ You need to build a full-stack todo application with user authentication using N
 ## Analysis Summary
 
 **Problem**: Build a full-stack todo app with authentication
-**Stack**: Next.js 14, tRPC, Prisma, PostgreSQL, NextAuth.js
+**Stack**: Next.js 16 (App Router), tRPC v11, Prisma 7, PostgreSQL 18, Auth.js
 **Key Files**:
 - prisma/schema.prisma
 - src/server/routers/todo.ts
