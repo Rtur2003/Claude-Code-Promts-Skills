@@ -73,6 +73,9 @@ Do not read every file. Resolve your task to one file below, open it, act.
 - .claude/ setup and prompt placement: ./prompts/english/workflows/claude-code-setup-guide.md
 - Examples: ./prompts/english/examples/
 
+## Reference
+- Anthropic canon + AGENTS.md interop + adjacent tools: ./prompts/english/workflows/reference-resources.md
+
 ## Governance
 - Contribution rules: ./CONTRIBUTING.md
 - Prompt review checklist: ./prompts/english/workflows/prompt-review-checklist.md

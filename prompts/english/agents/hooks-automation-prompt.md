@@ -277,7 +277,25 @@ jq -n '{ hookSpecificOutput: { hookEventName: "PreToolUse",
   { "type": "command", "command": "jq -c . >> .claude/instructions.log" } ] } ] } }
 ```
 
-Claude can write any of these for you: *"write a hook that runs eslint --fix after every file edit"*, *"write a hook that blocks git push to main"*.
+### Community recipe set
+
+The hooks power users share most often:
+
+| Hook | Event | Purpose |
+|---|---|---|
+| Format on edit | `PostToolUse` `Write\|Edit` | Prettier / Ruff / `cargo fmt` on the edited file (`async: true`) |
+| Test the matching file | `PostToolUse` `Write\|Edit` | Run the test file that covers the edited source |
+| Block dangerous bash | `PreToolUse` `Bash` | Deny `rm -rf`, `dd if=`, `git reset --hard`, force push |
+| Secret scanner | `PreToolUse` `Write\|Edit` | Block an edit whose content matches `sk-`, `AKIA`, `BEGIN [A-Z ]*PRIVATE KEY` |
+| Cost tracker | `Stop` | Append session token spend to a CSV — the most-requested hook in 2026, because agent loops can run 10x over budget |
+| Sub-agent ROI | `SubagentStop` | Log each subagent's duration and token count |
+| Issue-ID linker | `PostToolUse` `Bash(git commit *)` | Prepend the ticket ID parsed from the branch name to the commit message |
+| PR description generator | `Stop` | Draft a PR title and body from the session transcript |
+| Long-task notifier | `Notification` matcher `permission_prompt\|idle_prompt` | OS notification / Slack webhook when Claude needs you or finishes |
+
+Watch `/context` and `/usage` on long unattended runs, and cap fan-outs — test on one directory before the whole repo.
+
+Claude can write any of these for you: *"write a hook that runs eslint --fix after every file edit"*, *"write a Stop hook that logs this session's token cost to costs.csv"*.
 
 ---
 

@@ -3,7 +3,7 @@
 > **Native Subagents** | **Dynamic Workflows** | **Adversarial Review**
 
 **Use this when:** a task needs more than one agent — parallel research, an isolated worker, a codebase-wide audit or migration, a writer/reviewer split, or an unattended run that verifies its own output.
-**Skip to:** [Protocol](#protocol-delegate) · [Pick a mechanism](#pick-a-mechanism) · [Phase 1 Subagents](#phase-1-subagents--isolated-workers) · [Phase 2 Workflows](#phase-2-dynamic-workflows--scripted-orchestration) · [Phase 3 Fan-out](#phase-3-fan-out--batch-and-headless-loops) · [Phase 4 Review](#phase-4-adversarial-review) · [Parallel humans](#parallel-human-driven-sessions) · [Remember](#remember)
+**Skip to:** [Protocol](#protocol-delegate) · [Five patterns](#the-five-composable-patterns) · [Pick a mechanism](#pick-a-mechanism) · [Phase 1 Subagents](#phase-1-subagents--isolated-workers) · [Phase 2 Workflows](#phase-2-dynamic-workflows--scripted-orchestration) · [Phase 3 Fan-out](#phase-3-fan-out--batch-and-headless-loops) · [Phase 4 Review](#phase-4-adversarial-review) · [Parallel humans](#parallel-human-driven-sessions) · [Remember](#remember)
 
 ## Role
 
@@ -23,6 +23,24 @@ E → EVALUATE   — Did isolation and parallelism actually pay off?
 ```
 
 Stop only when every unit is verified by an agent that did not build it, and the merged result passes the task's own check.
+
+---
+
+## The five composable patterns
+
+Anthropic's "Building Effective Agents" defines five patterns. Most multi-agent work is one of these — name the pattern before you build:
+
+| Pattern | Shape | Use for |
+|---|---|---|
+| **Prompt chaining** | Step A's output feeds step B | A task with clean sequential subtasks (outline → draft → polish) |
+| **Routing** | Classify the input, send it to a specialized handler | Distinct request types that need different handling |
+| **Parallelization** | Run independent subtasks at once, aggregate | Sectioning work, or voting for confidence |
+| **Orchestrator-workers** | A lead decides the subtasks dynamically and delegates | Work where the subtasks aren't known up front |
+| **Evaluator-optimizer** | One agent produces, another critiques, loop | Output that measurably improves with a review round |
+
+**Challenge-and-converge:** for a hard bug or a contested decision, run three agents on the same question and tell each to challenge the others' findings. A single agent stops at the first plausible cause; three that argue converge on the real one.
+
+**Keep the deterministic parts deterministic.** Production agent systems blend fixed code with strategic LLM decision points — they are not one big agentic loop. If a step can be a script, make it a script (a hook, a dynamic-workflow line), and spend the model's judgment where it actually matters.
 
 ---
 

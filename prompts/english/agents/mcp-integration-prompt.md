@@ -203,7 +203,17 @@ For high-tool-count servers, have the agent **write code that calls MCP tools** 
 | Web scrape / search | **Firecrawl MCP** | HTTP |
 | Cloudflare / Vercel / Stripe / Notion / Figma / Linear | Vendor hosted endpoints | HTTP, OAuth |
 
-Reviewed directory: **claude.ai/directory**. Prefer the `gh` / `aws` / `gcloud` CLI over an MCP server when a CLI exists — it is the most context-efficient path and Claude already knows the common commands.
+### Community favorites for large codebases
+
+| Server | What it adds |
+|---|---|
+| **Serena** (Oraios AI) | Semantic code understanding — symbol-level navigation and edits over LSP, packaged as MCP. Pairs with a memory server for persistent project context |
+| **Sequential Thinking MCP** | Externalizes multi-step reasoning into an auditable sequence; useful for hard planning tasks |
+| **Memory MCP** | Persists project conventions and patterns across sessions (a lighter alternative to committing everything to CLAUDE.md) |
+
+For symbol navigation and post-edit type errors in a typed language, prefer an **official code-intelligence LSP plugin** (`pyright-lsp`, `typescript-lsp`, `rust-analyzer-lsp`, `gopls-lsp`, and others from `claude-plugins-official`) over a general-purpose MCP server — it is built for that job and Claude wires it into the edit loop.
+
+Reviewed directory: **claude.ai/directory**. Prefer the `gh` / `aws` / `gcloud` CLI over an MCP server when a CLI exists — it is the most context-efficient path and Claude already knows the common commands. By 2026, official vendor servers have largely displaced community forks — prefer the official one where it exists.
 
 ---
 

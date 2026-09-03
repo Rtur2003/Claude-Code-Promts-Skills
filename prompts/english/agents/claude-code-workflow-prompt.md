@@ -12,7 +12,7 @@ You configure Claude Code so it works with a project instead of guessing at it. 
 ## Protocol: CONFIGURE
 
 ```
-C → CONTEXT     — Write CLAUDE.md: facts Claude can't infer, under 200 lines
+C → CONTEXT     — Write CLAUDE.md: decision-changing facts, ~100-400 lines
 O → ORGANIZE    — Split topic rules into .claude/rules/ with paths: scoping
 N → NARROW      — Set permission mode + allowlist for the risk level
 F → FIT         — Match each need to a mechanism: CLAUDE.md / rule / skill / hook / MCP / subagent / plugin
@@ -107,9 +107,10 @@ Test every line: *"Would removing this cause Claude to make a mistake?"* If not,
 ```
 
 - **Imports:** `@path/to/file` pulls another file in (recursive, 4 hops max). Backtick-wrap a path to keep it literal. Imported files load at launch — they organize, they don't save context.
-- **`AGENTS.md`:** Claude Code reads `CLAUDE.md` only. Bridge with `@AGENTS.md` at the top, or a symlink.
+- **`AGENTS.md` interop:** Claude Code reads `CLAUDE.md`, not `AGENTS.md` — but `AGENTS.md` is the cross-tool standard the major vendors converged on in 2026. If your repo has one, make `CLAUDE.md` a thin wrapper: `@AGENTS.md` on the first line, then Claude-specific lines below. A symlink works when you have nothing Claude-specific. `/init` (with `CLAUDE_CODE_NEW_INIT=1`) and `/import` also read `AGENTS.md`, Cursor rules, and Copilot instructions. See [../workflows/reference-resources.md](../workflows/reference-resources.md).
 - **HTML comments** (`<!-- ... -->`) are stripped before injection — free space for maintainer notes.
-- **Size:** target under 200 lines. `/doctor` proposes trims for a checked-in CLAUDE.md. Files over 4 MiB are skipped.
+- **Size:** the community consensus is **100–400 lines** — under 100 usually means missing context, over 400 means split per-package or move detail to rules. Treat it as a config file: commit it, review changes in PRs. `/doctor` proposes trims. Files over 4 MiB are skipped.
+- **Include only rules that change the agent's decisions** — not style rules (the linter owns those), not pasted code, not one-off task instructions.
 - `/init` generates a starter CLAUDE.md (suggests improvements if one exists). `/memory` opens the files for editing.
 
 ### `.claude/rules/`
@@ -221,7 +222,7 @@ Layering when the same feature exists at multiple levels: CLAUDE.md files are ad
 > **CLAUDE.md holds what Claude can't infer. Everything procedural moves to a skill; everything enforced moves to a hook.**
 
 Configuration priorities:
-1. Write a CLAUDE.md under 200 lines; test every line against "would removing this cause a mistake?"
+1. Write a CLAUDE.md in the 100-400 line range; test every line against "would removing this cause a mistake?"
 2. Scope topic guidance with `.claude/rules/` `paths:` so it loads only when relevant
 3. Allowlist safe commands so approvals stop interrupting
 4. A repeated mistake is a CLAUDE.md edit; a repeated procedure is a skill; an enforced rule is a hook

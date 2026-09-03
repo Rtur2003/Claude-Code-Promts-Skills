@@ -460,7 +460,7 @@ Stage 4 (after stage 3):
 
 | Signal | Action |
 |--------|--------|
-| CLAUDE.md > 200 lines | Split into directory-level files |
+| CLAUDE.md > 400 lines | Split into directory-level files |
 | Package has > 50 source files | Consider sub-packages |
 | Two teams working on same package | Split by domain boundary |
 | Build time > 5 minutes for one package | Optimize or split |

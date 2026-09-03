@@ -115,10 +115,21 @@ allowed-tools: Bash(npm run *) Bash(git tag *) Bash(git push *)
 5. Verify the published artifact
 ```
 
+### Reference vs task (a.k.a. Knowledge vs Playbook)
+
+Two kinds of skill, and the split matters:
+
+- **Reference / Knowledge** — what to know: an API style guide, a schema, domain rules. Claude applies it throughout the session. Usually model-invocable.
+- **Task / Playbook** — how to do one thing: deploy, release, cut a report. Steps with side effects. Usually `disable-model-invocation: true` so you control when it runs.
+
+A skill that mixes both tends to do neither well. Split it.
+
 ### Rules
 
-- Keep `SKILL.md` under 500 lines. Move detail to sibling files.
-- Keep the body itself concise — once loaded it stays in context across turns, so every line is a recurring cost. State what to do, not why.
+- **Keep the body under ~2,000 tokens (roughly 250 lines).** It stays in context across turns once loaded — every line is a recurring cost. Move detail to sibling files that load on demand.
+- **Be specific and opinionated.** "Use our error envelope" beats "handle errors well." A vague skill is worse than no skill — it triggers and then doesn't help.
+- State what to do, not why.
+- `SKILL.md` itself stays under 500 lines even with supporting files.
 - Read the frontmatter only when the opening `---` is the first line of the file.
 
 ---
