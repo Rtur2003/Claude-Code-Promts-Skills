@@ -16,6 +16,7 @@ This repository is **English-only** and **Markdown-only**.
 ## Prompt Quality Standard
 
 Every prompt must contain:
+- A `**Use this when:**` line and a `**Skip to:**` anchor list right under the title
 - `## Role`
 - `## Protocol / Core Loop`
 - `## Phases`
@@ -27,6 +28,12 @@ Every recommendation should end with a concrete:
 - decision, or
 - tool, or
 - validation step.
+
+### Currency Rule
+
+- Verify Claude Code features, commands, and model IDs against `code.claude.com/docs` and `platform.claude.com/docs` — never from memory.
+- Do not reference retired models (`claude-3-*`, `claude-opus-4-1`, `claude-sonnet-4-0`, `gpt-4o`) as current.
+- State framework versions only after checking the current stable release.
 
 Use this measurable checklist for prompt reviews:
 - [Prompt Review Checklist](prompts/english/workflows/prompt-review-checklist.md)
@@ -47,11 +54,12 @@ Copy this checklist into your PR description and complete all items:
 - [ ] No spelling or grammar errors
 - [ ] Internal relative links resolve
 - [ ] Hypothetical example paths are plain code literals (not Markdown links)
-- [ ] Catalog/index entries are updated
-- [ ] `llms.txt` is updated when primary navigation or core prompts change
-- [ ] No vague advice language
+- [ ] Catalog/index entries are updated (`README.md`, both INDEX files, `prompts/english/workflows/INDEX.md`, `project-types/INDEX.md`)
+- [ ] `llms.txt` and `REPOSITORY-MAP.md` updated when adding/removing/renaming a prompt
+- [ ] New prompts have the `Use this when` / `Skip to` header and a `~token` estimate in the agent catalog
+- [ ] No vague advice language; no model/version claims stated from memory
 - [ ] Prompt changes pass `Role / Protocol / Phases / Remember` review checklist
-- [ ] Navigation consistency checked across `README.md`, `prompts/english/INDEX.md`, `prompts/english/agents/INDEX.md`, and `llms.txt`
+- [ ] Navigation consistency checked across `README.md`, `prompts/english/INDEX.md`, `prompts/english/agents/INDEX.md`, `prompts/english/workflows/INDEX.md`, and `llms.txt`
 - [ ] Markdown lint passed: `npx markdownlint-cli2 '**/*.md'`
 
 Optional local checks:

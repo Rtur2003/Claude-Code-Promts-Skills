@@ -6,8 +6,8 @@ Your production application is experiencing intermittent 500 errors on the `/api
 
 ## Prompts Used
 
-1. **Error Analysis Prompt** - Systematic debugging
-2. **Agent System Prompt** - APEI workflow
+1. **Agent System Prompt** — APEI workflow
+2. **Debugging & Troubleshooting Prompt** — DEBUG protocol for root-cause diagnosis
 
 ---
 

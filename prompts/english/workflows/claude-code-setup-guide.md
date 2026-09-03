@@ -10,18 +10,21 @@ This guide covers everything you need to integrate prompts from this repository 
 
 ## Understanding Claude Code's Configuration System
 
-Claude Code uses a layered configuration system that reads from multiple sources in order of priority:
+Claude Code reads two separate layered systems: **instructions** (CLAUDE.md, rules) and **settings** (`settings.json`).
 
 ```
-Priority (highest → lowest):
+Settings (higher precedence wins):
 ┌──────────────────────────────────────────────────────┐
-│ 1. Conversation context (current session)            │
-│ 2. Directory-level CLAUDE.md (nearest to file)       │
-│ 3. Project-root CLAUDE.md                            │
-│ 4. ~/.claude/CLAUDE.md (user-global)                 │
-│ 5. .claude/settings.json (project settings)          │
-│ 6. ~/.claude/settings.json (user-global settings)    │
+│ 1. Managed policy settings (org-controlled)          │
+│ 2. .claude/settings.local.json (personal, gitignored)│
+│ 3. .claude/settings.json (team, committed)           │
+│ 4. ~/.claude/settings.json (user-global)             │
 └──────────────────────────────────────────────────────┘
+
+Instructions (CLAUDE.md + .claude/rules/) are ADDITIVE, not overriding —
+all levels are concatenated into context, root-of-tree first, working
+directory last. Nested CLAUDE.md load on demand when Claude reads files
+in that subdirectory.
 ```
 
 ---
@@ -47,9 +50,9 @@ your-project/
 ├── .claude/
 │   ├── settings.json          # Hooks, permissions, MCP
 │   └── commands/              # Custom slash commands
-│       ├── review.md          # /project:review
-│       ├── deploy.md          # /project:deploy
-│       └── debug.md           # /project:debug
+│       ├── review.md          # /review
+│       ├── deploy.md          # /deploy
+│       └── debug.md           # /debug
 ├── src/
 │   └── CLAUDE.md              # Source-specific conventions
 ├── tests/
@@ -225,8 +228,8 @@ Use this as your project root `CLAUDE.md`. Copy and customize:
 Express/Fastify API server for the main application.
 
 ## Stack
-- Runtime: Node.js 20+
-- Framework: Fastify 4
+- Runtime: Node.js 24 LTS
+- Framework: Fastify v5
 - ORM: Drizzle
 - Validation: Zod
 - Auth: JWT with refresh tokens
@@ -254,124 +257,118 @@ Express/Fastify API server for the main application.
 
 ```json
 {
+  "model": "opus",
+  "effortLevel": "high",
+  "outputStyle": "Concise",
   "permissions": {
     "allow": [
-      "Read",
-      "Write",
-      "Edit",
-      "Bash(npm test)",
+      "Bash(npm run test:*)",
       "Bash(npm run lint)",
       "Bash(npm run build)",
       "Bash(npx tsc --noEmit)",
-      "Bash(npx prettier --write *)"
+      "Bash(git commit *)",
+      "Read(src/**)"
     ],
     "deny": [
-      "Bash(rm -rf /)",
-      "Bash(curl *)",
-      "Bash(wget *)"
+      "Read(**/.env)",
+      "Edit(prisma/migrations/**)"
+    ],
+    "ask": [
+      "Bash(git push *)"
     ]
   },
   "hooks": {
     "PreToolUse": [
       {
         "matcher": "Edit|Write",
-        "command": "if echo \"$CLAUDE_FILE_PATH\" | grep -qE '\\.(env|pem|key|secret)$'; then echo 'BLOCKED: sensitive file'; exit 1; fi"
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/block-secrets.sh"
+          }
+        ]
       }
     ],
     "PostToolUse": [
       {
         "matcher": "Edit|Write",
-        "command": "npx prettier --write \"$CLAUDE_FILE_PATH\" 2>/dev/null || true"
-      },
-      {
-        "matcher": "Edit|Write",
-        "command": "npx eslint --fix \"$CLAUDE_FILE_PATH\" 2>/dev/null || true"
-      }
-    ],
-    "Notification": [
-      {
-        "matcher": "",
-        "command": "echo \"[$(date)] Claude notification\" >> .claude/notifications.log"
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npx prettier --write",
+            "args": ["${tool_input.file_path}"],
+            "async": true
+          }
+        ]
       }
     ]
   },
-  "mcpServers": {
-    "github": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-github"],
-      "env": {
-        "GITHUB_TOKEN": ""
-      }
-    },
-    "filesystem": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/path/to/allowed/dir"]
-    },
-    "postgres": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-postgres"],
-      "env": {
-        "DATABASE_URL": ""
-      }
-    }
-  }
+  "env": { "CLAUDE_CODE_SUBAGENT_MODEL": "haiku" },
+  "statusLine": { "type": "command", "command": ".claude/statusline.sh" },
+  "enabledPlugins": ["acme-tools@acme"],
+  "autoMemoryEnabled": true
 }
 ```
 
-### Hook Environment Variables
+Hook config: the `hooks` value is an array of `{ matcher, hooks: [{ type, command, ... }] }` entries. The command receives the hook event as JSON on stdin — extract fields with `jq` or the `${tool_input.field}` substitution, not the old `$CLAUDE_FILE_PATH` env var. Full hook reference: [../agents/hooks-automation-prompt.md](../agents/hooks-automation-prompt.md).
 
-| Variable | Description | Available In |
-|----------|-------------|-------------|
-| `$CLAUDE_FILE_PATH` | Path of file being edited | PreToolUse, PostToolUse |
-| `$CLAUDE_TOOL_NAME` | Name of the tool being used | PreToolUse, PostToolUse |
+MCP servers belong in `.mcp.json` at the project root (committed, team-shared), not in `settings.json`. Full MCP setup: [../agents/mcp-integration-prompt.md](../agents/mcp-integration-prompt.md).
 
-### Settings Hierarchy
+`"auto"` / `"bypassPermissions"` as `defaultMode` are ignored in project/local settings — they only work in `~/.claude/settings.json` or managed settings.
+
+### Settings hierarchy
 
 ```
-~/.claude/settings.json          → User-global (applies to all projects)
-your-project/.claude/settings.json → Project-level (committed to git)
+managed policy settings          highest precedence, org-controlled
+your-project/.claude/settings.local.json   personal, not committed
+your-project/.claude/settings.json         team, committed to git
+~/.claude/settings.json                     user-global
 ```
 
-Project settings override user-global settings. **Commit project settings to git** so the whole team shares the same configuration.
+More specific wins. **Commit project `settings.json`** so the team shares configuration; keep machine-specific overrides in `settings.local.json` (gitignored).
 
 ---
 
-## .claude/commands/: Custom Slash Commands
+## .claude/skills/ and .claude/commands/: Custom Commands
 
-### How Custom Commands Work
-
-Files in `.claude/commands/` become available as slash commands in Claude Code. The filename becomes the command name.
+Custom commands have been merged into skills. A file at `.claude/commands/deploy.md` and a skill at `.claude/skills/deploy/SKILL.md` both create `/deploy`. Existing `.claude/commands/` files keep working; skills are recommended — they support a directory of supporting files, model-invocation, and subagent execution. Full authoring: [../agents/agent-skills-prompt.md](../agents/agent-skills-prompt.md).
 
 ```
-.claude/commands/
-├── review.md          → /project:review
-├── deploy.md          → /project:deploy
-├── debug.md           → /project:debug
-├── new-feature.md     → /project:new-feature
-└── security-check.md  → /project:security-check
+.claude/skills/
+├── review/SKILL.md      → /review
+├── deploy/SKILL.md       → /deploy
+└── new-feature/SKILL.md  → /new-feature
 ```
 
-### Command File Format
+### Skill file format
 
-Each `.md` file contains the prompt that runs when the command is invoked. You can use `$ARGUMENTS` to accept parameters.
+`SKILL.md` = YAML frontmatter + Markdown instructions. Use `$ARGUMENTS` / `$1` / `$2` for parameters, `` !`cmd` `` for injected context, `@file` for file references.
 
-#### Example: `.claude/commands/review.md`
+#### Example: `.claude/skills/review/SKILL.md`
 
 ```markdown
-Review the code changes in this project with these criteria:
+---
+description: Review the current changes for correctness, security, performance, tests, and style. Use when the user asks for a review.
+allowed-tools: Bash(git diff *)
+---
 
-1. **Correctness**: Does the code do what it's supposed to?
-2. **Security**: Any injection, auth, or data exposure risks?
-3. **Performance**: Any N+1 queries, memory leaks, or unnecessary computation?
-4. **Tests**: Are new paths tested? Are edge cases covered?
-5. **Style**: Does it follow our conventions in CLAUDE.md?
+## Current changes
 
-Focus on: $ARGUMENTS
+!`git diff HEAD`
 
-Provide actionable feedback with specific file:line references.
+## Instructions
+
+Review the diff above against:
+1. Correctness — does it do what it should?
+2. Security — injection, auth, data exposure
+3. Performance — N+1 queries, leaks, needless work
+4. Tests — new paths covered, edge cases
+5. Style — matches CLAUDE.md conventions
+
+Focus on: $ARGUMENTS. Give feedback with file:line references.
 ```
 
-Usage: `/project:review the authentication middleware changes`
+Usage: `/review the authentication middleware changes`
 
 #### Example: `.claude/commands/new-feature.md`
 
@@ -401,7 +398,7 @@ Feature: $ARGUMENTS
 - Verify the feature works end-to-end
 ```
 
-Usage: `/project:new-feature user profile image upload with S3 storage`
+Usage: `/new-feature user profile image upload with S3 storage`
 
 #### Example: `.claude/commands/debug.md`
 
@@ -413,7 +410,7 @@ Issue: $ARGUMENTS
 ## Protocol
 1. **Reproduce**: Find the exact steps to trigger the bug
 2. **Isolate**: Narrow down to the specific file and function
-3. **Root cause**: Use /think mode to analyze deeply
+3. **Root cause**: Analyze deeply — add `ultrathink` to the prompt if the cause is not obvious
 4. **Fix**: Apply the minimal fix
 5. **Verify**: Write a regression test
 6. **Document**: Note the fix in the commit message
@@ -421,7 +418,7 @@ Issue: $ARGUMENTS
 Use the project's test suite to verify the fix doesn't break anything.
 ```
 
-Usage: `/project:debug login fails when email contains a plus sign`
+Usage: `/debug login fails when email contains a plus sign`
 
 ---
 
@@ -599,8 +596,8 @@ When combining multiple prompts, be aware of potential conflicts:
 | Security + Performance | Security may add overhead | Prioritize security; optimize within constraints |
 | Refactoring + Testing | Refactoring may break tests | Update tests alongside refactoring; never skip |
 | Architecture + Migration | New arch patterns vs. legacy constraints | Incremental migration; don't rewrite everything |
-| Full-Stack + Token Optimization | Full-stack needs detailed context | Use directory-level CLAUDE.md to scope context |
-| Code Review + Compact Mode | Review needs depth; compact saves tokens | Use /think for review, /compact for applying fixes |
+| Full-Stack + broad context | Full-stack needs detailed context | Use directory-level CLAUDE.md and `.claude/rules/` with `paths:` to scope context |
+| Deep review + token budget | Review needs depth; long sessions bloat context | Run `/code-review` in a fresh subagent; `/clear` between review and fix passes |
 
 ---
 
@@ -641,17 +638,11 @@ Set your personal coding preferences that apply to all projects:
       "Write"
     ]
   },
-  "mcpServers": {
-    "github": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-github"],
-      "env": {
-        "GITHUB_TOKEN": "your-token"
-      }
-    }
-  }
+  "enableAllProjectMcpServers": false
 }
 ```
+
+Put MCP servers in `.mcp.json` (project root), not `settings.json`. For a hosted GitHub MCP server with OAuth instead of a PAT, see [../agents/mcp-integration-prompt.md](../agents/mcp-integration-prompt.md).
 
 ---
 
@@ -661,7 +652,7 @@ Set your personal coding preferences that apply to all projects:
 
 ```
 my-saas/
-├── CLAUDE.md                          # Stack: Next.js 14, Prisma, Stripe
+├── CLAUDE.md                          # Stack: Next.js 16, Prisma 7, Stripe
 ├── .claude/
 │   ├── settings.json                  # Auto-format, auto-lint hooks
 │   └── commands/
@@ -744,7 +735,7 @@ enterprise-mono/
 ### Pattern 1: Deep Work Sessions
 
 ```
-Session 1: Architecture (with /think or /ultrathink)
+Session 1: Architecture (plan mode, /effort xhigh)
 ├── Read CLAUDE.md for context
 ├── Design solution architecture
 ├── Document decisions in CLAUDE.md
@@ -752,7 +743,7 @@ Session 1: Architecture (with /think or /ultrathink)
 
 /clear → Reset context
 
-Session 2: Implementation (Normal mode)
+Session 2: Implementation (/effort high)
 ├── CLAUDE.md auto-loads previous decisions
 ├── Execute plan step by step
 ├── Run tests after each step
@@ -760,10 +751,10 @@ Session 2: Implementation (Normal mode)
 
 /clear → Reset context
 
-Session 3: Review & Polish (Mixed modes)
-├── /think → Code review
-├── Normal → Apply fixes
-├── /compact → Final cleanup
+Session 3: Review & Polish
+├── /code-review → adversarial review in a fresh subagent
+├── Apply the fixes
+├── /compact if context is bloated
 └── Update CLAUDE.md with learnings
 ```
 
@@ -813,7 +804,7 @@ CLAUDE.md tracks:
 - [ ] Commit `.claude/` directory to git for team sharing
 - [ ] Add sensitive values (tokens, secrets) to `.gitignore` or use env vars
 - [ ] Test hooks by making a small edit and verifying auto-format runs
-- [ ] Test custom commands with `/project:command-name`
+- [ ] Test custom commands with `/command-name`
 - [ ] Review token usage with `/cost` after first session
 
 ---

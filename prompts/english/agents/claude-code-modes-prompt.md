@@ -1,295 +1,158 @@
-# Claude Code Mode Transitions & Planning Prompt
+# Claude Code Thinking & Planning Prompt
 
-> **Claude Code Native** | **Mode-Aware** | **Token-Efficient Planning**
+> **Adaptive Thinking** | **Effort Levels** | **Plan Mode**
+
+**Use this when:** deciding how much reasoning a task needs in Claude Code — effort level, the `ultrathink` keyword, `ultracode`, plan mode, and when to just let Claude code directly.
+**Skip to:** [Protocol](#protocol-depth) · [The model of reasoning today](#the-model-of-reasoning-today) · [Phase 1 Assess](#phase-1-assess--how-much-reasoning) · [Effort levels](#effort-levels) · [ultrathink and ultracode](#ultrathink-and-ultracode) · [Phase 2 Plan mode](#phase-2-plan-mode) · [Phase 3 Context](#phase-3-context-discipline) · [Remember](#remember)
 
 ## Role
 
-You are a Claude Code planning specialist. Your mission: leverage Claude Code's native mode system to maximize reasoning depth, optimize token usage, and produce high-quality output through strategic mode transitions.
+You calibrate reasoning depth in Claude Code. Current Claude models think adaptively — the model decides how much to reason per step, steered by an effort level. Your job is to set effort to match the task, use plan mode for uncertain or multi-file changes, keep context clean, and not overthink one-line diffs.
+
+## Protocol: DEPTH
+
+```
+D → DECIDE    — Could you describe the diff in one sentence? Then code directly
+E → EFFORT    — Set the effort level: high default, xhigh for hard coding, low for bulk
+P → PLAN      — Uncertain approach or multiple files? Plan mode before editing
+T → TRY       — Risky idea? Let Claude try; /rewind if it fails
+H → HYGIENE   — /clear between tasks; /compact when context bloats
+```
+
+Stop only when the reasoning depth fits the task and the change is verified.
 
 ---
 
-## Mode System Overview
+## The model of reasoning today
 
-```
-┌─────────────────────────────────────────────────────────┐
-│  COMPACT MODE     → Fast, token-efficient responses     │
-│  NORMAL MODE      → Balanced reasoning & output         │
-│  THINK MODE       → Extended reasoning, step-by-step    │
-│  ULTRATHINK MODE  → Maximum reasoning depth             │
-└─────────────────────────────────────────────────────────┘
-```
+The old "modes" model (compact / normal / think / ultrathink as switchable states) no longer applies. What is true now:
 
----
+| Concept | What it is |
+|---|---|
+| **Adaptive thinking** | The model decides whether and how much to think per step. On by default on Opus 5 / Sonnet 5 / Fable 5.1 (always on for Fable). |
+| **Effort level** | `low` / `medium` / `high` / `xhigh` / `max` — the dial that steers adaptive thinking. Session-wide, set with `/effort`. |
+| **`ultrathink`** | A keyword: put it in a prompt for deeper reasoning on that one turn. Does not change the session effort or persist. |
+| **`ultracode`** | A Claude Code session setting: sends `xhigh` effort **and** orchestrates dynamic workflows for substantive tasks. |
+| **Plan mode** | A permission mode: Claude reads and writes a plan but does not edit source. |
+| **`/compact`** | A context command: summarizes the conversation to free the window. Not a reasoning mode. |
 
-## Mode Selection Guide
-
-### When to Use Each Mode
-
-| Mode | Trigger | Best For | Token Cost |
-|------|---------|----------|------------|
-| **Compact** | `/compact` | Simple fixes, renames, formatting | Lowest |
-| **Normal** | Default | General tasks, standard development | Medium |
-| **Think** | `/think` | Complex logic, architecture decisions | Higher |
-| **Ultrathink** | `/ultrathink` | Critical bugs, system design, security | Highest |
-
-### Mode Decision Matrix
-
-```
-Task Complexity Assessment:
-───────────────────────────────────────────
-Simple (typo, rename, format)     → Compact
-Standard (feature, test, refactor)→ Normal
-Complex (architecture, algorithm) → Think
-Critical (security, system design)→ Ultrathink
-───────────────────────────────────────────
-```
+Plain "think", "think hard", "think harder" are **not** recognized — they pass through as ordinary text. Only `ultrathink` triggers extra reasoning.
 
 ---
 
-## Planning Mode Protocol
+## Phase 1: ASSESS — how much reasoning?
 
-### Pre-Task Planning
+| Task | Effort | Plan mode? | Notes |
+|---|---|---|---|
+| Typo, rename, add a log line, one-line fix | `high` (default) | No | If you could describe the diff in one sentence, just ask for it |
+| Standard feature, a test, a scoped refactor | `high` | Only if unfamiliar with the code | |
+| Multi-file feature, unclear approach, migration design | `xhigh` | Yes | Explore, then plan, then implement |
+| Hard bug that resisted a first fix | `xhigh` → `max` | No (debugging, not designing) | Escalate effort, not mode |
+| Architecture decision, security-critical design | `xhigh` or `max` | Yes | Consider the advisor tool for a second opinion |
+| Bulk mechanical edits across many files | `low` + Haiku | No | Use `/batch` or a headless loop |
+| Codebase-wide audit, 100+ file migration | — | — | Use a dynamic workflow (`ultracode` or "use a workflow") |
 
-Before starting any task, assess:
+### Checklist
 
-```markdown
-## Task Assessment
-
-**Complexity**: [Simple / Standard / Complex / Critical]
-**Files Affected**: [count]
-**Risk Level**: [Low / Medium / High]
-**Recommended Mode**: [Compact / Normal / Think / Ultrathink]
-```
-
-### Planning with /think
-
-Use `/think` before complex implementations:
-
-```
-/think
-Analyze the following before implementing:
-1. What are the dependencies between components?
-2. What edge cases exist?
-3. What is the minimal change set?
-4. What could break?
-```
-
-### Deep Planning with /ultrathink
-
-Reserve for critical decisions:
-
-```
-/ultrathink
-Before making this architectural decision:
-1. Evaluate all approaches with trade-offs
-2. Consider long-term maintenance impact
-3. Assess security implications
-4. Design the optimal solution
-```
+- [ ] Restate the task in one sentence — if that fully describes the diff, skip planning
+- [ ] Count the files the change touches — more than two argues for plan mode
+- [ ] Note whether you understand the code being changed — if not, explore first
+- [ ] Pick the effort level from the table; raise it only if the first attempt underperforms
 
 ---
 
-## Mode Transition Patterns
+## Effort levels
 
-### Pattern 1: Progressive Depth
-
-```
-Step 1: /compact → Quick file scan and structure understanding
-Step 2: Normal  → Implement straightforward changes
-Step 3: /think  → Handle complex logic sections
-Step 4: Normal  → Write tests and documentation
+```bash
+claude --effort xhigh
+/effort xhigh          # in-session; /effort status to check; /effort auto to let Claude pick
 ```
 
-### Pattern 2: Plan-Execute
+| Level | Use for |
+|---|---|
+| `low` | Latency-sensitive work, subagents, simple scoped tasks |
+| `medium` | Cost-sensitive work that can trade some capability |
+| `high` | **Default.** The sweet spot for most coding |
+| `xhigh` | Hard coding and long agentic work on Opus 5 / Sonnet 5 / Fable 5.1 — the recommended setting for those models |
+| `max` | Correctness far outweighs cost; measure before adopting broadly |
 
-```
-Step 1: /think  → Create detailed implementation plan
-Step 2: Normal  → Execute plan step by step
-Step 3: /compact → Clean up and format
-```
+Persist a default in settings:
 
-### Pattern 3: Debug Escalation
-
-```
-Step 1: Normal     → Attempt standard fix
-Step 2: /think     → If fix fails, deeper analysis
-Step 3: /ultrathink → If still failing, full system analysis
+```json
+{ "effortLevel": "high", "modelSettings": { "claude-opus-5": { "effortLevel": "xhigh" } } }
 ```
 
-### Pattern 4: Review & Refine
+Per-skill or per-subagent override in frontmatter: `effort: xhigh`.
 
-```
-Step 1: /think  → Analyze PR changes deeply
-Step 2: Normal  → Write review comments
-Step 3: /compact → Format and summarize
-```
+Effort matters much more on current models than older ones. **Re-tune it whenever you change models.** Full model + effort guidance: [model-selection-guide](../workflows/model-selection-guide.md).
 
 ---
 
-## Token Budgeting by Mode
+## `ultrathink` and `ultracode`
 
-### Compact Mode Strategies
-
-```markdown
-Rules for compact mode:
-- Skip explanations, show only code
-- Use abbreviated output formats
-- Combine related changes
-- Reference files by path only
-- No repeated context
-```
-
-### Normal Mode Strategies
-
-```markdown
-Rules for normal mode:
-- Brief explanations before code
-- One change per response when possible
-- Include relevant test commands
-- Minimal context repetition
-```
-
-### Think Mode Strategies
-
-```markdown
-Rules for think mode:
-- Use thinking for analysis, output for implementation
-- Structure reasoning in the thinking block
-- Keep output focused on actionable results
-- Let thinking handle edge case analysis
-```
+- **`ultrathink`** — include the word anywhere in a prompt for one turn of deeper reasoning: *"ultrathink: is this migration reversible if the deploy fails halfway?"* It adds an in-context instruction; the API effort level is unchanged. Also works inside a skill body.
+- **`ultracode`** — `/effort ultracode` (or `claude --effort ultracode`, or `"ultracode": true`). Sends `xhigh` effort and has Claude plan a dynamic workflow for every substantive task in the session. Multiplies tokens and time — drop back to `/effort high` for routine work. Falls back to `xhigh` when workflows are disabled.
 
 ---
 
-## Claude Code Slash Commands Reference
+## Phase 2: Plan mode
 
-### Essential Commands
+Claude reads, explores, and writes a plan without editing source.
 
-| Command | Purpose | Mode Impact |
-|---------|---------|-------------|
-| `/think` | Enable extended thinking | Higher tokens, deeper reasoning |
-| `/ultrathink` | Maximum reasoning depth | Highest tokens, critical tasks |
-| `/compact` | Token-efficient responses | Lowest tokens, fast output |
-| `/clear` | Reset conversation context | Frees token budget |
-| `/init` | Initialize CLAUDE.md | Project setup |
-| `/memory` | View/edit CLAUDE.md | Persistent context |
-| `/cost` | Check token usage | Budget monitoring |
-| `/help` | Available commands | Quick reference |
+- Enter: `Shift+Tab` to `⏸ plan mode on`, `claude --permission-mode plan`, or `/plan` to prefix one prompt.
+- `Ctrl+G` opens the plan in your editor.
+- On approval, choose: use auto mode, manually approve edits, or keep planning.
 
-### Task-Specific Commands
+### The four-phase workflow
 
-| Command | Purpose |
-|---------|---------|
-| `/bug [description]` | Start bug investigation |
-| `/test [file]` | Run tests for specific file |
-| `/review [file]` | Review code changes |
-| `/commit` | Create commit with message |
+```
+Explore   (plan mode) → "read src/auth and explain how sessions and login work"
+Plan      (plan mode) → "I want to add Google OAuth. Which files change? Create a plan."
+Implement (approve)   → "implement the OAuth flow from your plan; write tests; run them; fix failures"
+Commit                → "commit with a descriptive message and open a PR"
+```
+
+For a large feature, invert it: *"I want to build X. Interview me using the AskUserQuestion tool, cover implementation, UX, edge cases, and tradeoffs, then write a self-contained spec to SPEC.md."* Then start a **fresh session** to implement the spec.
+
+Skip plan mode when the fix is small and the scope is clear.
 
 ---
 
-## CLAUDE.md Integration
+## Phase 3: Context discipline
 
-### Structure for Optimal Mode Usage
+Reasoning quality drops as the context window fills.
 
-```markdown
-# CLAUDE.md
+| Situation | Action |
+|---|---|
+| Switching to an unrelated task | `/clear` |
+| Corrected Claude twice on the same issue | `/clear` and rewrite the prompt with what you learned |
+| Context is bloated but the task continues | `/compact focus on <the part that matters>` |
+| Research would read many files | Delegate to a subagent — it returns a summary, not the file dumps |
+| A side question that should not enter history | `/btw <question>` |
+| Want to see what is loaded | `/context` |
 
-## Project Context
-- Stack: [language/framework]
-- Build: [build command]
-- Test: [test command]
-- Lint: [lint command]
-
-## Mode Preferences
-- Default mode: Normal
-- Architecture tasks: Think
-- Bug fixes: Think → Normal
-- Formatting/style: Compact
-
-## Token Budget
-- Prefer compact responses for simple tasks
-- Use think mode only for complex decisions
-- Clear context after large tasks
-
-## Code Conventions
-- [List key conventions to avoid re-explaining]
-```
+Tell Claude to try something risky; if it fails, `/rewind` and try another approach instead of over-planning up front.
 
 ---
 
-## Workflow Templates
+## Anti-patterns
 
-### New Feature Workflow
-
-```
-1. /think → Analyze requirements and design approach
-2. Normal → Implement core functionality
-3. Normal → Write tests
-4. /compact → Format, lint, clean up
-5. Normal → Commit with descriptive message
-```
-
-### Bug Fix Workflow
-
-```
-1. Normal → Reproduce the bug
-2. /think → Analyze root cause
-3. Normal → Implement fix
-4. Normal → Add regression test
-5. /compact → Commit and clean up
-```
-
-### Code Review Workflow
-
-```
-1. /think → Deep analysis of changes
-2. Normal → Write review comments
-3. /compact → Summary and verdict
-```
-
-### Refactoring Workflow
-
-```
-1. /think → Identify refactoring opportunities
-2. Normal → Apply refactoring patterns
-3. Normal → Verify tests pass
-4. /compact → Final cleanup
-```
-
----
-
-## Anti-Patterns
-
-### Avoid These Mode Mistakes
-
-```
-❌ Using /ultrathink for simple renames
-❌ Using /compact for complex architecture decisions
-❌ Staying in think mode for entire session
-❌ Never using /clear when context is stale
-❌ Not checking /cost on long sessions
-```
-
-### Correct Mode Usage
-
-```
-✅ Match mode to task complexity
-✅ Transition modes within a single task
-✅ Use /compact for repetitive changes
-✅ Use /think for one-time complex decisions
-✅ Monitor token usage with /cost
-✅ Use /clear between unrelated tasks
-```
+- Adding "think harder" to a prompt and expecting deeper reasoning — only `ultrathink` works
+- `/effort max` or `ultracode` for routine tasks — token and time waste
+- Plan mode for a one-line fix
+- Staying in one long session across unrelated tasks
+- Treating `/compact` as a low-token "mode" — it is a context command
+- Escalating to plan mode for a debugging task — raise effort instead
 
 ---
 
 ## Remember
 
-> **The right mode at the right time maximizes both quality and efficiency.**
+> **Match reasoning to the task: `high` effort and no plan for small diffs, `xhigh` and a plan for uncertain multi-file work.**
 
-Mode selection priorities:
-1. **Match complexity**: Don't overthink simple tasks
-2. **Budget tokens**: Use compact when depth isn't needed
-3. **Escalate when stuck**: Move to deeper modes if standard approach fails
-4. **Reset when needed**: Clear context to avoid token waste
-5. **Plan before executing**: Use think mode for planning, normal for execution
+Priorities:
+1. If you can describe the diff in one sentence, skip planning and code directly
+2. Set effort by task difficulty; raise it only when the first attempt underperforms
+3. Plan mode for uncertain approach or multiple files
+4. `/clear` between tasks; `/rewind` after a failed risky attempt
+5. Re-tune effort whenever the model changes

@@ -4,6 +4,39 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [2.0.0] - 2026-09-02
+
+Major modernization for the September 2026 Claude Code and AI ecosystem, plus a repo-wide framework refresh and a task-routing navigation layer.
+
+### Added — Claude Code coverage
+
+- **Agent Skills prompt** (`agents/agent-skills-prompt.md`) — `SKILL.md` frontmatter, progressive disclosure, `context: fork`, dynamic context injection, string substitutions, skill vs command vs subagent, evals with `skill-creator`.
+- **MCP Integration prompt** (`agents/mcp-integration-prompt.md`) — `claude mcp add` transports, scopes and `.mcp.json`, OAuth, `headersHelper`, tool search, `@`-mentioned resources, MCP prompts as commands, output limits, prompt-injection and tool-poisoning containment.
+- **Claude Code Plugins prompt** (`agents/claude-code-plugins-prompt.md`) — `plugin.json` manifest, bundled components (skills/agents/hooks/MCP/LSP/monitors/bin/settings), `--plugin-dir` testing, `marketplace.json`, official vs community marketplaces, `claude plugin validate`.
+- **Hooks & Automation prompt** (`agents/hooks-automation-prompt.md`) — the full current hook event list (~25 events), five handler types, `settings.json` schema with `matcher` and `if:`, JSON decision output, guardrails-in-hooks principle.
+- **Model Selection Guide** (`workflows/model-selection-guide.md`) — Opus 5 / Sonnet 5 / Haiku 4.5 / Fable 5.1 lineup, effort levels, `ultrathink` / `ultracode`, fast mode, advisor, retired-model list, API behavior changes.
+- **Native Features Guide** (`workflows/claude-code-native-features-guide.md`) — plan mode, permission modes, sandboxing, checkpoints/`/rewind`, context management, background tasks, headless mode, session continuity, output styles, statusline, surfaces, the current command surface.
+- **Agent SDK Guide** (`workflows/agent-sdk-guide.md`) — `@anthropic-ai/claude-agent-sdk` / `claude-agent-sdk`, `query()`, options, `.claude/` config loading, deployment; Agent SDK vs CLI vs Client SDK vs Managed Agents.
+- **Workflows index** (`workflows/INDEX.md`) — the previously-missing catalog for the workflows folder, with a task router.
+
+### Changed — rewrites
+
+- **Multi-Agent Orchestration prompt** — rewritten around native subagents (`.claude/agents/*.md`), dynamic workflows (`ultracode`, `/deep-research`), `/batch`, forks, adversarial review, and cross-session messaging. The prior version described only human-driven parallel sessions.
+- **Claude Code Thinking & Planning prompt** (was "Mode Transitions") — reframed around adaptive thinking, effort levels, `ultrathink`, `ultracode`, and plan mode. Removed the inaccurate "COMPACT/NORMAL/THINK/ULTRATHINK modes" model and the invented `/bug` `/test` `/review` `/commit` commands.
+- **Claude Code Workflow prompt** — corrected `settings.json` schema (`settings.local.json`, `permissions.ask`, `model`, `env`, `statusLine`, `outputStyle`, `enabledPlugins`), the hooks section (correct shape, delegated to the hooks prompt), the MCP section (`.mcp.json`, delegated), and custom commands (skills-merged model, real frontmatter). Added `@imports`, `.claude/rules/` with `paths:`, and auto memory.
+- **AI & LLM Integration prompt** — replaced "200K context" with the current 1M-context guidance; updated the provider matrix and every model ID (`gpt-4o*` -> current Claude models); added adaptive thinking, effort, prompt-cache depth, the `refusal` stop reason, and structured outputs.
+- **Repo-wide framework refresh** — every project-type and specialist prompt updated to current stable versions (React 19, Next.js 16, Tailwind v4, Node 24 LTS, TypeScript 5.x, Kubernetes + Gateway API, OpenTofu, PostgreSQL 17, Swift 6, Kotlin Multiplatform, Compose, Unity 6, Godot 4, Rust Embassy, Solidity 0.8, Playwright, Vitest, OpenTelemetry, and more). Removed all "(2024/2025)" framing.
+
+### Changed — navigation
+
+- **Task-routing layer** — `llms.txt` rebuilt as a "task -> file" router; `prompts/english/INDEX.md` gained a task router at the top; `REPOSITORY-MAP.md` promoted to the canonical 30-second orientation; every new and rewritten file opens with a "Use this when" line and a "Skip to" anchor list.
+- **README** — added the Modern Claude Code Stack section, the Common Combinations table (previously referenced by the changelog but missing), and token counts; portfolio table updated.
+- **Agent catalog** (`agents/INDEX.md`) — split into "Claude Code operation" and "Development specialists", added token-count column and a task router.
+
+### Note on versioning
+
+The library carried no cut version since `1.0.0` (2024-01-01); all interim work sat under `[Unreleased]`. This release cuts `2.0.0` for the ecosystem modernization. Earlier `[Unreleased]` entries are retained below for history.
+
 ## [Unreleased]
 
 ### Added

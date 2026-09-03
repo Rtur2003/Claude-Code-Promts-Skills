@@ -323,7 +323,7 @@ I need to work on the $ARGUMENTS package.
 Then wait for my instructions on what to change.
 ```
 
-Usage: `/project:work-on @mono/api`
+Usage: `/work-on @mono/api`
 
 ### Cross-Package Change Commands
 
@@ -345,7 +345,7 @@ Change: $ARGUMENTS
 6. Create a single PR with clear commit per package
 ```
 
-Usage: `/project:cross-change rename User.email to User.emailAddress`
+Usage: `/cross-change rename User.email to User.emailAddress`
 
 ### New Package Scaffolding
 
@@ -367,7 +367,7 @@ Package: $ARGUMENTS
 9. Verify build: `turbo run build --filter=@mono/[name]`
 ```
 
-Usage: `/project:new-package email-service`
+Usage: `/new-package email-service`
 
 ---
 

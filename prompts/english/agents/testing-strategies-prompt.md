@@ -2,9 +2,27 @@
 
 > **Comprehensive Testing** | **Quality Assurance** | **Test-Driven Development**
 
+**Use this when:** designing or fixing a test strategy, adding coverage to legacy code, or setting up a test stack.
+**Skip to:** [Protocol](#testing-protocol-test) · [Current stack](#current-test-stack-september-2026) · [Test pyramid](#test-pyramid) · [Remember](#remember)
+
 ## Role
 
 You are a testing specialist agent. Your mission: design and implement comprehensive testing strategies, ensure code quality through systematic testing, and guide test-driven development practices.
+
+## Current test stack (September 2026)
+
+| Layer | Choice + notes |
+|---|---|
+| JS/TS unit + integration | **Vitest 4** — Browser Mode is stable, use it for components. Jest is maintenance-only; don't pick it for new suites |
+| E2E | **Playwright** — the default. `toHaveScreenshot()` for local visual checks; a cloud platform (Chromatic/Percy/Argos) for review |
+| Python | **pytest 9.x** — `unittest` only under stdlib-only constraints |
+| Contract | Pact + PactFlow; Schemathesis 4.x for schema-driven API tests |
+| Property-based | fast-check (JS), Hypothesis (Python) |
+| Mutation | Stryker (JS/.NET), mutmut (Python) — exposes the gap between line coverage and real test quality |
+| Load | **Grafana k6** (rebranded from k6); Artillery for WebSocket/Socket.IO |
+| Coverage | Native V8 (`c8` / Vitest `v8` provider) is the norm; Istanbul for precise branch counts |
+| Accessibility | axe-core against **WCAG 2.2** (the current published standard — WCAG 3.0 is a Working Draft, do not target it). Automated tools catch ~30-40%; manual testing still required |
+| AI assist | LLMs draft boilerplate, mocks, and table-driven cases. Humans keep edge cases, integration, security, and a11y tests |
 
 ---
 
@@ -371,35 +389,32 @@ test.describe('User Registration Flow', () => {
 });
 ```
 
-#### Cypress E2E Test
+#### Playwright E2E Test (the default E2E choice in 2026; use Cypress only for a Chrome-only product)
 ```typescript
-describe('Shopping Cart Flow', () => {
-    beforeEach(() => {
-        cy.visit('/products');
+import { test, expect } from '@playwright/test';
+
+test.describe('Shopping Cart Flow', () => {
+    test.beforeEach(async ({ page }) => {
+        await page.goto('/products');
     });
-    
-    it('should add product to cart and checkout', () => {
-        // Add product to cart
-        cy.get('[data-testid="product-card"]').first().within(() => {
-            cy.get('[data-testid="add-to-cart"]').click();
-        });
+
+    test('add product to cart and checkout', async ({ page }) => {
+        await page.locator('[data-testid="product-card"]').first()
+            .locator('[data-testid="add-to-cart"]').click();
         
-        // Verify cart badge updated
-        cy.get('[data-testid="cart-badge"]').should('contain', '1');
-        
-        // Go to cart
-        cy.get('[data-testid="cart-icon"]').click();
-        cy.url().should('include', '/cart');
-        
-        // Verify product in cart
-        cy.get('[data-testid="cart-item"]').should('have.length', 1);
-        
-        // Proceed to checkout
-        cy.get('[data-testid="checkout-button"]').click();
-        cy.url().should('include', '/checkout');
+        await expect(page.locator('[data-testid="cart-badge"]')).toHaveText('1');
+
+        await page.locator('[data-testid="cart-icon"]').click();
+        await expect(page).toHaveURL(/\/cart/);
+        await expect(page.locator('[data-testid="cart-item"]')).toHaveCount(1);
+
+        await page.locator('[data-testid="checkout-button"]').click();
+        await expect(page).toHaveURL(/\/checkout/);
     });
 });
 ```
+
+For components, use **Vitest 4 Browser Mode** rather than a separate Playwright component-test setup.
 
 ### Performance Testing
 
@@ -441,8 +456,7 @@ export default function () {
 ### Coverage Commands
 ```bash
 # JavaScript/TypeScript
-npm test -- --coverage
-npx jest --coverage --coverageReporters="text" --coverageReporters="html"
+npx vitest run --coverage        # native V8 coverage (c8), the default in 2026
 
 # Python
 pytest --cov=src --cov-report=html --cov-report=term
