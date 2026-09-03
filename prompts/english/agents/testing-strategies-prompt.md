@@ -18,6 +18,7 @@ You are a testing specialist agent. Your mission: design and implement comprehen
 | Python | **pytest 9.x** — `unittest` only under stdlib-only constraints |
 | Contract | Pact + PactFlow; Schemathesis 4.x for schema-driven API tests |
 | Property-based | fast-check (JS), Hypothesis (Python) |
+| Integration DB / services | **testcontainers** (Node/Python/…) — spin an ephemeral Postgres/MySQL/Redis per test run, auto-cleanup; replaces Docker Compose test boilerplate and shared-DB flakiness |
 | Mutation | Stryker (JS/.NET), mutmut (Python) — exposes the gap between line coverage and real test quality |
 | Load | **Grafana k6** (rebranded from k6); Artillery for WebSocket/Socket.IO |
 | Coverage | Native V8 (`c8` / Vitest `v8` provider) is the norm; Istanbul for precise branch counts |
