@@ -31,8 +31,12 @@ When analyzing DevOps projects:
 - **IaC Tools**: Terraform (BSL 1.1) or OpenTofu (MPL 2.0, Linux Foundation fork — state encryption, provider-defined `for_each`, `-exclude`); Pulumi or AWS CDK for real-language IaC; Ansible for config.
 - **Monitoring**: OpenTelemetry (CNCF-graduated, the standard for new instrumentation) + Prometheus 3.x + Grafana LGTM stack; DataDog/CloudWatch as managed alternatives
 - **Logging**: Loki, OTLP logs, CloudWatch Logs (ELK is legacy for new stacks)
+- **Log/metric/trace pipeline**: `vector` (Rust, one binary, 100+ sources/sinks, VRL transforms) over Fluentd/Fluent Bit
 - **Secrets Management**: Vault, AWS/GCP Secrets Manager, GitHub OIDC + environment secrets, SOPS
 - **GitOps**: ArgoCD (UI-first, multi-tenancy) or Flux (pipeline-first, minimal footprint) — both CNCF-graduated
+- **Lightweight Kubernetes**: `k3s` (edge/IoT, SQLite datastore), `k0s` (single binary, no host deps), `talos` (Kubernetes-native immutable OS, security-first)
+- **Local toolchain**: `mise` for language/tool versions (Rust rewrite of asdf, ~24x faster, replaces the `*env` family); `just` for project task recipes (over make)
+- **CI as code**: `dagger` (pipelines in Go/Python/TS that run locally identical to CI, with deterministic caching) when YAML sprawl becomes the bottleneck
 - **Deployment Strategy**: Blue-green, canary, rolling updates
 
 ### Planning Phase - DevOps Specific (ENVISION)

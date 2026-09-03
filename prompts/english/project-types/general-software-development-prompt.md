@@ -39,7 +39,8 @@ First, internalize the [Foundation Prompt](../base/claude-foundation-prompt.md) 
 - **API contracts**: OpenAPI 3.1 for REST, AsyncAPI 3.x for events; design-first with contract tests.
 - **Feature flags**: build against OpenFeature (CNCF); backends Unleash, Flagsmith, or Flipt.
 - **Docs**: Docusaurus or Starlight (Astro) for product docs, MkDocs + Material for Python.
-- **Toolchain versions**: pin with `mise` / `proto` / `.tool-versions`, not per-developer installs.
+- **Toolchain versions**: pin with `mise` (Rust, ~24x faster than asdf, replaces nvm/pyenv/rbenv) or `proto` / `.tool-versions`, not per-developer installs. `just` for project task recipes over make.
+- **Local dev CLI**: `ripgrep` + `fd` + `bat` + `delta` (git pager) + `zoxide` (smart cd) + `atuin` (searchable synced shell history) remove more daily friction than most tooling; add `difftastic` for syntax-tree diffs and `hyperfine` for CLI benchmarking.
 
 ## Universal Development Principles
 
