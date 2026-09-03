@@ -571,9 +571,14 @@ Design:
 - Drizzle ORM: SQL-like, zero-dependency, pre-1.0 but outpacing Prisma; default for edge/serverless and SQL-fluent teams
 - Prisma 7: Rust engine removed (TS + WASM query compiler), ~9x faster serverless cold start; pick for schema-first DX
 - Kysely: pure typed SQL builder, no ORM
-- sqlx / sqlc (Go, Rust): compile-time-verified SQL
+- sqlc (Go/Python/TS): generates type-safe code from raw SQL, validated against the schema at gen time
+
+Migrations:
+- atlas: schema-as-code (HCL/SQL/ORM), declarative + versioned, migration analyzers
+- pgroll: zero-downtime Postgres schema changes (expand/contract, old+new coexist, instant rollback); works on RDS/Aurora
 
 Store: PostgreSQL 18 default. Valkey (BSD, not Redis) for a new cache.
+Python server: granian (Rust ASGI) is a drop-in for uvicorn with faster startup and lower memory.
 ```
 
 ### Modern Auth Solutions

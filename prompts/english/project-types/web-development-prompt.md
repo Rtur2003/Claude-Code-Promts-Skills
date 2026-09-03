@@ -365,9 +365,11 @@ Verify current versions before pinning — the web ecosystem moves fast.
 | **Data fetching** | TanStack Query v5 / native `fetch` in Server Components | |
 | **Forms** | React Hook Form + Zod, or React 19 Actions | |
 | **Animation** | Motion (Framer Motion) / GSAP / View Transitions API | |
-| **Testing** | Vitest 4 (Browser Mode for components) + Playwright (E2E) | Playwright is the default E2E choice |
+| **Testing** | Vitest 4 (Browser Mode for components — real Chromium/Firefox/Safari, not jsdom) + Playwright (E2E) | Playwright is the default E2E choice |
 | **Component dev** | Storybook 9 | |
-| **Type safety** | TypeScript 7 (native Go compiler) + Zod | |
+| **Type safety** | TypeScript 7 (native Go compiler) + Zod | `valibot` (tree-shakes to <1KB) or `arktype` (TS-syntax schemas, fastest validator) when Zod's bundle size or ergonomics bite |
+| **Linting** | ESLint 9 flat config | Add `oxlint` (Rust, 50–100x faster) for the CI fast path; keep ESLint for custom-rule plugins |
+| **Atomic CSS alt** | UnoCSS | On-demand engine, ~10ms hot reload regardless of project size; Tailwind-compatible presets — pick it over Tailwind when dev build speed dominates |
 
 ### Paradigm shifts still worth stating
 

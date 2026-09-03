@@ -536,6 +536,12 @@ REFRESH MATERIALIZED VIEW CONCURRENTLY monthly_sales;
 
 ## Migration Best Practices
 
+### Tooling
+
+- **atlas** — schema-as-code (HCL/SQL/ORM), declarative + versioned workflows, 50+ built-in migration analyzers. Over hand-written Flyway migrations.
+- **pgroll** (Postgres) — automates the expand/contract pattern below: old and new schema versions coexist, application cuts over, instant rollback. Works on RDS/Aurora.
+- **pglite** — full Postgres in WASM, 3MB. **Alpha: no durability, single-user — local dev, tests, and local-first apps only, never production.**
+
 ### Schema Migration
 ```sql
 -- Migration: Add new column (zero-downtime)

@@ -30,7 +30,9 @@ First, internalize the [Foundation Prompt](../base/claude-foundation-prompt.md) 
 | Batch / streaming | Spark 4 (Spark Connect); Kafka 4.x is KRaft-only (no ZooKeeper); Flink 2.x for stateful streams |
 | Lakehouse | Apache Iceberg (default), REST catalog; Delta for Databricks shops, Hudi for CDC upserts |
 | Experiment tracking | MLflow 3.x (OSS registry + eval) or Weights & Biases |
-| LLM eval / tracing | Langfuse (OSS, self-host) or Braintrust (eval CI/CD) |
+| LLM app framework | **DSPy** for anything that needs optimization (structured signatures + gradient-free tuning, over hand-written LangChain chains); provider SDK + Pydantic AI for thin needs |
+| Structured output | **instructor** (LLM -> validated Pydantic, retry + streaming); **outlines** for guaranteed-valid JSON/regex/grammar with fewer wasted tokens |
+| LLM eval / tracing | Langfuse (OSS, self-host) or Braintrust (eval CI/CD); **promptfoo** for CLI/CI eval with built-in prompt-injection, PII, and jailbreak scanning |
 | Vector DB | pgvector 0.8 (+ pgvectorscale) if already on Postgres; Qdrant at 5M+ vectors; LanceDB embedded; Pinecone managed |
 | Embeddings | `text-embedding-3-small` to start; Voyage AI (Voyage 4) when RAG quality is the bottleneck; BGE-M3 to self-host |
 | Fine-tuning | QLoRA (4-bit base + LoRA adapter, single 80GB GPU); Unsloth trainer; DPO/ORPO for preference |
