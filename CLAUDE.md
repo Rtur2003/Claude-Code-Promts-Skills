@@ -11,23 +11,41 @@
 ## Repository Structure
 
 ```
-├── CLAUDE.md              # This file — project memory for Claude Code
-├── README.md              # Main documentation with prompt catalog
+├── CLAUDE.md              # This file — project memory
+├── README.md              # Main catalog, portfolio table, common combinations
+├── REPOSITORY-MAP.md      # 30-second orientation, task -> file lookup
 ├── QUICK-START.md         # 30-second setup guide
-├── USAGE.md               # Detailed examples & advanced usage
+├── USAGE.md               # Scenario-based prompt composition
 ├── CONTRIBUTING.md        # Contribution guidelines
-├── CHANGELOG.md           # Version history
+├── CHANGELOG.md           # Version history (current: 2.0.0)
+├── llms.txt               # Full LLM router index
 └── prompts/
     └── english/
-        ├── INDEX.md           # All prompts organized by category
+        ├── INDEX.md           # Global task -> file router
         ├── agents/            # Active agent prompts + compatibility stubs
-        │   ├── INDEX.md
+        │   ├── INDEX.md       #   catalog with token counts + task router
         │   └── archive/       # Archived prompts removed from active catalog
         ├── base/              # Foundation prompt (universal best practices)
-        ├── project-types/     # Domain-specific prompts (11 files: web, API, ML, mobile, blockchain, desktop, etc.)
-        ├── examples/          # Real-world usage examples (10 files)
-        └── workflows/         # APEI methodology, prompt selection, troubleshooting, setup, and maintenance guides
+        ├── project-types/     # Domain-specific prompts (11 files)
+        ├── examples/          # Real-world usage examples
+        └── workflows/         # Model selection, native features, Agent SDK,
+            └── INDEX.md       #   APEI, selection, troubleshooting, setup, maintenance
 ```
+
+### Claude Code operation prompts (agents/)
+
+The library covers the current Claude Code / Claude ecosystem. Keep these accurate against `code.claude.com/docs` and `platform.claude.com/docs`:
+
+- `agent-skills-prompt.md` — SKILL.md authoring
+- `mcp-integration-prompt.md` — MCP servers, scopes, auth, injection safety
+- `claude-code-plugins-prompt.md` — plugin.json, marketplaces
+- `multi-agent-orchestration-prompt.md` — native subagents + dynamic workflows
+- `hooks-automation-prompt.md` — hook events and settings.json schema
+- `claude-code-workflow-prompt.md` — CLAUDE.md, rules, settings, permissions
+- `claude-code-modes-prompt.md` — adaptive thinking, effort, plan mode
+- `workflows/model-selection-guide.md` — model lineup and effort
+- `workflows/claude-code-native-features-guide.md` — the current feature surface
+- `workflows/agent-sdk-guide.md` — the Claude Agent SDK
 
 ## File Naming Conventions
 
@@ -89,10 +107,11 @@ No build system — this is a pure Markdown repository.
 ## Common Tasks
 
 ### Add a new agent prompt
-1. Create `prompts/english/agents/your-topic-prompt.md` using the template above
-2. Update `prompts/english/agents/INDEX.md` with a new table row
-3. Update `prompts/english/INDEX.md`
-4. Add entry to the prompt catalog table in `README.md`
+1. Create `prompts/english/agents/your-topic-prompt.md` using the template above; open with a "Use this when" line and a "Skip to" anchor list
+2. Update `prompts/english/agents/INDEX.md` — the task router and the catalog table (with a ~token estimate)
+3. Update `prompts/english/INDEX.md` task router
+4. Add entry to the portfolio table and, if it is a recurring pairing, the Common Combinations table in `README.md`
+5. Add a line to `llms.txt` and `REPOSITORY-MAP.md`
 
 ### Add a new project-type prompt
 1. Create `prompts/english/project-types/your-domain-prompt.md`
@@ -144,3 +163,6 @@ update: enhance code review checklist  # Updates
 - Don't deviate from the APEI methodology in prompt design
 - Don't remove the Remember section from prompts
 - Don't use absolute URLs for internal links — use relative paths
+- Don't cite Claude Code features, commands, or model IDs from memory — verify against `code.claude.com/docs` / `platform.claude.com/docs`
+- Don't reference retired models (`claude-3-*`, `claude-opus-4-1`, `claude-sonnet-4-0`, `gpt-4o`) as current
+- Don't add filler or AI-cliché phrasing; every sentence carries information

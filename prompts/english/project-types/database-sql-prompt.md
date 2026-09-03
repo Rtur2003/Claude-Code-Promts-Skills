@@ -8,7 +8,7 @@ You are a database design and SQL specialist agent. Your mission: design efficie
 
 ---
 
-## Database Protocol: DESIGN
+## Protocol: DESIGN
 
 ```
 ┌─────────────────────────────────────────────────────┐
@@ -43,6 +43,18 @@ You are a database design and SQL specialist agent. Your mission: design efficie
 - Scaling requirements (vertical/horizontal)?
 ```
 
+#### Database Selection (September 2026)
+
+| Need | Choice |
+|---|---|
+| General-purpose relational | **PostgreSQL 18** (async I/O, B-tree skip scan, `uuidv7()`, virtual generated columns, OAuth 2.0 auth) |
+| Vector / semantic search | **pgvector 0.8.x** on Postgres (add `pgvectorscale` for high scale); Qdrant or Milvus only when scale forces a dedicated store |
+| In-memory cache / queue | **Valkey** (BSD-3, Linux Foundation; default engine in AWS ElastiCache). Redis is now tri-licensed (SSPL / RSAL / AGPLv3) — pick it only for a specific Redis Ltd. feature |
+| Embedded / edge SQL | **SQLite** (Node has stable `node:sqlite`); Turso Database (Rust rewrite) or Cloudflare D1 for a hosted edge story |
+| Single-node analytics / OLAP | **DuckDB** + **Polars** — reads Parquet/CSV/Iceberg directly; evaluate before reaching for Spark |
+| Distributed / NewSQL | **TiDB** (Apache 2.0, MySQL-compatible) for permissive licensing; CockroachDB moved to a restricted Community License (CCL) with a free tier only under ~$10M revenue — confirm terms before adopting |
+| Serverless Postgres | **Neon** (now part of Databricks) or Supabase; PlanetScale ended its free tier and added managed Postgres |
+
 #### Entity Discovery
 ```markdown
 ## Entity Analysis
@@ -71,11 +83,12 @@ You are a database design and SQL specialist agent. Your mission: design efficie
 
 ### Schema Design Patterns
 
-#### Relational Schema (PostgreSQL)
+#### Relational Schema (PostgreSQL 18)
 ```sql
 -- Users table with best practices
+-- On PostgreSQL 18, prefer uuidv7() for primary keys: time-ordered, better index locality than gen_random_uuid()
 CREATE TABLE users (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY DEFAULT uuidv7(),
     email VARCHAR(255) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
     name VARCHAR(100) NOT NULL,

@@ -1,44 +1,49 @@
 # Repository Map
 
-Single-file navigation map for fast orientation before deep reading.
+30-second orientation. Resolve your task to one file, open it, act. Do not read the whole repo.
 
-## Root
+## What this repo is
 
-| Path | Purpose |
+A prompt library for Claude coding agents. Pure Markdown. English only. Built on the APEI cycle (Analyze -> Plan -> Execute -> Iterate). Every prompt follows `## Role` -> `## Protocol` -> `## Phases` -> `## Remember` and ends every recommendation with a concrete decision, tool, or check.
+
+## Fast lookup
+
+| I need... | Open |
 |---|---|
-| `README.md` | Main catalog, usage entrypoint, portfolio standards |
-| `QUICK-START.md` | Fast setup and minimal prompt selection |
-| `USAGE.md` | Scenario-based prompt composition |
-| `CONTRIBUTING.md` | Contribution and quality rules |
-| `CHANGELOG.md` | Versioned documentation history |
-| `CLAUDE.md` | Project memory and maintenance rules |
-| `llms.txt` | LLM-friendly index |
-| `prompts/english/` | Full prompt library (English only) |
+| The default operational prompt | `prompts/english/agents/claude-agent-system-prompt.md` |
+| To route any task to the right prompt | `prompts/english/INDEX.md` |
+| To pick a Claude model / effort level | `prompts/english/workflows/model-selection-guide.md` |
+| To know what current Claude Code can do | `prompts/english/workflows/claude-code-native-features-guide.md` |
+| To write a skill / set up MCP / build a plugin / write hooks | `prompts/english/agents/` (`agent-skills`, `mcp-integration`, `claude-code-plugins`, `hooks-automation`) |
+| To run parallel agents or a dynamic workflow | `prompts/english/agents/multi-agent-orchestration-prompt.md` |
+| To build a specific kind of app | `prompts/english/project-types/` |
+| To improve existing code (review, debug, refactor, test, perf) | `prompts/english/agents/` specialist prompts |
+| Composition examples | `prompts/english/examples/` |
+| Governance / contribution rules | `CONTRIBUTING.md`, `prompts/english/workflows/prompt-review-checklist.md` |
 
-## prompts/english
+## Directory layout
 
-| Path | Purpose |
+| Path | Contents |
 |---|---|
-| `INDEX.md` | Global prompt index across all categories |
-| `agents/` | Active specialist/system prompts |
-| `agents/INDEX.md` | Active + archived agent catalog |
-| `agents/archive/` | Archived prompts and merge rationale |
-| `base/` | Foundation universal prompt |
-| `project-types/` | Domain-specific prompts (web, API, ML, mobile, etc.) |
-| `examples/` | Real usage scenarios |
-| `workflows/` | Selection guides, review checklists, maintenance workflows |
+| `README.md` | Catalog, portfolio table, common combinations |
+| `prompts/english/INDEX.md` | Global task -> file router |
+| `prompts/english/agents/` | 35 active prompts: the Agent System, Claude Code operation (Skills, MCP, Plugins, Subagents+Workflows, Hooks, Workflow, Thinking), and development specialists |
+| `prompts/english/agents/INDEX.md` | Agent catalog with token counts and a task router |
+| `prompts/english/agents/archive/` | Archived prompts + merge rationale |
+| `prompts/english/base/` | Foundation prompt (universal best practices) |
+| `prompts/english/project-types/` | 11 domain prompts (web, API, mobile, desktop, data/ML, DevOps, DB, game, embedded, blockchain, general) |
+| `prompts/english/examples/` | Real usage walkthroughs |
+| `prompts/english/workflows/` | Model selection, native features, Agent SDK, APEI, setup, selection, troubleshooting, maintenance |
+| `prompts/english/workflows/INDEX.md` | Workflow guide catalog |
+| `llms.txt` | Full LLM router index |
+| `CHANGELOG.md` | Version history |
+| `CLAUDE.md` | Project memory for anyone working on this repo |
 
-## Recommended Reading Order
+## How to use the library
 
-1. `REPOSITORY-MAP.md` (this file)
-2. `README.md`
-3. `prompts/english/INDEX.md`
-4. `prompts/english/agents/claude-agent-system-prompt.md`
-5. Add only one specialist prompt from `prompts/english/agents/INDEX.md` if needed
+1. Start with **Agent System** (`prompts/english/agents/claude-agent-system-prompt.md`).
+2. Add **one** specialist or project-type prompt only if the task clearly needs it.
+3. For Claude Code setup, add the relevant operation prompt (Skills / MCP / Hooks / Workflow).
+4. Validate every output against explicit success criteria before adding more prompts.
 
-## Fast Lookup
-
-- Need the default operational prompt: `prompts/english/agents/claude-agent-system-prompt.md`
-- Need Claude Code setup/MCP workflow: `prompts/english/agents/claude-code-workflow-prompt.md`
-- Need prompt composition examples: `prompts/english/examples/`
-- Need governance criteria: `prompts/english/workflows/prompt-review-checklist.md`
+Selection tree: `prompts/english/workflows/prompt-selector-guide.md`.

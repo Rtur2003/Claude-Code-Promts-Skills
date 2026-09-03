@@ -36,10 +36,12 @@ You are a performance optimization specialist agent. Your mission: identify perf
 |--------|--------|----------|
 | First Contentful Paint (FCP) | <1.8s | <3s |
 | Largest Contentful Paint (LCP) | <2.5s | <4s |
-| First Input Delay (FID) | <100ms | <300ms |
+| Interaction to Next Paint (INP) | <200ms | <500ms |
 | Cumulative Layout Shift (CLS) | <0.1 | <0.25 |
 | Time to First Byte (TTFB) | <200ms | <600ms |
 | Total Blocking Time (TBT) | <200ms | <600ms |
+
+INP replaced First Input Delay as a Core Web Vital in March 2024. It is the most-failed CWV — measure it with the field data in Chrome UX Report, not lab tools alone.
 
 **API/Backend:**
 | Metric | Target | Critical |
@@ -290,25 +292,24 @@ const worker = new Worker('./heavy-computation.js');
 
 #### Unoptimized Rendering
 ```javascript
-// Problem: Unnecessary re-renders
+// Problem: Child re-renders on every Parent render
 function Parent() {
     const [count, setCount] = useState(0);
-    
-    // This function is recreated every render
     const handleClick = () => setCount(c => c + 1);
-    
-    return <Child onClick={handleClick} />; // Child re-renders every time
+    return <Child onClick={handleClick} />;
 }
 
-// Solution: Memoization
+// Solution 1 (preferred on React 19+): enable the React Compiler.
+// It auto-memoizes components and hooks at build time - no manual
+// useCallback/useMemo/React.memo. Opt in via the Babel/SWC plugin
+// (reactCompiler: true in Next.js) and the eslint-plugin-react-hooks v6 rules.
+
+// Solution 2 (manual, when the compiler is not enabled):
 function Parent() {
     const [count, setCount] = useState(0);
-    
     const handleClick = useCallback(() => setCount(c => c + 1), []);
-    
     return <MemoizedChild onClick={handleClick} />;
 }
-
 const MemoizedChild = React.memo(Child);
 ```
 
@@ -550,11 +551,12 @@ app.get('/api/heavy-operation', async (req, res) => {
 ### Performance Checklist
 ```markdown
 **Frontend:**
-- [ ] Bundle size optimized (code splitting, tree shaking)
-- [ ] Images optimized (WebP, lazy loading, responsive)
-- [ ] Critical CSS inlined
-- [ ] JavaScript deferred/async
-- [ ] Service worker for caching
+- [ ] Bundle size optimized (code splitting, tree shaking; Vite 8 / Rspack, not raw Webpack)
+- [ ] React Compiler enabled on React 19+ (removes manual memoization)
+- [ ] Images optimized (AVIF with WebP fallback, `loading="lazy"`, responsive `srcset`)
+- [ ] Critical CSS inlined; fonts preloaded with `font-display: swap`
+- [ ] JavaScript deferred/async; long tasks broken up to protect INP
+- [ ] Service worker for caching where a PWA is in scope
 
 **Backend:**
 - [ ] Database queries optimized (indexes, no N+1)
@@ -710,10 +712,10 @@ export default {
 ```
 ✦ MEASURE FIRST: Don't guess where the bottleneck is — profile with real data
 ✦ PRIORITIZE: Fix the highest-impact issue first — 80/20 rule applies
-✦ BATCH & CACHE: DataLoader for N+1, Redis for hot data, CDN for static assets
+✦ BATCH & CACHE: DataLoader for N+1, Valkey/Redis for hot data, CDN for static assets
 ✦ MEMORY: Track heap growth, find leaks early — they only get worse
 ✦ EDGE: Push computation closer to users — CDN, edge workers, edge databases
-✦ COMPRESS: Brotli > gzip, WebP > PNG, lazy load everything below the fold
+✦ COMPRESS: Brotli/zstd > gzip, AVIF > WebP > PNG, lazy load everything below the fold
 ✦ AUTOMATE: Performance budgets in CI/CD — catch regressions before production
 ✦ MONITOR: Real user metrics (RUM) reveal what synthetic tests miss
 ```

@@ -16,8 +16,8 @@ A prompt is archived when at least one of these is true:
 | Error Analysis | Archive | Debugging & Troubleshooting + Agent System | Overlaps with production debugging flow and root-cause loop |
 | Project Workflow | Archive | Agent System + Technology Stack + Full-Stack Development | Lifecycle planning is now covered by core + stack-specific prompts |
 | Integration Guardian | Archive | Code Review + Testing + Monitoring & Observability | Cross-cutting integrity checks are distributed in stronger specialist prompts |
-| Claude Code Token Optimization | Archive | Claude Code Modes + Claude Code Workflow | Token strategy is now embedded in mode and workflow guidance |
-| Prompt Chaining | Archive | Agent System + Multi-Agent Orchestration | Multi-step planning is handled by core loop and orchestration prompt |
+| Claude Code Token Optimization | Archive | Claude Code Thinking & Planning + Claude Code Workflow + Model Selection Guide | Token and effort strategy is now covered by effort levels, context discipline, and model choice |
+| Prompt Chaining | Archive | Agent System + Multi-Agent Orchestration | Multi-step planning is handled by the core loop, subagents, and dynamic workflows |
 
 ## Access Archived Content
 

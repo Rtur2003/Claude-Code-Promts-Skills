@@ -47,24 +47,29 @@ npm outdated 2>/dev/null || pip list --outdated 2>/dev/null || go list -m -u all
 ## Migration Scope
 
 ### Source State
-- **Runtime**: [e.g., Node.js 16]
-- **Framework**: [e.g., React 17 class components]
-- **Database**: [e.g., PostgreSQL 13, schema v4]
+- **Runtime**: [e.g., Node.js 20]
+- **Framework**: [e.g., Next.js 14 Pages Router]
+- **Database**: [e.g., PostgreSQL 15, schema v4]
 - **Key APIs**: [e.g., REST v1, GraphQL]
 
 ### Target State
-- **Runtime**: [e.g., Node.js 20]
-- **Framework**: [e.g., React 18 hooks + Server Components]
-- **Database**: [e.g., PostgreSQL 16, schema v5]
+- **Runtime**: [e.g., Node.js 24 LTS]
+- **Framework**: [e.g., Next.js 16 App Router + Cache Components]
+- **Database**: [e.g., PostgreSQL 18, schema v5]
 - **Key APIs**: [e.g., REST v2, GraphQL]
 
 ### Migration Type
-- [ ] Framework migration (e.g., class → hooks, AngularJS → Angular)
-- [ ] Language/runtime upgrade (e.g., Java 11 → 21, Python 3.8 → 3.12)
-- [ ] Dependency major version bump (e.g., Webpack 4 → 5)
+- [ ] Framework migration (e.g., Pages Router → App Router, class → hooks, AngularJS → Angular 21)
+- [ ] Language/runtime upgrade (e.g., Java 11 → 21/25 LTS, Python 3.10 → 3.13, Node 20 → 24)
+- [ ] Dependency major version bump (e.g., Prisma 6 → 7, Vite 5 → 8, Tailwind v3 → v4)
+- [ ] Toolchain swap (e.g., Terraform → OpenTofu, Redis → Valkey, Jest → Vitest, Webpack → Vite/Rspack)
 - [ ] Database migration (schema change, engine swap)
 - [ ] API version migration (v1 → v2, deprecation cutover)
 ```
+
+### Codemods first
+
+Check for an official codemod before hand-editing: `npx @next/codemod`, `npx types-react-codemod`, `ng update`, `npx nuxt/codemods`, `npx jscodeshift`. Run it on a branch, review the diff, then fix what the codemod could not.
 
 ---
 

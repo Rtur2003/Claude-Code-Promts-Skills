@@ -88,16 +88,16 @@ export class CodeReviewer {
   }
   
   async reviewPR(diff: string, context: PRContext): Promise<ReviewResult> {
-    // Chunk large diffs to fit context window
-    const chunks = this.chunkDiff(diff, 50000); // ~50K chars per chunk
+    // Current models have a 1M context window; chunk only very large diffs
+    const chunks = this.chunkDiff(diff, 400000); // ~400K chars per chunk
     const allIssues: ReviewIssue[] = [];
     
     for (const chunk of chunks) {
       const prompt = this.buildPrompt(chunk, context);
       
       const response = await this.client.messages.create({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 4096,
+        model: 'claude-sonnet-5',
+        max_tokens: 8192,
         system: SYSTEM_PROMPT,
         messages: [{ role: 'user', content: prompt }],
       });
@@ -450,7 +450,7 @@ class ResilientReviewer {
 ```
 ✅ AI code review agent fully functional
 ✅ GitHub webhook → Claude API → PR comments
-✅ Diff chunking for large PRs (50K chars/chunk)
+✅ Diff chunking for very large PRs (~400K chars/chunk; 1M-token context)
 ✅ File filtering (skip lock files, generated code)
 ✅ Response caching to reduce duplicate reviews
 ✅ Rate limiting with exponential backoff

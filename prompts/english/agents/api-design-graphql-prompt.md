@@ -40,17 +40,19 @@ grep -rn "fetch\|axios\|got\|ky\|ofetch" src/ --include="*.ts" | head -20
 - [ ] What are current pain points? (Over-fetching, under-fetching, N+1)
 - [ ] What is the expected scale? (RPS, concurrent users, data volume)
 
-## Phase 2: REST vs GraphQL Decision Matrix
+## Phase 2: REST vs GraphQL vs typed-RPC Decision Matrix
 
-| Factor | Choose REST | Choose GraphQL |
-|--------|-------------|----------------|
-| **Data Shape** | Fixed, predictable responses | Varied queries, nested relations |
-| **Consumers** | Single client type | Multiple clients (web, mobile, IoT) |
-| **Caching** | HTTP caching sufficient | Complex caching needs |
-| **Real-time** | SSE/webhooks adequate | Subscriptions needed |
-| **Team** | REST experience strong | Schema-first culture |
-| **File Upload** | Native multipart | Requires custom handling |
-| **Public API** | Easier for third parties | Power users benefit |
+| Factor | Choose REST | Choose GraphQL | Choose typed-RPC (tRPC v11 / Hono RPC) |
+|--------|-------------|----------------|----------------------------------------|
+| **Data Shape** | Fixed, predictable responses | Varied queries, nested relations | Fixed; procedures map to functions |
+| **Consumers** | Single client type, third parties | Multiple clients (web, mobile, IoT) | One TS codebase (monorepo) |
+| **Contract** | OpenAPI 3.1 spec | SDL schema | Inferred from server types, no codegen |
+| **Caching** | HTTP caching sufficient | Persisted queries + cache hints | HTTP caching via the adapter |
+| **Real-time** | SSE/webhooks | Subscriptions | SSE / separate WebSocket layer |
+| **File Upload** | Native multipart | Requires custom handling | Multipart via the framework |
+| **Public API** | Easiest for third parties | Power users benefit | Not for external consumers |
+
+Contracts: publish an **OpenAPI 3.1** document for REST, an **AsyncAPI 3.x** document for event-driven / message APIs (Kafka, MQTT, WebSocket), and lint both with Spectral. Design-first (spec before code) pairs with contract testing.
 
 ### Hybrid Approach (Recommended for Complex Systems)
 ```
@@ -474,9 +476,9 @@ app.use('/api', (req, res, next) => {
   next();
 });
 
-// Sunset header for deprecation
+// Sunset header for deprecation (RFC 8594) - use a real future date
 app.use('/api/v1', (req, res, next) => {
-  res.set('Sunset', 'Sat, 01 Jan 2026 00:00:00 GMT');
+  res.set('Sunset', 'Wed, 01 Jul 2026 00:00:00 GMT');
   res.set('Deprecation', 'true');
   res.set('Link', '</api/v2>; rel="successor-version"');
   next();
@@ -555,6 +557,11 @@ describe('User Resolvers', () => {
 ```
 
 ### Contract Testing
+
+Two complementary checks:
+- **Pact** (consumer-driven) — the consumer records expectations, the provider verifies them. Use for service-to-service contracts.
+- **Schemathesis 4.x** (schema-driven) — generates thousands of cases from the OpenAPI/GraphQL schema, including negative cases, and checks response conformance. Use to test the provider against its own spec.
+
 ```typescript
 // Pact consumer test
 import { PactV3, MatchersV3 } from '@pact-foundation/pact';

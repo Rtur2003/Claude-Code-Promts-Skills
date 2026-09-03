@@ -37,21 +37,23 @@ When choosing tools for any task:
 
 ## Frontend — Modern Stack Recommendations
 
+> Baselines (September 2026): React 19.2 (Compiler 1.0 opt-in), Next.js 16 (Turbopack default), Vite 8 (Rolldown), Tailwind v4 (`@theme`), TypeScript 7. Verify current versions before pinning.
+
 ### Animation Libraries
 
 | Library | Best For | Why It's Great |
 |---------|----------|----------------|
-| **Framer Motion** | React animations | Declarative API, layout animations, gesture support, exit animations |
+| **Motion** (formerly Framer Motion) | React animations | Declarative API, layout animations, gestures, exit animations; `motion/react` import |
 | **Motion One** | Framework-agnostic | Tiny (~3KB), Web Animations API, performant |
 | **Auto Animate** | Automatic transitions | Zero-config, add to any parent element, works with any framework |
-| **GSAP** | Complex timelines | Industry standard, ScrollTrigger, incredible performance |
+| **GSAP** | Complex timelines | Industry standard, ScrollTrigger, incredible performance; free for commercial use since 2025 |
+| **Native View Transitions API** | Route/state transitions | Baseline in current browsers, no library for cross-document/SPA transitions |
 | **Lottie** | After Effects animations | Designer-friendly, JSON-based, small file size |
-| **React Spring** | Physics-based motion | Natural feel, interruptible animations |
 | **Rive** | Interactive animations | State machines, runtime control, cross-platform |
 
 ```typescript
-// Framer Motion — React example
-import { motion, AnimatePresence } from 'framer-motion';
+// Motion — React example (package: motion, import: motion/react)
+import { motion, AnimatePresence } from 'motion/react';
 
 const FadeIn = ({ children }: { children: React.ReactNode }) => (
   <motion.div
@@ -87,16 +89,18 @@ function TodoList() {
 
 ### State Management (Modern)
 
-| Library | Best For | Size |
-|---------|----------|------|
-| **Zustand** | Simple global state | ~1KB, no boilerplate |
-| **Jotai** | Atomic state | Bottom-up approach, like Recoil but simpler |
+Server state and client state are different problems. Use TanStack Query for server state; pick one client-state library below.
+
+| Library | Best For | Notes |
+|---------|----------|-------|
+| **Zustand** | Client global state | Ecosystem leader for new projects; minimal boilerplate |
+| **Redux Toolkit** | Large apps needing strict conventions | Time-travel debugging, RTK Query; no longer the default |
+| **Jotai** | Atomic state | Bottom-up, fine-grained |
 | **Nanostores** | Multi-framework | Works with React, Vue, Svelte, Solid, Angular |
-| **Legend State** | Performance-critical | Observable-based, fastest benchmarks |
-| **TanStack Store** | Framework-agnostic | From TanStack team, type-safe |
+| **TanStack Store / TanStack DB** | Framework-agnostic / reactive client store | TanStack DB pairs with a sync engine (Electric SQL) |
 
 ```typescript
-// Zustand — modern state management (replaces Redux in most cases)
+// Zustand — client state (TanStack Query handles server state)
 import { create } from 'zustand';
 
 const useStore = create((set) => ({
@@ -110,19 +114,20 @@ const useStore = create((set) => ({
 
 | Library | Best For | Key Feature |
 |---------|----------|-------------|
-| **TanStack Query** | Server state | Caching, background refetch, optimistic updates |
-| **SWR** | Simple fetching | Stale-while-revalidate, lightweight |
-| **tRPC** | TypeScript full-stack | End-to-end type safety, no code generation |
-| **Orval** | OpenAPI codegen | Auto-generates hooks from OpenAPI specs |
+| **TanStack Query v5** | Server state | Caching, background refetch, optimistic updates |
+| **tRPC v11** | TypeScript monorepos | End-to-end type safety, no code generation |
+| **Hono RPC** | Edge/multi-runtime | tRPC-like typed client, no codegen, runs on Workers/Bun/Deno/Node |
+| **Server Components + Server Actions** | Next.js / RSC frameworks | Fetch on the server, no client fetching layer for many cases |
+| **Orval** | OpenAPI codegen | Auto-generates typed hooks from an OpenAPI 3.1 spec |
 
 ### Form Libraries
 
 | Library | Best For | Key Feature |
 |---------|----------|-------------|
 | **React Hook Form** | React forms | Minimal re-renders, validation integrations |
-| **Formik** | Complex forms | Declarative, extensive ecosystem |
+| **React 19 Actions** | Progressive-enhancement forms | `useActionState` / `useFormStatus`, works without JS |
 | **TanStack Form** | Framework-agnostic | Type-safe, headless, any framework |
-| **Vee-Validate** | Vue forms | Composition API, Zod/Yup support |
+| **Vee-Validate** | Vue forms | Composition API, Zod/Valibot support |
 | **Superforms** | SvelteKit forms | Server-first, progressive enhancement |
 
 ### Validation
@@ -142,12 +147,31 @@ const useStore = create((set) => ({
 
 | Framework | Language | Why Choose It |
 |-----------|----------|---------------|
-| **Hono** | TypeScript | Ultra-fast, runs everywhere (Bun, Deno, CF Workers, Node) |
-| **ElysiaJS** | TypeScript/Bun | End-to-end type safety, incredible performance |
-| **FastAPI** | Python | Auto-docs, async, Pydantic validation |
-| **Fiber** | Go | Express-like API, fastest Go framework |
+| **Hono v4** | TypeScript | Runs unchanged on Workers, Bun, Deno, Node, Vercel; Hono RPC for typed clients. Default for edge/multi-runtime |
+| **Fastify v5** | TypeScript | Node 20+, full ESM, JSON Schema validation; the mainstream high-performance Node choice |
+| **ElysiaJS 1.x** | TypeScript/Bun | Highest raw throughput; Eden end-to-end typed client |
+| **NestJS v11** | TypeScript | Enterprise DI-heavy standard |
+| **FastAPI** | Python | Auto-docs, async, Pydantic v2 validation |
 | **Axum** | Rust | Tokio-based, tower middleware, type-safe |
-| **Gin** | Go | Simple, battle-tested, great performance |
+| **Gin / Fiber** | Go | Battle-tested, great performance |
+
+### Runtimes & Package Managers
+
+| Tool | Notes |
+|------|-------|
+| **Node.js 24 LTS** ("Krypton") | Native TS type-stripping on by default; built-in test runner and permission model stable |
+| **Bun 1.3** | Production-ready, ~98% Node compat; built-in SQLite/Redis/S3/Postgres clients, bundler, test runner |
+| **Deno 2.7** | Node/npm compat complete, JSR registry, default-deny permissions |
+| **pnpm 11** | Content-addressed store; the default for monorepos |
+
+### Monorepo Tooling
+
+| Tool | Best For |
+|------|----------|
+| **Turborepo** | JS/TS teams up to ~100 packages; the 2026 default |
+| **Nx** | Larger JS/TS orgs needing project graph, `affected`, generators |
+| **Bazel / Buck2** | Polyglot, hermetic builds at 1000+ engineer scale |
+| **Moon** | Middle ground between Turborepo and Bazel |
 
 ```typescript
 // Hono — universal web framework
@@ -174,12 +198,12 @@ app.post('/api/users',
 
 | Tool | Language | Why Choose It |
 |------|----------|---------------|
-| **Drizzle ORM** | TypeScript | SQL-like syntax, zero overhead, type-safe, migrations |
-| **Prisma** | TypeScript | Schema-first, auto-generated client, migrations |
+| **Drizzle ORM** | TypeScript | SQL-like syntax, zero overhead, type-safe, ~7KB; default for edge/serverless (still pre-1.0) |
+| **Prisma 7** | TypeScript | Schema-first, auto-generated client; the Rust engine is gone (TS + WASM query compiler), ~85% smaller, far faster serverless cold starts |
 | **Kysely** | TypeScript | Type-safe SQL query builder, no ORM magic |
 | **SQLAlchemy 2.0** | Python | Async support, type hints, industry standard |
 | **GORM** | Go | Full-featured, conventions over config |
-| **sqlx** | Go/Rust | Compile-time checked SQL queries |
+| **sqlx / sqlc** | Go/Rust | Compile-time checked SQL queries |
 
 ```typescript
 // Drizzle ORM — SQL-like, type-safe, zero overhead
@@ -211,11 +235,12 @@ const allUsers = await db.select().from(users).where(eq(users.name, 'John'));
 
 | Tool | Language | Key Feature |
 |------|----------|-------------|
-| **BullMQ** | Node.js | Redis-based, reliable, dashboard available |
+| **BullMQ** | Node.js | Redis/Valkey-based, reliable, dashboard available |
 | **Trigger.dev** | TypeScript | Serverless-friendly, long-running tasks |
 | **Inngest** | TypeScript | Event-driven, step functions, retries |
-| **Celery** | Python | Distributed, mature, multiple brokers |
+| **Celery / Dramatiq** | Python | Distributed task queues; Dramatiq is the lighter option |
 | **Temporal** | Any | Workflow engine, durable execution |
+| **Cloudflare Queues / Workflows** | Workers | Native to the edge platform, no separate broker |
 
 ---
 
@@ -223,12 +248,13 @@ const allUsers = await db.select().from(users).where(eq(users.name, 'John'));
 
 | Framework | Stack | Best For |
 |-----------|-------|----------|
-| **Next.js 14+** | React | Server components, app router, full-stack |
-| **Nuxt 3** | Vue | Auto-imports, server routes, Nitro engine |
-| **SvelteKit** | Svelte | Form actions, load functions, tiny bundles |
-| **Remix** | React | Nested routes, progressive enhancement |
-| **Astro** | Any | Content-heavy sites, partial hydration |
-| **SolidStart** | Solid | Reactivity without VDOM, great performance |
+| **Next.js 16** | React 19 | Server Components, App Router, Turbopack default, Cache Components |
+| **Nuxt 4** | Vue 3.6 | Auto-imports, server routes, Nitro engine, `app/` directory |
+| **SvelteKit 2** | Svelte 5 | Form actions, load functions, tiny bundles |
+| **React Router v7** (framework mode) | React | The successor to Remix; nested routes, loaders/actions, SSR |
+| **TanStack Start** | React | Type-safe full-stack on TanStack Router (RC) |
+| **Astro 7** | Any | Content-heavy sites, islands, built-in Fonts/CSP APIs |
+| **SolidStart** | Solid | Reactivity without a VDOM |
 
 ---
 
@@ -238,21 +264,31 @@ const allUsers = await db.select().from(users).where(eq(users.name, 'John'));
 
 | Platform | Best For | Key Feature |
 |----------|----------|-------------|
-| **Vercel** | Frontend/Full-stack | Instant deploys, edge functions, preview URLs |
-| **Cloudflare Pages/Workers** | Edge-first web apps/APIs | Global edge runtime, Wrangler workflow, integrated KV/R2/D1 |
+| **Vercel** | Frontend/Full-stack | Fluid compute (default, bills Active CPU), instant deploys, preview URLs |
+| **Cloudflare Workers** | Edge-first apps/APIs | Static Assets + SSR in one deploy; `wrangler.jsonc`; KV/R2/D1/Queues/Durable Objects/Workflows all GA. Start with Workers — Pages is in maintenance mode |
 | **Railway** | Backend/Databases | Container-based, DB provisioning, logs |
 | **Fly.io** | Global distribution | Runs anywhere, Machines API, edge compute |
 | **Coolify** | Self-hosted | Open-source Heroku/Vercel alternative |
-| **SST (Serverless Stack)** | AWS | Type-safe AWS infrastructure, live Lambda dev |
+| **SST v3 (Ion)** | AWS | Type-safe AWS infrastructure on Pulumi, live Lambda dev |
+
+### Infrastructure as Code
+
+| Tool | Best For | Notes |
+|------|----------|-------|
+| **OpenTofu** | Open-source-license requirement, greenfield | MPL 2.0 fork of Terraform; state encryption, provider-defined `for_each`, `-exclude` |
+| **Terraform** | HashiCorp/IBM ecosystem, HCP | BSL 1.1 license |
+| **Pulumi** | Multi-cloud in a real language | TS/Python/Go/C# |
+| **AWS CDK** | AWS-only shops | TypeScript/Python |
 
 ### Monitoring & Observability
 
 | Tool | Best For | Key Feature |
 |------|----------|-------------|
+| **OpenTelemetry** | Instrumentation | CNCF-graduated; the standard — instrument once with the OTel SDK + OTLP, not a proprietary agent |
+| **Grafana LGTM** | Self-hosted platform | Loki/Grafana/Tempo/Mimir + Alloy collector + Pyroscope (profiling) |
+| **Prometheus 3.x** | Metrics | OTLP ingest, native histograms |
 | **Sentry** | Error tracking | Source maps, performance, session replay |
-| **Axiom** | Logging | Unlimited logs, structured data, fast search |
-| **Better Stack** | Uptime + Logs | Status pages, on-call, incident management |
-| **OpenTelemetry** | Tracing | Vendor-neutral, distributed tracing standard |
+| **Better Stack / Axiom** | Uptime, logs | Status pages, on-call; fast log search |
 
 ---
 
@@ -260,11 +296,13 @@ const allUsers = await db.select().from(users).where(eq(users.name, 'John'));
 
 | Tool | Type | Key Feature |
 |------|------|-------------|
-| **Vitest** | Unit/Integration | Vite-powered, Jest-compatible, fast |
-| **Playwright** | E2E | Cross-browser, auto-wait, codegen |
-| **Testing Library** | Component | User-centric testing, framework-agnostic |
-| **MSW** | API mocking | Service Worker-based, intercepts at network level |
-| **Storybook** | Component dev | Isolated development, visual testing, docs |
+| **Vitest 4** | Unit/Integration/Component | Vite-powered; Browser Mode is stable — component tests need no separate Playwright CT setup |
+| **Playwright** | E2E | The default E2E choice; cross-browser, auto-wait, `toHaveScreenshot()` for visual checks |
+| **Testing Library** | Component | User-centric queries, framework-agnostic |
+| **MSW** | API mocking | Service Worker-based, intercepts at the network level |
+| **Schemathesis 4.x** | API property testing | Generates cases from an OpenAPI/GraphQL schema |
+| **Stryker** | Mutation testing | Exposes the gap between line coverage and real test quality |
+| **Grafana k6** | Load testing | Go core, JS scripting, low resource use |
 
 ---
 
@@ -272,11 +310,12 @@ const allUsers = await db.select().from(users).where(eq(users.name, 'John'));
 
 | Tool | Type | Key Feature |
 |------|------|-------------|
-| **Vercel AI SDK** | AI streaming | Unified API for OpenAI, Anthropic, etc. |
-| **LangChain.js** | AI chains | Composable AI pipelines, tools, memory |
-| **LlamaIndex** | RAG | Document indexing, retrieval, query engines |
-| **Instructor** | Structured output | Extract typed data from LLM responses |
-| **Ollama** | Local LLMs | Run models locally, easy API |
+| **Claude Agent SDK** | Agents | Claude Code's loop as a library (TS + Python) — see the Agent SDK guide |
+| **Vercel AI SDK** | AI streaming | Unified API across providers; AI SDK 6 adds agent primitives |
+| **Pydantic AI** | Typed agents (Python) | Provider-agnostic, structured output, thin |
+| **LangGraph** | Agent orchestration | Graph-based state machines for multi-step agents |
+| **LlamaIndex** | RAG ingestion/retrieval | Document indexing, retrieval, query engines |
+| **vLLM / Ollama** | Inference | vLLM for production serving; Ollama for local/dev |
 
 ---
 
@@ -334,14 +373,14 @@ When working with Claude Code, reference specific tools:
 Example CLAUDE.md addition:
 
 ## Preferred Libraries
-- Animation: Framer Motion (not CSS-in-JS animations)
-- State: Zustand (not Redux unless existing)
-- Forms: React Hook Form + Zod
-- Data fetching: TanStack Query
+- Animation: Motion (motion/react), or the View Transitions API
+- State: TanStack Query (server) + Zustand (client)
+- Forms: React Hook Form + Zod, or React 19 Actions
 - UI Components: shadcn/ui + Radix
-- ORM: Drizzle (for new projects) / Prisma (for existing)
-- Auth: Better Auth or Lucia
-- Testing: Vitest + Playwright + MSW
+- ORM: Drizzle (new) / Prisma 7 (existing)
+- Auth: Better Auth
+- Testing: Vitest 4 + Playwright
+- Cache/queue: Valkey (not Redis) for new deployments
 ```
 
 ---

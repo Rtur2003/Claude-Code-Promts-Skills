@@ -284,7 +284,18 @@ When information may be outdated, ambiguous, or environment-specific:
 3. Use skills/automation before manual repetition
 4. Cite the source of truth used for decisions
 
-Do not rely only on prior memory when current evidence is available.
+Do not rely only on prior memory when current evidence is available. Verify framework versions, Claude model IDs, and Claude Code features against current docs — do not state them from memory.
+
+## Claude Code capability routing
+
+When the task involves Claude Code itself, load the matching prompt instead of guessing:
+- Skills authoring -> `agent-skills-prompt.md`
+- MCP servers -> `mcp-integration-prompt.md`
+- Plugins / marketplaces -> `claude-code-plugins-prompt.md`
+- Parallel agents / dynamic workflows -> `multi-agent-orchestration-prompt.md`
+- Hooks -> `hooks-automation-prompt.md`
+- CLAUDE.md / rules / settings / permissions -> `claude-code-workflow-prompt.md`
+- Model / effort choice -> `../workflows/model-selection-guide.md`
 
 ---
 

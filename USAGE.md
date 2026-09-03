@@ -18,9 +18,15 @@
 | Architecture design | Agent System + Architecture Patterns |
 | Tooling choice | Agent System + Technology Stack |
 | Performance optimization | Agent System + Performance |
-| Multi-agent execution | Agent System + Multi-Agent Orchestration |
-| Claude Code planning modes | Agent System + Claude Code Modes |
+| Multi-agent execution / dynamic workflows | Agent System + Multi-Agent Orchestration |
+| Thinking depth / effort / plan mode | Agent System + Claude Code Thinking & Planning |
+| Pick a model or effort level | Model Selection Guide |
 | Claude Code setup/config | Agent System + Claude Code Workflow |
+| Write a Claude skill | Agent Skills |
+| Connect an external system (MCP) | MCP Integration |
+| Build/distribute a plugin | Claude Code Plugins |
+| Automate on a lifecycle event | Hooks & Automation |
+| Build an agent on the Agent SDK | Agent SDK Guide |
 | Interactive app/API work | Foundation + one project-type prompt |
 
 ## Copy-Paste Setup
