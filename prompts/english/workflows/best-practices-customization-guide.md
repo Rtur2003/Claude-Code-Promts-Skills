@@ -4,6 +4,22 @@
 
 ---
 
+## Working with Claude Code effectively
+
+These patterns hold regardless of which prompt you paste in. They come from Anthropic's published best practices.
+
+- **Give Claude a check it can run.** A test suite, a build, a linter, a screenshot to compare. Without one, "looks done" is the only signal and you become the verification loop. Have Claude show the evidence (test output, the command and its result), not just assert success.
+- **Explore, then plan, then code, then commit.** Use plan mode to read the relevant code and write a plan before editing. Skip planning only when you could describe the diff in one sentence.
+- **Scope investigations.** "Investigate X" with no scope reads hundreds of files and fills the context. Scope it narrowly or delegate to a subagent that returns a summary.
+- **Let Claude interview you** for a large feature: "interview me using the AskUserQuestion tool, then write a spec to SPEC.md." Execute the spec in a fresh session.
+- **`/clear` between unrelated tasks.** After two failed corrections on the same issue, `/clear` and write a better prompt with what you learned — a clean session beats a polluted one.
+- **Add an adversarial review step.** Before treating work as done, have `/code-review` or a subagent review the diff in fresh context. Tell it to flag only gaps that affect correctness or the requirements — a reviewer told to find gaps will invent them.
+- **Prune CLAUDE.md.** If Claude ignores a rule, the file is probably too long. Test each line: "would removing this cause a mistake?" Convert must-hold rules to hooks.
+
+See [claude-code-native-features-guide.md](claude-code-native-features-guide.md) for the mechanics.
+
+---
+
 ## Customizing Prompts for Your Team
 
 ### Step 1: Start with the Right Base
@@ -23,9 +39,9 @@ Append a `## Team Standards` section to any prompt:
 ## Team Standards
 
 ### Stack
-- Frontend: Next.js 15, TypeScript, Tailwind CSS, shadcn/ui
+- Frontend: Next.js 16, TypeScript, Tailwind v4, shadcn/ui
 - Backend: Node.js, Prisma, PostgreSQL
-- Testing: Vitest (unit), Playwright (e2e)
+- Testing: Vitest 4 (unit), Playwright (e2e)
 - CI/CD: GitHub Actions
 - Hosting: Vercel (frontend), Railway (backend)
 
@@ -142,10 +158,10 @@ Priority 4 (8K+ tokens): Agent System + specialist + project-type
 ```
 
 **Tips to save tokens:**
-- Put persistent context in CLAUDE.md (loaded automatically, doesn't consume message tokens)
-- Use `/compact` mode for simple tasks
-- Use `/clear` between unrelated tasks
-- Put specialist prompts in `.claude/commands/` instead of CLAUDE.md (loaded only when needed)
+- Put persistent context in CLAUDE.md (loaded automatically), and scope topic guidance to `.claude/rules/` with `paths:` so it loads only for matching files
+- Use `/clear` between unrelated tasks; `/compact <focus>` when one task's context bloats
+- Put specialist prompts in `.claude/skills/` (loaded on demand) rather than CLAUDE.md
+- Delegate research to subagents — the file reads stay out of your main context
 
 ---
 
