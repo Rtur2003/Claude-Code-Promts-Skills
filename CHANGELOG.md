@@ -33,6 +33,24 @@ Major modernization for the September 2026 Claude Code and AI ecosystem, plus a 
 - **README** — added the Modern Claude Code Stack section, the Common Combinations table (previously referenced by the changelog but missing), and token counts; portfolio table updated.
 - **Agent catalog** (`agents/INDEX.md`) — split into "Claude Code operation" and "Development specialists", added token-count column and a task router.
 
+### Added — second research pass
+
+- **Reference Resources guide** (`workflows/reference-resources.md`) — the Anthropic canon this library paraphrases (docs, best-practices, Building Effective Agents, the context-engineering blog trilogy, cookbook, courses), `AGENTS.md` cross-tool interop (how to make one config serve Claude Code + Cursor + Codex + Aider), community catalogs, and where each adjacent coding agent still wins.
+- **Hidden Gems section** in `technology-stack-prompt.md` — 25 narrowly-focused tools that beat the mainstream default at one job (oxlint, knip, ty, pgroll, atlas, dagger, mise, dspy, instructor, valibot, arktype, unocss, testcontainers, the Rust CLI set, …), each with a maturity flag; alpha tools marked not-for-production.
+- **Community-favorite MCP servers** in `mcp-integration-prompt.md` — Serena (semantic code / LSP-over-MCP), Sequential Thinking, Memory; plus the official code-intelligence LSP plugins.
+- **Community hook recipes** in `hooks-automation-prompt.md` — cost tracker, secret scanner, issue-ID linker, PR-description generator, sub-agent ROI, long-task notifier.
+- **Five composable patterns + challenge-and-converge** in `multi-agent-orchestration-prompt.md` (from Anthropic's Building Effective Agents), plus the 12-factor principle (blend deterministic code with strategic LLM decisions).
+- **Cost control section** in `claude-code-native-features-guide.md` — the runaway-loop problem and its guardrails.
+- Niche tools folded into the web / API / database / data-science / devops / general-software project-type prompts and the DX and testing agent prompts.
+
+### Changed — second research pass
+
+- CLAUDE.md size guidance reconciled to the **100–400 line** community consensus (was "under 200"), across `claude-code-workflow-prompt.md`, `monorepo-complex-projects-prompt.md`, and the setup guide; framed as "commit it, review in PRs, decision-changing rules only".
+- `agent-skills-prompt.md` — added the reference/Knowledge vs task/Playbook split and the "under ~2,000 tokens, specific and opinionated" rule.
+- `prompt-review-checklist.md` — updated to match the actual repo template (Use-this-when header, `## Phase N:` sections, a Currency check); CONTRIBUTING gained a Currency Rule.
+- Verified against multiple primary sources: MCP spec `2026-07-28` (current), Next.js 16 (stable GA), Sonnet 5 `$2/$10` permanent, `budget_tokens` removed (400), `ultrathink` the only recognized keyword.
+- `best-practices-customization-guide.md` — added a "Working with Claude Code effectively" section (verification loops, explore-plan-code, adversarial review, context discipline).
+
 ### Note on versioning
 
 The library carried no cut version since `1.0.0` (2024-01-01); all interim work sat under `[Unreleased]`. This release cuts `2.0.0` for the ecosystem modernization. Earlier `[Unreleased]` entries are retained below for history.
