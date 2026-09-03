@@ -272,6 +272,16 @@ Input → PII Detection → Content Filter → LLM → Output Validation → Res
 ```typescript
 // LLM output evaluation pattern
 async function evaluateOutput(input: string, output: string, criteria: string[]) {
+  // Structured output: one integer score per criterion
+  const scoreSchema = {
+    type: 'object',
+    properties: Object.fromEntries(
+      criteria.map((c) => [c, { type: 'integer', minimum: 1, maximum: 5 }]),
+    ),
+    required: criteria,
+    additionalProperties: false,
+  };
+
   const scores = await llm.chat({
     model: 'claude-haiku-4-5',
     messages: [{

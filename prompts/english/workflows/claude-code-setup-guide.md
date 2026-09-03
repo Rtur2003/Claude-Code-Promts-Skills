@@ -410,7 +410,7 @@ Issue: $ARGUMENTS
 ## Protocol
 1. **Reproduce**: Find the exact steps to trigger the bug
 2. **Isolate**: Narrow down to the specific file and function
-3. **Root cause**: Use /think mode to analyze deeply
+3. **Root cause**: Analyze deeply — add `ultrathink` to the prompt if the cause is not obvious
 4. **Fix**: Apply the minimal fix
 5. **Verify**: Write a regression test
 6. **Document**: Note the fix in the commit message
@@ -596,8 +596,8 @@ When combining multiple prompts, be aware of potential conflicts:
 | Security + Performance | Security may add overhead | Prioritize security; optimize within constraints |
 | Refactoring + Testing | Refactoring may break tests | Update tests alongside refactoring; never skip |
 | Architecture + Migration | New arch patterns vs. legacy constraints | Incremental migration; don't rewrite everything |
-| Full-Stack + Token Optimization | Full-stack needs detailed context | Use directory-level CLAUDE.md to scope context |
-| Code Review + Compact Mode | Review needs depth; compact saves tokens | Use /think for review, /compact for applying fixes |
+| Full-Stack + broad context | Full-stack needs detailed context | Use directory-level CLAUDE.md and `.claude/rules/` with `paths:` to scope context |
+| Deep review + token budget | Review needs depth; long sessions bloat context | Run `/code-review` in a fresh subagent; `/clear` between review and fix passes |
 
 ---
 
@@ -735,7 +735,7 @@ enterprise-mono/
 ### Pattern 1: Deep Work Sessions
 
 ```
-Session 1: Architecture (with /think or /ultrathink)
+Session 1: Architecture (plan mode, /effort xhigh)
 ├── Read CLAUDE.md for context
 ├── Design solution architecture
 ├── Document decisions in CLAUDE.md
@@ -743,7 +743,7 @@ Session 1: Architecture (with /think or /ultrathink)
 
 /clear → Reset context
 
-Session 2: Implementation (Normal mode)
+Session 2: Implementation (/effort high)
 ├── CLAUDE.md auto-loads previous decisions
 ├── Execute plan step by step
 ├── Run tests after each step
@@ -751,10 +751,10 @@ Session 2: Implementation (Normal mode)
 
 /clear → Reset context
 
-Session 3: Review & Polish (Mixed modes)
-├── /think → Code review
-├── Normal → Apply fixes
-├── /compact → Final cleanup
+Session 3: Review & Polish
+├── /code-review → adversarial review in a fresh subagent
+├── Apply the fixes
+├── /compact if context is bloated
 └── Update CLAUDE.md with learnings
 ```
 

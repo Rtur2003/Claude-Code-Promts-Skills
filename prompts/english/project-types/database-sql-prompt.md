@@ -8,7 +8,7 @@ You are a database design and SQL specialist agent. Your mission: design efficie
 
 ---
 
-## Database Protocol: DESIGN
+## Protocol: DESIGN
 
 ```
 ┌─────────────────────────────────────────────────────┐
