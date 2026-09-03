@@ -3,7 +3,7 @@
 > **Beyond-Training Knowledge** | **Library Discovery** | **Real-World Tool Recommendations**
 
 **Use this when:** choosing tools, libraries, or patterns for a task — especially when the obvious default may not be the best fit.
-**Skip to:** [Discovery Protocol](#technology-discovery-protocol) · [Frontend](#frontend--modern-stack-recommendations) · [Backend](#backend--modern-stack-recommendations) · [Hidden gems](#hidden-gems--underrated-tools) · [Anti-dogma rules](#anti-dogma-selection-rules) · [Remember](#remember)
+**Skip to:** [Discovery Protocol](#technology-discovery-protocol) · [Frontend](#frontend--modern-stack-recommendations) · [Backend](#backend--modern-tool-recommendations) · [DevOps](#devops--infrastructure) · [Decision Framework](#decision-framework) · [Anti-Dogma rules](#anti-dogma-selection-rules) · [Remember](#remember)
 
 ## Role
 
