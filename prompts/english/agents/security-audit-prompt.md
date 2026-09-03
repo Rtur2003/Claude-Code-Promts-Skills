@@ -61,39 +61,64 @@ grep -rE "eval\(|exec\(" --include="*.js" --include="*.py"
 
 ### Phase 2: VULNERABILITY ASSESSMENT
 
-#### OWASP Top 10 Checklist
+#### OWASP Top 10:2025 Checklist
 
-##### A01: Broken Access Control
+The 2025 list replaced 2021. Notable changes: **Software Supply Chain Failures** debuts at #3, **Mishandling of Exceptional Conditions** is new at #10, SSRF is folded into Broken Access Control, and Security Misconfiguration moves to #2. Also run the **OWASP Top 10 for LLM Applications 2025** for any AI feature (prompt injection, excessive agency, system-prompt leakage, unbounded consumption) and the **OWASP API Security Top 10 (2023)** for APIs.
+
+##### A01: Broken Access Control (includes SSRF)
 ```markdown
 **Check for:**
-- [ ] Authorization bypass (IDOR)
-- [ ] Missing function-level access control
-- [ ] Metadata manipulation (JWT tampering)
+- [ ] Authorization bypass (IDOR / BOLA)
+- [ ] Missing function-level and field-level access control
+- [ ] JWT tampering / algorithm confusion
 - [ ] CORS misconfiguration
 - [ ] Path traversal
+- [ ] Server-Side Request Forgery (SSRF) — unvalidated URLs to internal services or cloud metadata
 
 **Test:**
 - Can users access others' data by changing IDs?
-- Can regular users access admin functions?
-- Are all endpoints protected appropriately?
+- Can regular users reach admin functions?
+- Can a user-supplied URL reach `169.254.169.254` or an internal host?
 ```
 
-##### A02: Cryptographic Failures
+##### A02: Security Misconfiguration
+```markdown
+**Check for:**
+- [ ] Default credentials, verbose errors, directory listing
+- [ ] Unnecessary features/ports/services enabled
+- [ ] Missing security headers (CSP, HSTS, X-Content-Type-Options)
+- [ ] Permissive cloud storage / IAM
+- [ ] Out-of-date framework defaults
+```
+
+##### A03: Software Supply Chain Failures
+```markdown
+**Check for:**
+- [ ] Dependencies with known CVEs (run the scan below)
+- [ ] Unpinned / unhashed dependencies; no lock file committed
+- [ ] Unmaintained or single-maintainer critical packages
+- [ ] Typosquat / dependency-confusion risk (internal package names published publicly)
+- [ ] Build system compromise surface: over-privileged CI tokens, unpinned Actions
+- [ ] No SBOM; no provenance / signature verification on artifacts
+
+**Practice:**
+- Generate an SBOM (CycloneDX or SPDX); sign it
+- Verify provenance on publish (npm / PyPI native attestation, OIDC Trusted Publishers)
+- Sign artifacts with Sigstore/Cosign; target SLSA Build L2+
+- Pin dependencies by hash; minimal CI token permissions
+```
+
+##### A04: Cryptographic Failures
 ```markdown
 **Check for:**
 - [ ] Sensitive data transmitted over HTTP
-- [ ] Weak encryption algorithms (MD5, SHA1 for passwords)
-- [ ] Hardcoded encryption keys
+- [ ] Weak algorithms (MD5, SHA1, DES; bcrypt/argon2id for passwords)
+- [ ] Hardcoded keys; keys not rotated
 - [ ] Sensitive data in logs
-- [ ] Passwords stored in plain text
-
-**Test:**
-- How are passwords stored?
-- Is all traffic encrypted?
-- Are encryption keys properly managed?
+- [ ] Passwords stored in plain text or reversibly encrypted
 ```
 
-##### A03: Injection
+##### A05: Injection
 ```markdown
 **Check for:**
 - [ ] SQL injection
@@ -114,7 +139,7 @@ exec("ls " + userInput);
 db.query("SELECT * FROM users WHERE id = $1", [req.params.id]);
 ```
 
-##### A04: Insecure Design
+##### A06: Insecure Design
 ```markdown
 **Check for:**
 - [ ] Missing rate limiting
@@ -124,36 +149,12 @@ db.query("SELECT * FROM users WHERE id = $1", [req.params.id]);
 - [ ] Trust boundaries not defined
 ```
 
-##### A05: Security Misconfiguration
-```markdown
-**Check for:**
-- [ ] Default credentials
-- [ ] Unnecessary features enabled
-- [ ] Error messages revealing info
-- [ ] Missing security headers
-- [ ] Debug mode in production
-- [ ] Outdated software
-
-**Security Headers to verify:**
-- Content-Security-Policy
-- X-Frame-Options
-- X-Content-Type-Options
-- Strict-Transport-Security
-- X-XSS-Protection
-```
-
-##### A06: Vulnerable Components
-```markdown
-**Check for:**
-- [ ] Outdated dependencies with known CVEs
-- [ ] Unmaintained packages
-- [ ] Dependencies with critical vulnerabilities
-
-**Scan command:**
+**Scan command (supply chain — used for A03):**
 ```bash
-npm audit --audit-level=high
-pip-audit || safety check
-snyk test
+npm audit --audit-level=high        # or: pnpm audit
+pip-audit                            # Python
+trivy fs --scanners vuln,secret,misconfig .
+osv-scanner scan .                   # cross-ecosystem, reachability-aware
 ```
 
 ##### A07: Authentication Failures
@@ -172,33 +173,35 @@ snyk test
 - Is password reset secure?
 ```
 
-##### A08: Software and Data Integrity Failures
+##### A08: Software or Data Integrity Failures
 ```markdown
 **Check for:**
-- [ ] Unverified dependencies (no lock file)
-- [ ] Insecure CI/CD pipeline
-- [ ] No integrity checks on updates
-- [ ] Insecure deserialization
+- [ ] Insecure deserialization (untrusted data into a deserializer)
+- [ ] Auto-update without signature verification
+- [ ] CI/CD that trusts unverified inputs
+- [ ] Unsigned artifacts in the deploy path
 ```
 
-##### A09: Logging and Monitoring Failures
+##### A09: Security Logging and Alerting Failures
 ```markdown
 **Check for:**
-- [ ] No logging of security events
+- [ ] No logging of auth, access-control, and input-validation failures
 - [ ] Sensitive data in logs
-- [ ] No alerting on attacks
-- [ ] Logs not protected
-- [ ] Insufficient audit trail
+- [ ] No alerting on attack patterns
+- [ ] Logs mutable / not shipped off-host
+- [ ] Insufficient audit trail for security-relevant actions
 ```
 
-##### A10: Server-Side Request Forgery (SSRF)
+##### A10: Mishandling of Exceptional Conditions
 ```markdown
 **Check for:**
-- [ ] User-controlled URLs in server requests
-- [ ] URL validation bypass
-- [ ] Internal service access
+- [ ] Errors that fail open (e.g. auth check throws -> request proceeds)
+- [ ] Empty catch blocks around security logic
+- [ ] Stack traces / internal detail in error responses
+- [ ] Unhandled edge cases in state machines and permission checks
+- [ ] Resource cleanup skipped on the error path
 
-**Vulnerable pattern:**
+**SSRF** (now folded into A01) — still test:
 ```javascript
 // SSRF vulnerable
 const response = await fetch(req.body.url);

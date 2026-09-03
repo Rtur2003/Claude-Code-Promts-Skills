@@ -1,30 +1,81 @@
-# Claude Code Prompts — LLM Index
+# Claude Code Prompts — LLM Router
 
-This repository is English-only and Markdown-only prompt library content.
+English-only, Markdown-only prompt library for Claude coding agents. Built on APEI: Analyze -> Plan -> Execute -> Iterate.
 
-## Start Here
-- README: ./README.md
-- Quick Start: ./QUICK-START.md
-- Usage: ./USAGE.md
-- Prompt Index: ./prompts/english/INDEX.md
-- Agent Index (active + archived): ./prompts/english/agents/INDEX.md
+Do not read every file. Resolve your task to one file below, open it, act.
 
-## Core Prompt
-- Agent System (source of truth): ./prompts/english/agents/claude-agent-system-prompt.md
+## Entry points
+- Orientation (read first): ./REPOSITORY-MAP.md
+- Global task router: ./prompts/english/INDEX.md
+- Default operational prompt: ./prompts/english/agents/claude-agent-system-prompt.md
+- Agent catalog with token counts: ./prompts/english/agents/INDEX.md
+- Workflow guides catalog: ./prompts/english/workflows/INDEX.md
 
-## Key Governance
-- Contribution Rules: ./CONTRIBUTING.md
-- Prompt Selector (single source): ./prompts/english/workflows/prompt-selector-guide.md
-- Prompt Review Checklist: ./prompts/english/workflows/prompt-review-checklist.md
-- Portfolio Maintenance (90-day cycle): ./prompts/english/workflows/portfolio-maintenance-guide.md
+## Running Claude Code
+- Pick a model / effort level: ./prompts/english/workflows/model-selection-guide.md
+- Current Claude Code features (plan mode, permissions, rewind, headless, surfaces): ./prompts/english/workflows/claude-code-native-features-guide.md
+- Thinking depth / effort / plan mode: ./prompts/english/agents/claude-code-modes-prompt.md
+- CLAUDE.md, rules, settings, permissions: ./prompts/english/agents/claude-code-workflow-prompt.md
+- Write / debug Agent Skills: ./prompts/english/agents/agent-skills-prompt.md
+- Connect an external system via MCP: ./prompts/english/agents/mcp-integration-prompt.md
+- Build and distribute a plugin: ./prompts/english/agents/claude-code-plugins-prompt.md
+- Subagents + dynamic workflows: ./prompts/english/agents/multi-agent-orchestration-prompt.md
+- Hooks and lifecycle automation: ./prompts/english/agents/hooks-automation-prompt.md
+- Build an agent programmatically (Agent SDK): ./prompts/english/workflows/agent-sdk-guide.md
+
+## Building software (project-type prompts)
+- Web frontend: ./prompts/english/project-types/web-development-prompt.md
+- API: ./prompts/english/project-types/api-development-prompt.md
+- Full-stack: ./prompts/english/agents/fullstack-development-prompt.md
+- Mobile: ./prompts/english/project-types/mobile-development-prompt.md
+- Desktop: ./prompts/english/project-types/desktop-development-prompt.md
+- Data / ML: ./prompts/english/project-types/data-science-ml-prompt.md
+- DevOps / CI-CD / IaC: ./prompts/english/project-types/devops-cicd-prompt.md
+- Database / SQL: ./prompts/english/project-types/database-sql-prompt.md
+- Game: ./prompts/english/project-types/game-development-prompt.md
+- Embedded / IoT: ./prompts/english/project-types/embedded-iot-prompt.md
+- Blockchain / web3: ./prompts/english/project-types/blockchain-web3-prompt.md
+- Language-agnostic: ./prompts/english/project-types/general-software-development-prompt.md
+- Foundation (universal best practices): ./prompts/english/base/claude-foundation-prompt.md
+
+## Improving existing code (specialist prompts)
+- Code review: ./prompts/english/agents/code-review-prompt.md
+- Security audit: ./prompts/english/agents/security-audit-prompt.md
+- Debugging / incident: ./prompts/english/agents/debugging-troubleshooting-prompt.md
+- Refactoring: ./prompts/english/agents/refactoring-prompt.md
+- Testing strategy: ./prompts/english/agents/testing-strategies-prompt.md
+- Performance: ./prompts/english/agents/performance-optimization-prompt.md
+- Migration / upgrade: ./prompts/english/agents/migration-upgrade-prompt.md
+- Monitoring / observability: ./prompts/english/agents/monitoring-observability-prompt.md
+- Error handling / resilience: ./prompts/english/agents/error-handling-resilience-prompt.md
+- Accessibility audit: ./prompts/english/agents/accessibility-audit-prompt.md
+
+## Deciding
+- Architecture patterns: ./prompts/english/agents/architecture-patterns-prompt.md
+- Technology selection: ./prompts/english/agents/technology-stack-prompt.md
+- API contract design: ./prompts/english/agents/api-design-graphql-prompt.md
+- Cloud / infrastructure: ./prompts/english/agents/cloud-infrastructure-prompt.md
+- Data engineering: ./prompts/english/agents/data-engineering-prompt.md
+- Database design / optimization: ./prompts/english/agents/database-optimization-prompt.md
+- Compliance / governance: ./prompts/english/agents/compliance-governance-prompt.md
+- Git / version control: ./prompts/english/agents/git-version-control-prompt.md
+- Developer experience / tooling: ./prompts/english/agents/developer-experience-tooling-prompt.md
+- Monorepo structure: ./prompts/english/agents/monorepo-complex-projects-prompt.md
+- Documentation: ./prompts/english/agents/documentation-prompt.md
+- UI / design systems: ./prompts/english/agents/ui-design-systems-prompt.md
+- AI / LLM integration: ./prompts/english/agents/ai-llm-integration-prompt.md
+
+## Methodology & guides
+- APEI walkthrough: ./prompts/english/workflows/iterative-development-guide.md
+- Prompt selection (single source): ./prompts/english/workflows/prompt-selector-guide.md
+- Troubleshooting router: ./prompts/english/workflows/troubleshooting-guide.md
+- Team / stack customization: ./prompts/english/workflows/best-practices-customization-guide.md
+- .claude/ setup and prompt placement: ./prompts/english/workflows/claude-code-setup-guide.md
+- Examples: ./prompts/english/examples/
+
+## Governance
+- Contribution rules: ./CONTRIBUTING.md
+- Prompt review checklist: ./prompts/english/workflows/prompt-review-checklist.md
+- Portfolio maintenance (90-day cycle): ./prompts/english/workflows/portfolio-maintenance-guide.md
 - Changelog: ./CHANGELOG.md
-
-## High-Value Specialist Prompts
-- Debugging & Troubleshooting: ./prompts/english/agents/debugging-troubleshooting-prompt.md
-- Security Audit: ./prompts/english/agents/security-audit-prompt.md
-- Architecture Patterns: ./prompts/english/agents/architecture-patterns-prompt.md
-- Multi-Agent Orchestration: ./prompts/english/agents/multi-agent-orchestration-prompt.md
-- Testing Strategies: ./prompts/english/agents/testing-strategies-prompt.md
-
-## Archive
-- Archive Index: ./prompts/english/agents/archive/INDEX.md
+- Archive index: ./prompts/english/agents/archive/INDEX.md

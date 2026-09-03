@@ -80,10 +80,11 @@ aws ce get-cost-and-usage \
 ┌──────────────────────────────────────────────────┐
 │             Application Load Balancer             │
 ├──────────────────────────────────────────────────┤
-│  Kubernetes Cluster (EKS/GKE/AKS)               │
-│  ┌────────────────┐  ┌────────────────┐          │
-│  │ Ingress (Nginx) │  │ Cert-Manager   │          │
-│  └────────┬───────┘  └────────────────┘          │
+│  Kubernetes 1.34 Cluster (EKS/GKE/AKS)          │
+│  ┌────────────────────┐  ┌────────────────┐      │
+│  │ Gateway API        │  │ Cert-Manager   │      │
+│  │ (Gateway+HTTPRoute) │  │                │      │
+│  └────────┬───────────┘  └────────────────┘      │
 │           │                                       │
 │  ┌────────┴───────┐  ┌────────────────┐          │
 │  │ App Pods (HPA) │  │ Worker Pods    │          │
@@ -92,13 +93,15 @@ aws ce get-cost-and-usage \
 │           │                   │                   │
 │  ┌────────┴───────┐  ┌───────┴────────┐         │
 │  │ RDS (Multi-AZ) │  │ ElastiCache    │         │
-│  │ PostgreSQL     │  │ Redis Cluster  │         │
+│  │ PostgreSQL 18  │  │ (Valkey)       │         │
 │  └────────────────┘  └────────────────┘         │
 │  ┌────────────────┐  ┌────────────────┐         │
 │  │ S3 (Assets)    │  │ SQS (Queues)   │         │
 │  └────────────────┘  └────────────────┘         │
 └──────────────────────────────────────────────────┘
 ```
+
+**Ingress vs Gateway API:** Gateway API (GatewayClass, Gateway, HTTPRoute, GRPCRoute) is GA and the target for new clusters — all new SIG-Network routing features land there, not in the frozen Ingress API. Ingress-NGINX entered read-only archive (no security fixes) in March 2026; migrate with `ingress2gateway` and run both side by side during the cutover.
 
 ### Multi-Region Strategy
 ```hcl
@@ -384,14 +387,15 @@ resource "aws_db_instance" "replica" {
 
 | Strategy | Savings | Effort | Risk |
 |----------|---------|--------|------|
+| Graviton (ARM) as the default arch | 20-40% | Low | Low |
 | Right-sizing instances | 20-40% | Low | Low |
-| Reserved Instances (1yr) | 30-40% | Low | Medium |
-| Savings Plans (3yr) | 50-60% | Low | High |
-| Spot Instances (stateless) | 60-90% | Medium | Medium |
-| Serverless migration | 40-70% | High | Low |
-| Storage tiering (S3) | 30-50% | Low | Low |
-| NAT Gateway optimization | 20-30% | Medium | Low |
-| Graviton (ARM) instances | 20-40% | Medium | Low |
+| Compute Savings Plans (1-3yr) | 30-60% | Low | Medium |
+| Spot / interruptible instances (stateless) | 60-90% | Medium | Medium |
+| Lambda SnapStart (Java/Python/.NET) | cold start ~3s to <200ms | Low | Low |
+| Fargate SOCI lazy image loading | faster task start | Low | Low |
+| Serverless migration for spiky load | 40-70% | High | Low |
+| Storage tiering (S3 Intelligent-Tiering) | 30-50% | Low | Low |
+| VPC endpoint vs NAT Gateway for AWS API traffic | 20-30% | Medium | Low |
 
 ### Auto-Scaling Configuration
 ```hcl

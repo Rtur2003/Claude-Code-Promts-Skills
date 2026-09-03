@@ -2,6 +2,14 @@
 
 > **Token-Optimized Cheat Sheet** | **Copy & Use**
 
+**Use this when:** the token budget is very tight and you need the loop, templates, and checklists without specialist depth. Otherwise use the Agent System prompt.
+
+## Role
+
+Autonomous coding agent. Run APEI, make minimal reversible changes, verify with a check you can run.
+
+## Protocol: APEI
+
 ---
 
 ## 🔄 Core Loop: APEI
@@ -48,25 +56,28 @@ I → ITERATE: Optimal? If not → A
 
 ---
 
-## 🔧 Claude Code Modes
+## 🔧 Claude Code — reasoning & context
 
 ```
-/compact    → Fast, minimal tokens (simple tasks)
-/think      → Extended reasoning (complex logic)
-/ultrathink → Max depth (architecture, security)
-/clear      → Reset context (between tasks)
-/cost       → Check token usage
-/memory     → View/edit CLAUDE.md
-/init       → Initialize project CLAUDE.md
+/effort high|xhigh   → session reasoning depth (xhigh for hard coding)
+ultrathink           → deeper reasoning for ONE turn (keyword in the prompt)
+Shift+Tab            → cycle permission modes (plan mode for uncertain changes)
+/compact <focus>     → summarize context to free the window
+/clear               → reset context between unrelated tasks
+/rewind              → roll code/conversation back to a checkpoint
+/context             → see what's loaded
+/usage               → token + cost usage
+/memory  /init       → edit / generate CLAUDE.md
 ```
 
-### Mode Selection
+### Depth selection
 
 ```
-Simple fix/rename    → /compact
-Standard feature     → Normal (default)
-Complex algorithm    → /think
-Critical decision    → /ultrathink
+One-line diff you can describe in a sentence  → just do it, no plan
+Standard feature, familiar code               → effort high
+Multi-file / uncertain approach               → plan mode + effort xhigh
+Hard bug that resisted a first fix            → raise effort, don't switch to plan mode
+Codebase-wide audit or migration             → dynamic workflow ("use a workflow" / ultracode)
 ```
 
 ---
@@ -86,10 +97,13 @@ git log --oneline -10
 npm test && npm run lint && npm run build
 
 # Python
-pytest && flake8 && mypy .
+pytest && ruff check . && ruff format --check .
 
 # Go
 go test ./... && golangci-lint run
+
+# Rust
+cargo test && cargo clippy -- -D warnings
 ```
 
 ### Git Workflow
@@ -223,11 +237,11 @@ describe('Feature', () => {
 
 | Issue | Solution |
 |-------|----------|
-| Slow builds | Enable caching |
-| Flaky tests | Add retries / fix async |
-| Large bundle | Code splitting |
-| N+1 queries | Use joins / eager load |
-| Memory leaks | Check event listeners |
+| Slow builds | Turborepo/Nx remote cache; Vite 8 |
+| Flaky tests | Fix async/await + isolation; quarantine, don't blind-retry |
+| Large bundle | Route-level code splitting; check with the bundle analyzer |
+| N+1 queries | DataLoader / eager load / a single join |
+| Memory leaks | Remove event listeners; check for retained closures |
 
 ---
 
@@ -241,4 +255,11 @@ describe('Feature', () => {
 
 ---
 
-> **Remember**: Progress over perfection. Iterate to optimal.
+## Remember
+
+> Progress over perfection. Minimal safe change, verified, then iterate.
+
+1. If you can describe the diff in one sentence, skip planning
+2. Give yourself a check that returns pass/fail and run it
+3. `/clear` between unrelated tasks; `/rewind` after a failed risky try
+4. A repeated mistake belongs in CLAUDE.md; a repeated procedure belongs in a skill

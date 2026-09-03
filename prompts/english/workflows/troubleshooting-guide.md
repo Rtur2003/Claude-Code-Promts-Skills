@@ -41,7 +41,7 @@ Issue Detected
 │
 └── Is it a code quality issue?
     ├── YES → Use Agent System + Code Review / Refactoring
-    └── NO → Start with Error Analysis prompt
+    └── NO → Start with Agent System + Debugging & Troubleshooting
 ```
 
 ## Diagnostic Workflow
@@ -76,7 +76,7 @@ echo "=== Docker/K8s ===" && docker ps 2>/dev/null || kubectl get pods -A 2>/dev
 
 | Evidence | Prompt Combination | Why |
 |----------|-------------------|-----|
-| Stack trace, error logs | Agent System + Error Analysis | Systematic root cause analysis |
+| Stack trace, error logs | Agent System + Debugging & Troubleshooting | DEBUG protocol for root cause |
 | High latency metrics | Agent System + Performance | MEASURE protocol for optimization |
 | Suspicious activity logs | Agent System + Security Audit | OWASP-based assessment |
 | Failed CI/CD pipeline | Agent System + Git & VCS | Branch, deploy troubleshooting |

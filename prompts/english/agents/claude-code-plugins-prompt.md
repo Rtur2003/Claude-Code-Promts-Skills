@@ -99,7 +99,7 @@ A plugin that ships exactly one skill can put `SKILL.md` at the plugin root and 
 | Component | File | Notes |
 |---|---|---|
 | **Skills** | `skills/<name>/SKILL.md` | Namespaced `/plugin:name`. Model-invoked by default. Full authoring: [agent-skills-prompt](agent-skills-prompt.md). |
-| **Subagents** | `agents/<name>.md` | Same frontmatter as project agents. Overridden by same-named project/user agents. See [subagents-and-workflows-prompt](subagents-and-workflows-prompt.md). |
+| **Subagents** | `agents/<name>.md` | Same frontmatter as project agents. Overridden by same-named project/user agents. See [multi-agent-orchestration-prompt](multi-agent-orchestration-prompt.md). |
 | **Hooks** | `hooks/hooks.json` | Same schema as the `hooks` object in `settings.json`. Command receives hook JSON on stdin. See [hooks-automation-prompt](hooks-automation-prompt.md). |
 | **MCP servers** | `.mcp.json` | Same entry shape as project `.mcp.json`. `${CLAUDE_PLUGIN_ROOT}` resolves to the install dir. See [mcp-integration-prompt](mcp-integration-prompt.md). |
 | **LSP servers** | `.lsp.json` | Code intelligence. Users need the language-server binary installed. Prefer the official pre-built LSP plugins for common languages. |

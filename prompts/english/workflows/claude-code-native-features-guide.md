@@ -138,7 +138,7 @@ tail -200 app.log | claude -p "flag any anomalies"
 - Still creates a resumable session unless `--no-session-persistence`.
 - `json` returns one object with a `result` field; `stream-json` prints one object per line starting with an init event.
 - `--allowedTools "Edit,Bash(git commit *)"` scopes an unattended run.
-- Use for CI, pre-commit hooks, and fan-out loops. See [subagents-and-workflows-prompt](../agents/subagents-and-workflows-prompt.md) for `/batch` and loop patterns.
+- Use for CI, pre-commit hooks, and fan-out loops. See [multi-agent-orchestration-prompt](../agents/multi-agent-orchestration-prompt.md) for `/batch` and loop patterns.
 
 ---
 

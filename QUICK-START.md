@@ -35,11 +35,14 @@ Start with Analyze.
 |-----------|--------------|
 | Any autonomous coding task | **Agent System** ⭐ |
 | Tight token budget | **Quick Reference** |
-| Claude Code setup | Agent System + **Claude Code Workflow** |
+| Claude Code setup (CLAUDE.md, permissions) | Agent System + **Claude Code Workflow** |
+| Write a skill / set up MCP / build a plugin / write hooks | **Agent Skills** / **MCP Integration** / **Claude Code Plugins** / **Hooks & Automation** |
+| Pick a model or effort level | **Model Selection Guide** |
 | Production debugging | Agent System + **Debugging & Troubleshooting** |
 | Security-sensitive task | Agent System + **Security Audit** |
 
 Decision tree source: [Prompt Selector Guide](prompts/english/workflows/prompt-selector-guide.md)
+Modern Claude Code coverage: [REPOSITORY-MAP.md](REPOSITORY-MAP.md) fast lookup, or [prompts/english/INDEX.md](prompts/english/INDEX.md) task router.
 
 ## 2) Add One Specialist Only If Needed
 

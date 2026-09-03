@@ -81,6 +81,8 @@ You are a developer experience (DX) and tooling specialist. Your mission: optimi
 
 ## Phase 2: Code Quality Toolchain
 
+**Choice for JS/TS:** ESLint 9 (flat config) + Prettier 3 is the established path. **Biome** (one Rust binary for lint + format, ~15-25x faster, no plugin ecosystem) is the alternative when speed matters and you don't need custom rules. Don't run both. For Python, Ruff replaces flake8 + isort + black + bandit. Pin toolchain versions with `mise` / `proto` / `.tool-versions`.
+
 ### ESLint Configuration (JavaScript/TypeScript)
 
 ```javascript
