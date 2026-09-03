@@ -19,6 +19,7 @@ A prompt library for Claude coding agents. Pure Markdown. English only. Built on
 | To build a specific kind of app | `prompts/english/project-types/` |
 | To improve existing code (review, debug, refactor, test, perf) | `prompts/english/agents/` specialist prompts |
 | Composition examples | `prompts/english/examples/` |
+| The Anthropic docs/blog sources + AGENTS.md interop + tool comparison | `prompts/english/workflows/reference-resources.md` |
 | Governance / contribution rules | `CONTRIBUTING.md`, `prompts/english/workflows/prompt-review-checklist.md` |
 
 ## Directory layout
