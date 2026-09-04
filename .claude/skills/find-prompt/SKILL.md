@@ -1,6 +1,6 @@
 ---
 name: find-prompt
-description: Route the current task to the right prompt(s) in this library, load them, and adopt them as your operating instructions for the rest of the conversation. Use when the user names a task ("add OAuth", "set up hooks", "review this PR", "pick a model"), asks which prompt to use, or says to "use the right prompt". Also use when you enter this repo and need to orient without reading every file.
+description: Use when the user names a coding or Claude Code task ("add OAuth", "set up hooks", "review this PR", "pick a model"), asks which prompt to use, says to "use the right prompt", or when you enter this repo and need to orient without reading every file.
 argument-hint: [task description — optional; defaults to the current task in the conversation]
 ---
 
@@ -16,7 +16,7 @@ If `${CLAUDE_SKILL_DIR}` is not substituted (it shows up literally), fall back: 
 
 1. **Determine the task.** Use `$ARGUMENTS` if given. Otherwise use the task already being worked on in this conversation (the user's last real request, the in-progress work, the files open). If genuinely unclear, ask one short question and stop.
 
-2. **Match the task** to the routing table below. Pick the **base** prompt plus **at most one** specialist or project-type prompt. Note any second optional prompt.
+2. **Match the task** to the routing table below. Pick the **base** prompt plus specialists by tier: 1 for a single-domain task (default), 2 only if the task spans two genuinely independent domains, or route to Multi-Agent Orchestration if the work needs isolation/review. See `${CLAUDE_SKILL_DIR}/../../../prompts/english/workflows/prompt-selector-guide.md` for the tier definitions and the conflict-precedence rule if loaded prompts disagree.
 
 3. **Read the file(s)** with the Read tool, using paths built from `${CLAUDE_SKILL_DIR}`:
    - base: `${CLAUDE_SKILL_DIR}/../../../prompts/english/agents/claude-agent-system-prompt.md`
@@ -99,7 +99,7 @@ Paths are relative to `prompts/english/`.
 
 ## Rules
 
-- **One base + at most one specialist.** If two specialists seem to fit, load the primary and name the second as optional.
+- **Composition by tier, not a hard cap.** Tier 1 (base + 1 specialist) covers most tasks. Move to Tier 2 (base + 2 specialists) only when the task genuinely spans two independent domains — say so explicitly. Route to Multi-Agent Orchestration (Tier 3) when the work needs isolated workers or adversarial review.
 - The base is always `agents/claude-agent-system-prompt.md`, except for a task purely about running Claude Code (then the single Claude Code prompt is enough).
 - Tiny task (typo, rename, one-line fix): don't load anything — say so and do it.
 - **Continue, don't restart.** After loading, resume the conversation's in-progress work under the new instructions. Keep every fact, decision, and constraint already established.

@@ -2,7 +2,7 @@
 
 ## Project Overview
 - **Name**: Claude Code Prompts
-- **Type**: Prompt library (pure Markdown, no code)
+- **Type**: Prompt library (Markdown-first) plus a small set of real, tested scripts bundled as Claude Code skills (`.claude/skills/*/scripts/`) and safety hooks (`hooks/scripts/`) — see "Bundled skills and scripts" below
 - **Purpose**: Production-ready system prompts for Claude AI coding agents
 - **Core Methodology**: APEI cycle — Analyze → Plan → Execute → Iterate
 - **License**: MIT
@@ -21,8 +21,22 @@
 ├── QUICK-START.md         # 30-second setup guide
 ├── USAGE.md               # Scenario-based prompt composition
 ├── CONTRIBUTING.md        # Contribution guidelines
-├── CHANGELOG.md           # Version history (current: 2.0.0)
+├── CHANGELOG.md           # Version history (current: 2.1.0)
 ├── llms.txt               # Full LLM router index
+├── .claude-plugin/
+│   └── plugin.json        # Plugin manifest — claude --plugin-dir installable
+├── hooks/
+│   ├── hooks.json          # PreToolUse wiring
+│   └── scripts/            # block-destructive-commands.sh, block-secret-writes.sh
+├── .claude/skills/         # 5 real skills (find-prompt + 4 deterministic-validation)
+│   ├── find-prompt/
+│   ├── deterministic-checks/
+│   ├── changelog-from-commits/
+│   ├── doc-link-audit/
+│   └── skill-audit/
+├── evals/                  # find-prompt routing-accuracy regression tests (static + live tiers)
+├── .github/workflows/
+│   └── quality-gate.yml    # CI: lint, link audit, skill audit, deterministic-checks, plugin validate, routing eval
 └── prompts/
     └── english/
         ├── INDEX.md           # Global task -> file router
@@ -101,12 +115,19 @@ Key elements:
 
 ## Build & Development
 
-No build system — this is a pure Markdown repository.
+No build system for the prompts themselves. The bundled skill/hook scripts under `.claude/skills/*/scripts/` and `hooks/scripts/` are standalone (bash/Python, no install step, no dependency beyond what's noted in each `SKILL.md`).
 
-- **Install**: `git clone` the repo
-- **Validate links**: `grep -r '\[.*\](.*\.md)' prompts/ | head` — spot-check relative links
+- **Install**: `git clone` the repo, or `claude --plugin-dir <path>` to try it as a plugin
+- **Validate links**: `python3 .claude/skills/doc-link-audit/scripts/check_links.py .` — real link/anchor checker, not a grep spot-check
 - **Validate formatting**: Open `.md` files in a Markdown previewer
-- **Lint (optional)**: `npx markdownlint-cli2 '**/*.md'` if available
+- **Lint**: `npx markdownlint-cli2 '**/*.md'`
+- **Pre-commit scan**: `bash .claude/skills/deterministic-checks/scripts/scan.sh .`
+- **Skill quality check**: `python3 .claude/skills/skill-audit/scripts/audit.py .claude/skills`
+- **Plugin manifest check**: `claude plugin validate .`
+
+## Bundled skills and scripts
+
+`.claude/skills/` ships 5 real Claude Code skills — 1 routing skill (`find-prompt`) and 4 deterministic-validation skills with actual scripts (`deterministic-checks`, `changelog-from-commits`, `doc-link-audit`, `skill-audit`). `hooks/` ships 2 `PreToolUse` safety scripts wired via `hooks/hooks.json`. These exist because a prompt library that teaches skill/hook/plugin authoring should demonstrate the pattern with working examples, not only describe it. Keep this section, `README.md`'s skills table, and `REPOSITORY-MAP.md` in sync when adding, removing, or renaming one. Every script must be tested against real input (not just read for plausibility) before being documented as working — see the CHANGELOG 2.1.0 entry for the false-positive classes found and fixed during this addition (GitHub heading-slug algorithm, fenced-code-block boundary detection) as the standard to hold new scripts to.
 
 ## Common Tasks
 
@@ -164,7 +185,7 @@ update: enhance code review checklist  # Updates
 ## Things to Avoid
 
 - Don't add non-English content — this repo is English only
-- Don't add code or build tooling — keep it pure Markdown
+- Don't add code beyond the bundled skill/hook scripts (`.claude/skills/*/scripts/`, `hooks/scripts/`) — the prompt content itself stays pure Markdown; a script added there must ship inside a skill with a `SKILL.md` documenting it, be dependency-free or note its dependency explicitly (see the `jq` note in `hooks-automation-prompt.md`), and be tested against real input before being documented as working
 - Don't deviate from the APEI methodology in prompt design
 - Don't remove the Remember section from prompts
 - Don't use absolute URLs for internal links — use relative paths

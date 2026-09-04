@@ -206,6 +206,17 @@ The official marketplace is curated separately; the submission form does not add
 
 ---
 
+## Worked example: this repository
+
+This library ships as an installable plugin: [`.claude-plugin/plugin.json`](../../../.claude-plugin/plugin.json) points `skills` at the existing `.claude/skills/` directory (so the zero-config "clone and `/find-prompt` just works" path keeps working — see [Phase 2](#phase-2-build--directory-and-manifest), custom `skills` paths *add to* the default scan, they don't replace it) and `hooks` at [`hooks/hooks.json`](../../../hooks/hooks.json), which wires the two working scripts from the Hooks & Automation prompt's recipe table.
+
+```bash
+claude --plugin-dir /path/to/Claude-Code-Promts    # load it for one session
+claude plugin validate /path/to/Claude-Code-Promts # check the manifest
+```
+
+---
+
 ## Remember
 
 > **A plugin is the packaging layer, not a new capability. Build the components first, then bundle what proved useful.**

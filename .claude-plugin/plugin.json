@@ -1,0 +1,11 @@
+{
+  "name": "claude-code-prompts",
+  "description": "Production-ready prompt library for Claude coding agents: 35+ specialist prompts on the APEI cycle, task-routing skill, and reference hooks — covering Skills, MCP, Plugins, subagents, and hooks for the current Claude Code ecosystem.",
+  "version": "2.1.0",
+  "author": { "name": "Rtur2003" },
+  "homepage": "https://github.com/Rtur2003/Claude-Code-Promts-Skills",
+  "repository": "https://github.com/Rtur2003/Claude-Code-Promts-Skills",
+  "license": "MIT",
+  "skills": ["./.claude/skills"],
+  "hooks": "./hooks/hooks.json"
+}

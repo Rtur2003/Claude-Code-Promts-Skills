@@ -4,6 +4,39 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [2.1.0] - 2026-09-05
+
+Closes gaps identified by an external technical audit (composition-rule contradiction, no conflict policy, no installable packaging) and, separately, closes a gap found through primary research into competing skill libraries: every well-regarded competitor (anthropics/skills, obra/superpowers, wshobson/agents) ships *guidance* skills, and none ship well-tested *deterministic-validation* skills — scripts that produce a ground-truth answer at zero model cost. This library now ships four of the latter, tested against real input including this repo's own history and files, plus the Skill Discovery Optimization methodology (verified against a real, well-regarded production skill) that this library's own skill-authoring prompt was missing.
+
+Every audit claim and every competitor comparison was checked against actual file contents / real primary sources before acting — most of the external audit's other findings (progressive disclosure, subagent model, hook coverage, model currency) were already correct in 2.0.0 and needed no change.
+
+### Added
+
+- **Four deterministic-validation skills** (`.claude/skills/`), each a real tested script, not a prompt describing one:
+  - `deterministic-checks` — scans for conflict markers, live-looking credentials, debug leftovers, untracked TODOs, oversized files. Zero model cost.
+  - `changelog-from-commits` — parses Conventional Commits into a categorized changelog with breaking-change detection. Tested against this repo's own commit history.
+  - `doc-link-audit` — checks internal Markdown links, heading anchors (replicates GitHub's exact slug algorithm, including the double-hyphen case an em-dash produces), and orphan pages. Found and fixed a fenced-code-block boundary bug in its own first draft (adjacent untagged code blocks paired incorrectly) by testing against this repo's real files, which cut its false-positive rate on this repo from 49 findings to 0.
+  - `skill-audit` — checks a skills directory for frontmatter validity, Skill Discovery Optimization description quality, body size, and cross-scope name collisions. Found and fixed a real SDO violation in this repo's own `find-prompt` skill description (led with a workflow summary instead of a trigger condition) via dogfooding.
+- **Skill Discovery Optimization section** (`agents/agent-skills-prompt.md#skill-discovery-optimization-sdo`) — the description-writing methodology from primary research into a well-regarded production skill library: description states triggering conditions only, never a workflow summary (a description that summarizes process has been observed to make the model act on the summary instead of reading the actual — longer, more correct — body).
+- **Composition Tiers** (`workflows/prompt-selector-guide.md`) — replaces the self-contradictory "add exactly one specialist" rule (which the README and INDEX both violated with documented two-specialist combos) with an explicit Tier 0–3 budget: Agent System alone, +1 specialist (default), +2 specialists (stated reason required), or Multi-Agent Orchestration for isolation/review work.
+- **Conflict Precedence** (`workflows/prompt-selector-guide.md#conflict-precedence`, mirrored in `agents/claude-agent-system-prompt.md`) — a five-level order (Safety boundary > Security guardrail > Explicit user constraint > Task specialist > Style/optimization) for when loaded prompts disagree, with a worked example (Debugging vs. Security over environment-variable inspection).
+- **Installable plugin packaging** (`.claude-plugin/plugin.json`) — the repo now loads with `claude --plugin-dir` and passes `claude plugin validate`. The manifest's `skills` field points at the existing `.claude/skills/` directory rather than duplicating it, so the zero-config "clone and `/find-prompt` just works" path is unaffected.
+- **Working hook scripts** (`hooks/hooks.json`, `hooks/scripts/block-destructive-commands.sh`, `hooks/scripts/block-secret-writes.sh`) — the "Block dangerous bash" and "Secret scanner" recipes in `hooks-automation-prompt.md` now link to real, tested `PreToolUse` scripts instead of describing the pattern only. Regex logic verified against 15 and 9 test cases respectively (destructive-command matcher, credential-pattern matcher).
+- **`jq` dependency note** in `hooks-automation-prompt.md` — the hook recipes assume `jq` for stdin JSON parsing; it is not present on a bare Windows/Git Bash install, now called out explicitly.
+- **CI** (`.github/workflows/quality-gate.yml`) — every PR against `main` now runs markdownlint, the doc-link audit, the skill audit, deterministic-checks, `claude plugin validate`, and the routing eval automatically. Before this, every one of those checks required a human to remember to run it by hand.
+- **Routing eval** (`evals/`) — 20 realistic test cases covering most `find-prompt` routing-table rows, run in two tiers: a static check (every case's target file actually exists — catches a renamed/archived prompt whose routing-table entry wasn't updated) that runs in CI unconditionally, and a live check (a real `claude-haiku-4-5` call verifies the model actually picks the expected file) that runs in CI only when an `ANTHROPIC_API_KEY` secret is configured. Verified the static tier actually catches a broken reference by deliberately breaking one test case, confirming the failure, then reverting.
+
+### Fixed
+
+- `doc-link-audit/scripts/check_links.py` — the `--exclude` pattern was compared against a Windows-style backslash path while patterns are written with forward slashes, so no exclude pattern ever matched on Windows. Normalizes the path before matching. Found via dogfooding: excluding this repo's own intentional compatibility-stub orphan pages silently failed to take effect.
+
+### Changed
+
+- `README.md`, `prompts/english/INDEX.md`, `prompts/english/agents/INDEX.md`, `.claude/skills/find-prompt/SKILL.md` — every "add one specialist" / "at most one specialist" line updated to reference the tier model instead of contradicting the documented two-specialist combinations.
+- `.claude/skills/find-prompt/SKILL.md` — description rewritten to lead with the trigger condition instead of a workflow summary (SDO fix, found by `skill-audit`).
+- `agents/claude-code-plugins-prompt.md` — added a worked-example section pointing at this repo's own manifest and hook wiring.
+- `CLAUDE.md` — "pure Markdown, no code" project description updated to reflect the bundled skill/hook scripts; added a "Bundled skills and scripts" section with the testing standard new scripts must meet.
+
 ## [2.0.0] - 2026-09-02
 
 Major modernization for the September 2026 Claude Code and AI ecosystem, plus a repo-wide framework refresh and a task-routing navigation layer.
