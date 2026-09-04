@@ -44,7 +44,7 @@ A prompt library for Claude coding agents. Pure Markdown. English only. Built on
 | `.claude-plugin/plugin.json` | Plugin manifest — makes this repo `claude --plugin-dir`-installable |
 | `hooks/` | Working `PreToolUse` scripts wired via `hooks/hooks.json` (block destructive commands, block secret writes) |
 | `.claude/skills/` | 5 real skills: `find-prompt` (routing), `deterministic-checks`, `changelog-from-commits`, `doc-link-audit`, `skill-audit` — each ships an actual script |
-| `evals/` | Routing-accuracy regression tests for `find-prompt` — 20 cases, static + live tiers, run in CI |
+| `evals/` | Routing-behavior regression tests for `find-prompt` — 34 cases across 5 categories (basic, no-specialist, multi-domain, ambiguous, conflict-precedence), static + live tiers, run in CI |
 | `.github/workflows/quality-gate.yml` | CI: markdownlint, link audit, skill audit, deterministic-checks, plugin validation, routing eval — every PR |
 
 ## How to use the library

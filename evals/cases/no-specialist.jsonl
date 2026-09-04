@@ -1,0 +1,5 @@
+{"id": "nospec-001", "task": "Rename this variable from usrData to userData across the file", "expected_tier": 0, "reason": "trivial rename — Agent System alone, no specialist"}
+{"id": "nospec-002", "task": "Fix this typo in the comment: 'recieve' should be 'receive'", "expected_tier": 0, "reason": "one-line typo fix"}
+{"id": "nospec-003", "task": "Explain what this function does", "expected_tier": 0, "reason": "read-only explanation, no domain specialist needed"}
+{"id": "nospec-004", "task": "Add a missing null check before this property access", "expected_tier": 0, "reason": "small, self-contained defensive-code fix"}
+{"id": "nospec-005", "task": "Change this string from double quotes to single quotes to match the file's style", "expected_tier": 0, "reason": "trivial style fix"}

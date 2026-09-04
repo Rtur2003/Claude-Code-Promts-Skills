@@ -66,9 +66,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Static tier — every routing-table target file exists
+      - name: Static tier — basic/no-specialist/multi-domain/ambiguous/conflict cases are well-formed and reference real files
         run: python3 evals/run_routing_eval.py
-      - name: Live tier — model actually routes each case correctly (only if ANTHROPIC_API_KEY secret is set)
+      - name: Live tier — model actually exhibits the expected routing and precedence behavior (only if ANTHROPIC_API_KEY secret is set)
         if: ${{ env.ANTHROPIC_API_KEY != '' }}
         run: |
           pip install anthropic --quiet
