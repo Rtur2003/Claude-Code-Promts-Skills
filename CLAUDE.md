@@ -34,7 +34,7 @@
 │   ├── changelog-from-commits/
 │   ├── doc-link-audit/
 │   └── skill-audit/
-├── evals/                  # find-prompt routing-accuracy regression tests (static + live tiers)
+├── evals/                  # find-prompt routing-behavior tests: basic, no-specialist, multi-domain, ambiguous, conflict-precedence
 ├── .github/workflows/
 │   └── quality-gate.yml    # CI: lint, link audit, skill audit, deterministic-checks, plugin validate, routing eval
 └── prompts/
