@@ -3,7 +3,7 @@
 > **SKILL.md Authoring** | **Progressive Disclosure** | **Model-Invoked Workflows**
 
 **Use this when:** creating, editing, or debugging a Claude Code / Claude skill; deciding skill vs command vs subagent vs CLAUDE.md; packaging a repeatable workflow.
-**Skip to:** [Protocol](#protocol-skill) · [Phase 1 Decide](#phase-1-decide--is-a-skill-the-right-tool) · [Phase 2 Write](#phase-2-write--skillmd-structure) · [Frontmatter reference](#frontmatter-reference) · [String substitutions](#string-substitutions) · [Dynamic context injection](#dynamic-context-injection) · [context-fork](#phase-4-isolate--run-a-skill-in-a-subagent) · [Evals](#phase-5-evaluate--prove-the-skill-works) · [Remember](#remember)
+**Skip to:** [Protocol](#protocol-skill) · [Phase 1 Decide](#phase-1-decide--is-a-skill-the-right-tool) · [Phase 2 Write](#phase-2-write--skillmd-structure) · [Frontmatter reference](#frontmatter-reference) · [Skill Discovery Optimization](#skill-discovery-optimization-sdo) · [String substitutions](#string-substitutions) · [Dynamic context injection](#dynamic-context-injection) · [context-fork](#phase-4-isolate--run-a-skill-in-a-subagent) · [Evals](#phase-5-evaluate--prove-the-skill-works) · [Remember](#remember)
 
 ## Role
 
@@ -167,6 +167,56 @@ All fields optional; `description` is the one that matters.
 | `user-invocable: false` | No | Yes | Yes |
 
 **Outside Claude Code** (claude.ai upload, Skills API, `package_skill.py`): only `name`, `description`, `license`, `compatibility`, `metadata`, `allowed-tools` are accepted. Any other field fails packaging with a hard error. Body features like `!`cmd`` do not run there.
+
+---
+
+## Skill Discovery Optimization (SDO)
+
+A skill Claude never triggers and a skill that doesn't exist have the same effect. Discovery is not a side detail — it's the difference between a skill working and silently doing nothing.
+
+### Description = when to use, never what it does
+
+The single highest-leverage rule: **the description states triggering conditions only. It never summarizes the skill's process.**
+
+```yaml
+# Bad — summarizes the workflow. The model can act on this summary instead
+# of reading the body, and will skip steps the body actually specifies.
+description: Use for code review — checks style, then runs tests, then posts a summary comment
+
+# Good — states only when to fire. The model has to read the body to know what happens.
+description: Use when reviewing a pull request or diff before merge
+```
+
+This isn't a style preference — it's an observed failure mode. A skill instructing two sequential review passes, described as "review between tasks," got exactly one pass from the model in testing: the description became a plan the model executed instead of the actual (longer, two-pass) instructions in the body. Rewording the description to name only the trigger condition — no mention of what happens once triggered — fixed it: the model then read the body and ran both passes.
+
+### Write third person, lead with the trigger
+
+```yaml
+# Bad: first person
+description: I can help you write tests when they're flaky
+
+# Bad: buries the trigger after a summary
+description: Comprehensive security scanning covering OWASP Top 10, dependency CVEs, and secret detection. Use for security reviews.
+
+# Good
+description: Use when reviewing code for security vulnerabilities, auth changes, or before a release with new user input handling
+```
+
+### Cover the vocabulary a model would actually search on
+
+Include concrete error messages, symptoms, and tool names — not just the abstract category:
+
+```yaml
+# Weak: category only
+description: Use for testing issues
+
+# Strong: symptoms and vocabulary that actually appear in a session
+description: Use when tests are flaky, hang, time out, or pass/fail inconsistently across runs
+```
+
+### Verify with `skill-audit`
+
+The `skill-audit` skill in this library's own `.claude/skills/` checks a description against these rules mechanically (trigger-phrase opener, workflow-summary language, length, third person) — run it after writing or editing a description rather than eyeballing it.
 
 ---
 

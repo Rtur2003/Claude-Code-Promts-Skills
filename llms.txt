@@ -1,6 +1,6 @@
 # Claude Code Prompts — LLM Router
 
-English-only, Markdown-only prompt library for Claude coding agents. Built on APEI: Analyze -> Plan -> Execute -> Iterate.
+English-only prompt library for Claude coding agents, plus real bundled skills (scripts, not just prompts describing them). Built on APEI: Analyze -> Plan -> Execute -> Iterate.
 
 Do not read every file. Resolve your task to one file below, open it, act.
 
@@ -11,6 +11,15 @@ Do not read every file. Resolve your task to one file below, open it, act.
 - Default operational prompt: ./prompts/english/agents/claude-agent-system-prompt.md
 - Agent catalog with token counts: ./prompts/english/agents/INDEX.md
 - Workflow guides catalog: ./prompts/english/workflows/INDEX.md
+- Composition tiers + conflict precedence: ./prompts/english/workflows/prompt-selector-guide.md
+- Install as a plugin: ./.claude-plugin/plugin.json (claude --plugin-dir .)
+
+## Bundled skills (real scripts, in .claude/skills/)
+- Route a task to the right prompt: /find-prompt
+- Pre-commit ground-truth scan (secrets, conflict markers, debug leftovers, TODOs, large files): ./.claude/skills/deterministic-checks/
+- Generate a changelog from Conventional Commits: ./.claude/skills/changelog-from-commits/
+- Check Markdown links/anchors/orphan pages: ./.claude/skills/doc-link-audit/
+- Audit a skills directory for collisions and description quality: ./.claude/skills/skill-audit/
 
 ## Running Claude Code
 - Pick a model / effort level: ./prompts/english/workflows/model-selection-guide.md

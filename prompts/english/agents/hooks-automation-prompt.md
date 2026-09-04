@@ -234,6 +234,8 @@ JSON on stdout:
 
 ## Recipes
 
+Most `command`-type hook scripts below parse the stdin JSON with `jq`. It ships by default on macOS (via Xcode CLT after first git use) and most Linux distros, but not on a bare Windows/Git Bash install — check with `command -v jq` before relying on a hook that pipes through it, and document the dependency in any hook you ship to others.
+
 ### Format after every edit
 
 ```json
@@ -285,8 +287,8 @@ The hooks power users share most often:
 |---|---|---|
 | Format on edit | `PostToolUse` `Write\|Edit` | Prettier / Ruff / `cargo fmt` on the edited file (`async: true`) |
 | Test the matching file | `PostToolUse` `Write\|Edit` | Run the test file that covers the edited source |
-| Block dangerous bash | `PreToolUse` `Bash` | Deny `rm -rf`, `dd if=`, `git reset --hard`, force push |
-| Secret scanner | `PreToolUse` `Write\|Edit` | Block an edit whose content matches `sk-`, `AKIA`, `BEGIN [A-Z ]*PRIVATE KEY` |
+| Block dangerous bash | `PreToolUse` `Bash` | Deny `rm -rf`, `dd if=`, `git reset --hard`, force push. Working example: [`hooks/scripts/block-destructive-commands.sh`](../../../hooks/scripts/block-destructive-commands.sh) in this repo. |
+| Secret scanner | `PreToolUse` `Write\|Edit` | Block an edit whose content matches `sk-`, `AKIA`, `BEGIN [A-Z ]*PRIVATE KEY`. Working example: [`hooks/scripts/block-secret-writes.sh`](../../../hooks/scripts/block-secret-writes.sh) in this repo. |
 | Cost tracker | `Stop` | Append session token spend to a CSV — the most-requested hook in 2026, because agent loops can run 10x over budget |
 | Sub-agent ROI | `SubagentStop` | Log each subagent's duration and token count |
 | Issue-ID linker | `PostToolUse` `Bash(git commit *)` | Prepend the ticket ID parsed from the branch name to the commit message |

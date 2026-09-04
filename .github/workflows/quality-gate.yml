@@ -1,0 +1,75 @@
+name: Quality Gate
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  markdownlint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Lint all Markdown
+        run: npx --yes markdownlint-cli2 '**/*.md'
+
+  doc-links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check internal links, anchors, and orphan pages
+        run: python3 .claude/skills/doc-link-audit/scripts/check_links.py .
+
+  skill-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Audit bundled skills (frontmatter, SDO, collisions)
+        run: python3 .claude/skills/skill-audit/scripts/audit.py .claude/skills
+
+  deterministic-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Scan for secrets, conflict markers, debug leftovers, untracked TODOs
+        # Excludes known documentation-example false positives — see this repo's
+        # own .claude/skills/deterministic-checks/SKILL.md "Known false-positive class".
+        env:
+          SCAN_EXCLUDE: 'prompts/english/agents/git-version-control-prompt\.md|\.claude/skills/deterministic-checks/SKILL\.md|prompts/english/agents/archive/|prompts/english/agents/code-review-prompt\.md|prompts/english/agents/refactoring-prompt\.md'
+        run: bash .claude/skills/deterministic-checks/scripts/scan.sh .
+
+  plugin-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
+      - name: Validate plugin manifest
+        run: claude plugin validate .
+
+  routing-eval:
+    runs-on: ubuntu-latest
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Static tier — every routing-table target file exists
+        run: python3 evals/run_routing_eval.py
+      - name: Live tier — model actually routes each case correctly (only if ANTHROPIC_API_KEY secret is set)
+        if: ${{ env.ANTHROPIC_API_KEY != '' }}
+        run: |
+          pip install anthropic --quiet
+          python3 evals/run_routing_eval.py --live

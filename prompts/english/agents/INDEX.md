@@ -4,9 +4,9 @@
 
 ## Core Rule
 
-Start with [Agent System](claude-agent-system-prompt.md). Add one specialist prompt only if required.
+Start with [Agent System](claude-agent-system-prompt.md). Add specialists by tier — 1 for a single-domain task (default), 2 for two genuinely independent domains, Multi-Agent Orchestration when units of work need isolation.
 
-Decision tree source: [../workflows/prompt-selector-guide.md](../workflows/prompt-selector-guide.md)
+Composition tiers + conflict precedence: [../workflows/prompt-selector-guide.md](../workflows/prompt-selector-guide.md)
 
 ## Route by task
 

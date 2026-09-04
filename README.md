@@ -10,10 +10,27 @@ Production-ready prompt library for Claude AI and coding agents, built on the **
 
 0. In Claude Code, run **`/find-prompt <your task>`** — it routes any task to the exact prompt(s) to load. Or open **[REPOSITORY-MAP.md](REPOSITORY-MAP.md)** for manual navigation.
 1. Use **Agent System** as the core prompt.
-2. Add **one** specialist prompt only when the task clearly needs it.
+2. Add specialist prompts by tier — 1 for a single-domain task (the default), 2 only when the task spans two genuinely independent domains, Multi-Agent Orchestration when units of work need isolation. See [Composition Tiers](prompts/english/workflows/prompt-selector-guide.md#composition-tiers-source-of-truth).
 3. Validate outputs against explicit success criteria.
 
-The `/find-prompt` skill ships in `.claude/skills/` — it loads automatically when you run Claude Code from this repo.
+Five skills ship in `.claude/skills/` — they load automatically when you run Claude Code from this repo:
+
+| Skill | Use when | File |
+|---|---|---|
+| `/find-prompt` | Routing any task to the right prompt(s) — the main entry point | [View](.claude/skills/find-prompt/SKILL.md) |
+| `deterministic-checks` | Before committing / opening a PR — zero-model-cost scan for conflict markers, live-looking credentials, debug leftovers, untracked TODOs, oversized files | [View](.claude/skills/deterministic-checks/SKILL.md) |
+| `changelog-from-commits` | Cutting a release — Conventional Commits parsed into a categorized changelog | [View](.claude/skills/changelog-from-commits/SKILL.md) |
+| `doc-link-audit` | Before publishing docs — internal links, heading anchors, and orphan pages, GitHub-accurate slug matching | [View](.claude/skills/doc-link-audit/SKILL.md) |
+| `skill-audit` | Reviewing a skills directory — frontmatter validity, description quality (SDO), body size, cross-scope name collisions | [View](.claude/skills/skill-audit/SKILL.md) |
+
+Each is a real script, not a prompt describing one — see [Repository Structure](#repository-structure) below. This repo is also an installable plugin ([`.claude-plugin/plugin.json`](.claude-plugin/plugin.json)):
+
+```bash
+claude --plugin-dir /path/to/Claude-Code-Promts     # try it for one session
+claude plugin validate /path/to/Claude-Code-Promts  # check the manifest
+```
+
+Installing as a plugin additionally wires two deterministic safety hooks (block destructive commands, block writing live-looking credentials) — see [Claude Code Plugins](prompts/english/agents/claude-code-plugins-prompt.md#worked-example-this-repository).
 
 ### Top 5 Outcome Scenarios
 
@@ -31,7 +48,7 @@ The `/find-prompt` skill ships in `.claude/skills/` — it loads automatically w
 
 Use the single-source selector here: [Prompt Selector Guide](prompts/english/workflows/prompt-selector-guide.md).
 
-Rule: start minimal, then add exactly one specialist only if quality gates fail.
+Rule: start minimal (Tier 1 — one specialist), move up a tier only if the task's checklist visibly can't be covered by what's loaded.
 
 ---
 
@@ -99,7 +116,7 @@ Coverage of the current Claude Code / Claude ecosystem (models, Skills, Plugins,
 
 ## Common Combinations
 
-Start with Agent System, then add **one** specialist. These pairings recur:
+Start with Agent System, then add specialists per the [Composition Tiers](prompts/english/workflows/prompt-selector-guide.md#composition-tiers-source-of-truth) — most rows below are Tier 1 (one specialist); rows with two specialists or Multi-Agent Orchestration are Tier 2/3 and need a stated reason for the extra load. These pairings recur:
 
 | Task | Setup |
 |---|---|
@@ -185,3 +202,5 @@ prompts/
 - [Workflows Index](prompts/english/workflows/INDEX.md)
 - [Prompt Selector Guide](prompts/english/workflows/prompt-selector-guide.md)
 - [Prompt Review Checklist](prompts/english/workflows/prompt-review-checklist.md)
+- [Evals](evals/README.md) — routing-accuracy regression tests, run in CI on every PR
+- [CI workflow](.github/workflows/quality-gate.yml) — markdownlint, link audit, skill audit, deterministic-checks, plugin validation, routing eval
