@@ -202,5 +202,5 @@ prompts/
 - [Workflows Index](prompts/english/workflows/INDEX.md)
 - [Prompt Selector Guide](prompts/english/workflows/prompt-selector-guide.md)
 - [Prompt Review Checklist](prompts/english/workflows/prompt-review-checklist.md)
-- [Evals](evals/README.md) — routing-accuracy regression tests, run in CI on every PR
+- [Evals](evals/README.md) — routing-behavior regression tests (basic, no-specialist, multi-domain, ambiguous, conflict-precedence), run in CI on every PR
 - [CI workflow](.github/workflows/quality-gate.yml) — markdownlint, link audit, skill audit, deterministic-checks, plugin validation, routing eval
