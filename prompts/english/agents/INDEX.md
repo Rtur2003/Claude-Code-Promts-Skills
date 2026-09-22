@@ -23,6 +23,7 @@ Composition tiers + conflict precedence: [../workflows/prompt-selector-guide.md]
 | Pick a model / effort level | [../workflows/model-selection-guide.md](../workflows/model-selection-guide.md) |
 | Know what a current Claude Code build does | [../workflows/claude-code-native-features-guide.md](../workflows/claude-code-native-features-guide.md) |
 | Build an agent on the Agent SDK | [../workflows/agent-sdk-guide.md](../workflows/agent-sdk-guide.md) |
+| Research a consequential question or source-verify a recommendation | [Evidence-Driven Research](evidence-driven-research-prompt.md) |
 | Review a PR / change set | [Code Review](code-review-prompt.md) |
 | Security exposure is possible | [Security Audit](security-audit-prompt.md) |
 | Root-cause a production incident | [Debugging & Troubleshooting](debugging-troubleshooting-prompt.md) |
@@ -74,6 +75,7 @@ Composition tiers + conflict precedence: [../workflows/prompt-selector-guide.md]
 | Developer Experience & Tooling | Lint/hooks/dev workflow standards | Core feature implementation | 4k | [View](developer-experience-tooling-prompt.md) |
 | Database Design & Optimization | Schema/index/query optimization | No data layer scope | 4k | [View](database-optimization-prompt.md) |
 | UI/UX & Design Systems | Component systems/theming/a11y UI | Backend-only task | 5k | [View](ui-design-systems-prompt.md) |
+| Evidence-Driven Research | Source-verified research, comparisons, consequential recommendations | A primary source already answers a simple factual question | 2k | [View](evidence-driven-research-prompt.md) |
 
 ## Archived (Merge/Archive)
 
