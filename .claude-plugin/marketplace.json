@@ -1,0 +1,20 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "claude-code-prompts",
+  "description": "Evidence-driven prompts, routing skills, capability audits, and deterministic quality checks for Claude Code agents.",
+  "owner": {
+    "name": "Rtur2003"
+  },
+  "plugins": [
+    {
+      "name": "claude-code-prompts",
+      "description": "Routes Claude Code tasks to focused prompts and adds deterministic documentation, skill, release, safety, and capability-audit workflows.",
+      "source": ".",
+      "category": "development",
+      "tags": ["prompts", "agent-skills", "research", "mcp", "quality"],
+      "homepage": "https://github.com/Rtur2003/Claude-Code-Promts-Skills",
+      "repository": "https://github.com/Rtur2003/Claude-Code-Promts-Skills",
+      "license": "MIT"
+    }
+  ]
+}
