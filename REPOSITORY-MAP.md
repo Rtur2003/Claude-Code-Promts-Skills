@@ -2,7 +2,7 @@
 
 30-second orientation. Resolve your task to one file, open it, act. Do not read the whole repo.
 
-**Running Claude Code in this repo?** Invoke `/find-prompt <your task>` — it routes any task to the exact prompt(s) to load, in one step. Skill lives at `.claude/skills/find-prompt/`. Four more real, tested skills ship alongside it in `.claude/skills/` — `deterministic-checks`, `changelog-from-commits`, `doc-link-audit`, `skill-audit` — each a script, not a prompt describing one.
+**Running Claude Code in this repo?** Invoke `/find-prompt <your task>` — it routes any task to the exact prompt(s) to load, in one step. Skill lives at `.claude/skills/find-prompt/`. Five more tested skills ship alongside it: four deterministic repository checks plus `capability-audit`, a read-only GitHub evidence collector for skills, plugins, MCP servers, and agent toolkits.
 
 ## What this repo is
 
@@ -22,6 +22,8 @@ A prompt library for Claude coding agents. Pure Markdown. English only. Built on
 | To improve existing code (review, debug, refactor, test, perf) | `prompts/english/agents/` specialist prompts |
 | Composition examples | `prompts/english/examples/` |
 | The Anthropic docs/blog sources + AGENTS.md interop + tool comparison | `prompts/english/workflows/reference-resources.md` |
+| Evidence-driven research beyond coding | `prompts/english/agents/evidence-driven-research-prompt.md` |
+| Skill/plugin/MCP discovery and pre-install review | `prompts/english/workflows/ecosystem-discovery-guide.md` + `.claude/skills/capability-audit/` |
 | Governance / contribution rules | `CONTRIBUTING.md`, `prompts/english/workflows/prompt-review-checklist.md` |
 
 ## Directory layout
@@ -30,7 +32,7 @@ A prompt library for Claude coding agents. Pure Markdown. English only. Built on
 |---|---|
 | `README.md` | Catalog, portfolio table, common combinations |
 | `prompts/english/INDEX.md` | Global task -> file router |
-| `prompts/english/agents/` | 35 active prompts: the Agent System, Claude Code operation (Skills, MCP, Plugins, Subagents+Workflows, Hooks, Workflow, Thinking), and development specialists |
+| `prompts/english/agents/` | 36 active prompts: the Agent System, Claude Code operation prompts, evidence-driven research, and development specialists |
 | `prompts/english/agents/INDEX.md` | Agent catalog with token counts and a task router |
 | `prompts/english/agents/archive/` | Archived prompts + merge rationale |
 | `prompts/english/base/` | Foundation prompt (universal best practices) |
@@ -43,8 +45,9 @@ A prompt library for Claude coding agents. Pure Markdown. English only. Built on
 | `CLAUDE.md` | Project memory for anyone working on this repo |
 | `.claude-plugin/plugin.json` | Plugin manifest — makes this repo `claude --plugin-dir`-installable |
 | `hooks/` | Working `PreToolUse` scripts wired via `hooks/hooks.json` (block destructive commands, block secret writes) |
-| `.claude/skills/` | 5 real skills: `find-prompt` (routing), `deterministic-checks`, `changelog-from-commits`, `doc-link-audit`, `skill-audit` — each ships an actual script |
-| `evals/` | Routing-accuracy regression tests for `find-prompt` — 20 cases, static + live tiers, run in CI |
+| `.claude/skills/` | 6 skills: `find-prompt`, four deterministic repository checks, and `capability-audit` with a read-only GitHub inspection script |
+| `evals/` | Routing-accuracy regression tests for `find-prompt` — 22 cases, static + live tiers, run in CI |
+| `plugin-evals/` | Native `claude plugin eval` trigger cases; model runs are opt-in because they consume account usage |
 | `.github/workflows/quality-gate.yml` | CI: markdownlint, link audit, skill audit, deterministic-checks, plugin validation, routing eval — every PR |
 
 ## How to use the library
