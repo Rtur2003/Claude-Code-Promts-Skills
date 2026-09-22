@@ -41,6 +41,8 @@ The material this library is built on. Verify any Claude Code or model claim her
 | Prompt engineering interactive tutorial | Runnable lessons from basics to advanced | `github.com/anthropics/prompt-eng-interactive-tutorial` |
 | anthropics/skills | The official Agent Skills library and `package_skill.py` | `github.com/anthropics/skills` |
 | Agent Skills spec | The open standard skills follow (`agentskills.io`) | `agentskills.io` |
+| Claude Code plugin evals | With/without-plugin behavioral tests, deterministic and model graders | `code.claude.com/docs/en/plugin-evals` |
+| Official MCP Registry | Publisher metadata and versioned MCP server discovery; not a security review | `registry.modelcontextprotocol.io` |
 | Agent SDK docs | Claude Code as a library — `@anthropic-ai/claude-agent-sdk`, `claude-agent-sdk` | `code.claude.com/docs/en/agent-sdk/overview` |
 | `/claude-api` bundled skill | In-session API reference: model IDs, pricing, params, migration | run `/claude-api` in Claude Code |
 
@@ -78,6 +80,8 @@ Unvetted, community-maintained. Useful for discovery; verify anything before ado
 | `rohitg00/awesome-claude-code-toolkit`, `jqueryscript/awesome-claude-code`, `hesreallyhim/awesome-claude-code` | Curated skills, subagents, hooks, MCP servers, plugins |
 | `appcypher/awesome-mcp-servers`, `wong2/awesome-mcp-servers` | MCP server directories (also `claude.ai/directory` for reviewed connectors) |
 | `humanlayer/12-factor-agents` | Architecture principles: production agents blend deterministic code with strategic LLM decision points, not a pure agentic loop |
+
+For a maintained search order, weighted evaluation rubric, low-adoption research seeds, and a pre-install gate, use [Capability Ecosystem Discovery](ecosystem-discovery-guide.md) plus the bundled `capability-audit` skill. Keep marketplace validation, installation, authentication, and runtime verification as separate claims.
 
 **Spec-driven development frameworks** (heavier than this library's "interview → SPEC.md → fresh session" flow): GitHub `spec-kit`, BMAD-METHOD, Kiro, Tessl. Use one when a team needs an enforced spec → design → tasks → implementation pipeline.
 
