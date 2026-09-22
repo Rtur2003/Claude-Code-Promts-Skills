@@ -18,6 +18,7 @@ Guides for running Claude Code and maintaining this library. Each is a standalon
 | Review a prompt against the repo standard | [prompt-review-checklist.md](prompt-review-checklist.md) |
 | Run the 90-day portfolio review | [portfolio-maintenance-guide.md](portfolio-maintenance-guide.md) |
 | Find the primary source behind a recommendation, or make one config work across tools | [reference-resources.md](reference-resources.md) |
+| Discover and evaluate skills, plugins, MCP servers, or agent toolkits | [ecosystem-discovery-guide.md](ecosystem-discovery-guide.md) |
 
 ## Catalog
 
@@ -34,3 +35,4 @@ Guides for running Claude Code and maintaining this library. Each is a standalon
 | [prompt-review-checklist.md](prompt-review-checklist.md) | Structure and no-vague-advice checks |
 | [portfolio-maintenance-guide.md](portfolio-maintenance-guide.md) | Monthly and quarterly governance, keep/merge/archive |
 | [reference-resources.md](reference-resources.md) | The Anthropic canon this library is built on, AGENTS.md cross-tool interop, community catalogs, adjacent-agent comparison |
+| [ecosystem-discovery-guide.md](ecosystem-discovery-guide.md) | Popularity-resistant discovery, trust-boundary inspection, candidate scorecard, and installation gate |
