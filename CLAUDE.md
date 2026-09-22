@@ -21,19 +21,20 @@
 ├── QUICK-START.md         # 30-second setup guide
 ├── USAGE.md               # Scenario-based prompt composition
 ├── CONTRIBUTING.md        # Contribution guidelines
-├── CHANGELOG.md           # Version history (current: 2.1.0)
+├── CHANGELOG.md           # Version history (current: 2.2.0)
 ├── llms.txt               # Full LLM router index
 ├── .claude-plugin/
 │   └── plugin.json        # Plugin manifest — claude --plugin-dir installable
 ├── hooks/
 │   ├── hooks.json          # PreToolUse wiring
 │   └── scripts/            # block-destructive-commands.sh, block-secret-writes.sh
-├── .claude/skills/         # 5 real skills (find-prompt + 4 deterministic-validation)
+├── .claude/skills/         # 6 skills (routing + 4 deterministic checks + capability audit)
 │   ├── find-prompt/
 │   ├── deterministic-checks/
 │   ├── changelog-from-commits/
 │   ├── doc-link-audit/
-│   └── skill-audit/
+│   ├── skill-audit/
+│   └── capability-audit/
 ├── evals/                  # find-prompt routing-accuracy regression tests (static + live tiers)
 ├── .github/workflows/
 │   └── quality-gate.yml    # CI: lint, link audit, skill audit, deterministic-checks, plugin validate, routing eval
@@ -123,11 +124,13 @@ No build system for the prompts themselves. The bundled skill/hook scripts under
 - **Lint**: `npx markdownlint-cli2 '**/*.md'`
 - **Pre-commit scan**: `bash .claude/skills/deterministic-checks/scripts/scan.sh .`
 - **Skill quality check**: `python3 .claude/skills/skill-audit/scripts/audit.py .claude/skills`
-- **Plugin manifest check**: `claude plugin validate .`
+- **Plugin checks**: `claude plugin validate .claude-plugin/plugin.json` and `claude plugin validate .claude-plugin/marketplace.json`
+- **Routing eval**: `python3 evals/run_routing_eval.py`
+- **Native plugin evals**: `claude plugin eval . --no-publish` (real model calls; use an explicit cost limit)
 
 ## Bundled skills and scripts
 
-`.claude/skills/` ships 5 real Claude Code skills — 1 routing skill (`find-prompt`) and 4 deterministic-validation skills with actual scripts (`deterministic-checks`, `changelog-from-commits`, `doc-link-audit`, `skill-audit`). `hooks/` ships 2 `PreToolUse` safety scripts wired via `hooks/hooks.json`. These exist because a prompt library that teaches skill/hook/plugin authoring should demonstrate the pattern with working examples, not only describe it. Keep this section, `README.md`'s skills table, and `REPOSITORY-MAP.md` in sync when adding, removing, or renaming one. Every script must be tested against real input (not just read for plausibility) before being documented as working — see the CHANGELOG 2.1.0 entry for the false-positive classes found and fixed during this addition (GitHub heading-slug algorithm, fenced-code-block boundary detection) as the standard to hold new scripts to.
+`.claude/skills/` ships 6 skills: `find-prompt`, 4 deterministic repository checks (`deterministic-checks`, `changelog-from-commits`, `doc-link-audit`, `skill-audit`), and `capability-audit`, a read-only GitHub evidence collector for third-party skills, plugins, MCP servers, and agent toolkits. `hooks/` ships 2 `PreToolUse` safety scripts wired via `hooks/hooks.json`. Keep this section, `README.md`, `REPOSITORY-MAP.md`, `llms.txt`, the routing table, and eval cases in sync. Test every script against real input before documenting it as working.
 
 ## Common Tasks
 
