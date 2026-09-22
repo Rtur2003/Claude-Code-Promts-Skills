@@ -150,8 +150,11 @@ claude --plugin-dir ./plugin-one --plugin-dir ./plugin-two       # multiple
 - [ ] MCP: `/mcp` shows the server connected
 - [ ] LSP: `/plugin` **Errors** tab is clean (a missing binary shows `Executable not found in $PATH`)
 
+Behavioral verification is separate from manifest validation. On Claude Code v2.1.269 or later, put realistic cases under `evals/` (or set `"experimental": {"evals": "<dir>"}` in `plugin.json`) and run `claude plugin eval .`. It executes fresh sessions with and without the plugin and reports the score delta. Every run is a real model call, so set `--runs`, `--max-cost-usd`, and `--no-publish` deliberately. Use deterministic `tool_used`, `tool_order`, `regex`, and `file_exists` graders where possible; reserve model graders for outcomes that cannot be checked mechanically.
+
 ```bash
 claude plugin validate ./my-plugin           # add --strict to fail on warnings
+claude plugin eval ./my-plugin --runs 1 --max-cost-usd 1 --no-publish
 ```
 
 ---
@@ -175,6 +178,8 @@ claude plugin validate ./my-plugin           # add --strict to fail on warnings
   ]
 }
 ```
+
+When the marketplace repository root is also the plugin root, `"source": "."` is valid. Relative sources work when users add the repository or a local directory as the marketplace; they do not work when users add only a direct URL to `marketplace.json`, because Claude Code downloads that one file without the relative plugin contents.
 
 ```bash
 claude plugin marketplace add acme/claude-plugins        # GitHub or GitLab owner/repo
@@ -208,11 +213,20 @@ The official marketplace is curated separately; the submission form does not add
 
 ## Worked example: this repository
 
-This library ships as an installable plugin: [`.claude-plugin/plugin.json`](../../../.claude-plugin/plugin.json) points `skills` at the existing `.claude/skills/` directory (so the zero-config "clone and `/find-prompt` just works" path keeps working — see [Phase 2](#phase-2-build--directory-and-manifest), custom `skills` paths *add to* the default scan, they don't replace it) and `hooks` at [`hooks/hooks.json`](../../../hooks/hooks.json), which wires the two working scripts from the Hooks & Automation prompt's recipe table.
+This library ships as an installable plugin: [`.claude-plugin/plugin.json`](../../../.claude-plugin/plugin.json) points `skills` at the existing `.claude/skills/` directory (so the zero-config "clone and `/find-prompt` just works" path keeps working) and `hooks` at [`hooks/hooks.json`](../../../hooks/hooks.json). [`.claude-plugin/marketplace.json`](../../../.claude-plugin/marketplace.json) exposes the repository-root plugin with `"source": "."`, while `plugin-evals/` contains native trigger cases selected through the manifest's `experimental.evals` field.
 
 ```bash
 claude --plugin-dir /path/to/Claude-Code-Promts    # load it for one session
-claude plugin validate /path/to/Claude-Code-Promts # check the manifest
+claude plugin validate /path/to/Claude-Code-Promts/.claude-plugin/plugin.json
+claude plugin validate /path/to/Claude-Code-Promts/.claude-plugin/marketplace.json
+claude plugin eval /path/to/Claude-Code-Promts --runs 1 --no-publish  # real model calls
+```
+
+Persistent marketplace installation:
+
+```text
+/plugin marketplace add Rtur2003/Claude-Code-Promts-Skills
+/plugin install claude-code-prompts@claude-code-prompts
 ```
 
 ---
