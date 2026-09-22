@@ -20,6 +20,7 @@ Do not read every file. Resolve your task to one file below, open it, act.
 - Generate a changelog from Conventional Commits: ./.claude/skills/changelog-from-commits/
 - Check Markdown links/anchors/orphan pages: ./.claude/skills/doc-link-audit/
 - Audit a skills directory for collisions and description quality: ./.claude/skills/skill-audit/
+- Audit a GitHub-hosted skill/plugin/MCP candidate without cloning or installing it: ./.claude/skills/capability-audit/
 
 ## Running Claude Code
 - Pick a model / effort level: ./prompts/english/workflows/model-selection-guide.md
@@ -32,6 +33,7 @@ Do not read every file. Resolve your task to one file below, open it, act.
 - Subagents + dynamic workflows: ./prompts/english/agents/multi-agent-orchestration-prompt.md
 - Hooks and lifecycle automation: ./prompts/english/agents/hooks-automation-prompt.md
 - Build an agent programmatically (Agent SDK): ./prompts/english/workflows/agent-sdk-guide.md
+- Evaluate skills, plugins, MCP servers, and agent toolkits: ./prompts/english/workflows/ecosystem-discovery-guide.md
 
 ## Building software (project-type prompts)
 - Web frontend: ./prompts/english/project-types/web-development-prompt.md
@@ -74,6 +76,7 @@ Do not read every file. Resolve your task to one file below, open it, act.
 - Documentation: ./prompts/english/agents/documentation-prompt.md
 - UI / design systems: ./prompts/english/agents/ui-design-systems-prompt.md
 - AI / LLM integration: ./prompts/english/agents/ai-llm-integration-prompt.md
+- Consequential research and source-verified comparisons beyond coding: ./prompts/english/agents/evidence-driven-research-prompt.md
 
 ## Methodology & guides
 - APEI walkthrough: ./prompts/english/workflows/iterative-development-guide.md
