@@ -12,5 +12,8 @@
     "MD040": false,
     "MD058": false,
     "MD060": false
-  }
+  },
+  "ignores": [
+    "plugin-evals/**/prompt.md"
+  ]
 }
