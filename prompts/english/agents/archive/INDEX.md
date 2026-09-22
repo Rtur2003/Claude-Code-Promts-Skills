@@ -27,3 +27,11 @@ Archived files remain available for reference:
 - [Integration Guardian](integration-guardian-prompt.md)
 - [Claude Code Token Optimization](claude-code-token-optimization-prompt.md)
 - [Prompt Chaining](prompt-chaining-prompt.md)
+
+Compatibility stubs preserve old inbound paths and redirect to the archive plus the active replacement:
+
+- [Error Analysis stub](../error-analysis-prompt.md)
+- [Project Workflow stub](../project-workflow-prompt.md)
+- [Integration Guardian stub](../integration-guardian-prompt.md)
+- [Claude Code Token Optimization stub](../claude-code-token-optimization-prompt.md)
+- [Prompt Chaining stub](../prompt-chaining-prompt.md)
