@@ -27,7 +27,13 @@ A shell script that scans a repository for five specific, mechanically-detectabl
 bash ${CLAUDE_SKILL_DIR}/scripts/scan.sh [path]   # defaults to .
 ```
 
-Exit code 0 = clean, 1 = findings printed to stdout, 2 = usage error. In a git repo it scans tracked + untracked-but-not-ignored files (via `git ls-files`); outside git it walks the filesystem, skipping `node_modules`, `.git`, `dist`, `build`, `vendor`.
+Exit code 0 = clean, 1 = findings printed to stdout, 2 = usage error. In a Git repo it scans tracked + untracked-but-not-ignored files (via `git ls-files`); outside Git it walks the filesystem, skipping `node_modules`, `.git`, `.claude/worktrees`, `dist`, `build`, and `vendor`.
+
+Set `SCAN_NO_GIT=1` when project policy forbids even read-only Git commands. The script then uses the filesystem walk regardless of repository state:
+
+```bash
+SCAN_NO_GIT=1 bash ${CLAUDE_SKILL_DIR}/scripts/scan.sh .
+```
 
 **Excluding a path** (e.g. a docs file that intentionally shows conflict-marker syntax):
 
