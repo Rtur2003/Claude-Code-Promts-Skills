@@ -50,6 +50,7 @@ Paths are relative to `prompts/english/`.
 | what a current Claude Code build can do — plan mode, rewind, headless, surfaces | `workflows/claude-code-native-features-guide.md` |
 | building an agent in Python/TS, the Agent SDK, `query()` | `workflows/agent-sdk-guide.md` |
 | AGENTS.md, one config across Cursor/Codex/Aider, the primary source for a claim | `workflows/reference-resources.md` |
+| evaluating or installing a skill, plugin, MCP server, or agent toolkit | `workflows/ecosystem-discovery-guide.md` |
 
 ### Building software (base = Agent System + the one specialist below)
 
@@ -96,6 +97,7 @@ Paths are relative to `prompts/english/`.
 | a monorepo, multi-package coordination, Turborepo/Nx | `agents/monorepo-complex-projects-prompt.md` |
 | writing docs, a README, API reference | `agents/documentation-prompt.md` |
 | a design system, tokens, a component library, theming | `agents/ui-design-systems-prompt.md` |
+| consequential research, source verification, product/service comparison, recommendation beyond coding | `agents/evidence-driven-research-prompt.md` |
 
 ## Rules
 

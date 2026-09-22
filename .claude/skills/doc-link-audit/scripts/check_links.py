@@ -50,6 +50,10 @@ def find_markdown_files(root, exclude_pattern=None):
     exclude_re = re.compile(exclude_pattern) if exclude_pattern else None
     for dirpath, dirnames, filenames in os.walk(root):
         dirnames[:] = [d for d in dirnames if d not in ('.git', 'node_modules', 'dist', 'build', 'vendor')]
+        rel_dir = os.path.relpath(dirpath, root).replace(os.sep, '/')
+        if rel_dir == '.claude':
+            # Claude Code worktrees are transient checkouts, not repository docs.
+            dirnames[:] = [d for d in dirnames if d != 'worktrees']
         for fn in filenames:
             if fn.endswith('.md'):
                 path = os.path.join(dirpath, fn)
@@ -128,7 +132,7 @@ def main():
     orphans = sorted(file_set - referenced - {os.path.relpath(f, root).replace('\\', '/')
                                                for f in files if os.path.basename(f).upper() in
                                                ('README.MD', 'INDEX.MD', 'CHANGELOG.MD', 'CONTRIBUTING.MD',
-                                                'LICENSE.MD', 'CLAUDE.MD', 'QUICK-START.MD', 'USAGE.MD',
+                                                'LICENSE.MD', 'CLAUDE.MD', 'AGENTS.MD', 'QUICK-START.MD', 'USAGE.MD',
                                                 'REPOSITORY-MAP.MD')})
 
     if broken:
