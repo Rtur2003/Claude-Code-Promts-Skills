@@ -4,6 +4,26 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [2.2.0] - 2026-09-22
+
+Adds evidence-driven research and pre-install capability inspection without expanding the default context for unrelated coding tasks.
+
+### Added
+
+- **Evidence-Driven Research prompt** — a cross-domain SOURCE protocol for consequential research, product/service comparisons, primary-source triangulation, adversarial checks, and explicit uncertainty.
+- **Capability Ecosystem Discovery guide** — a popularity-resistant search order, weighted scorecard, small-project research seeds, and installation gate for skills, plugins, MCP servers, and agent toolkits.
+- **`capability-audit` skill** — a dependency-free, read-only GitHub API inspector that reports maintenance, license, plugin/marketplace manifests, skills, MCP, hooks, executables, tests, CI, security-policy signals, and high-risk text patterns without cloning or executing candidate code.
+- **Marketplace catalog** — `.claude-plugin/marketplace.json` exposes the repository-root plugin with `source: "."`.
+- **Native plugin eval suite** — `plugin-evals/` tests positive and negative skill-trigger behavior through `claude plugin eval`; the existing zero-cost static routing suite remains the default CI gate.
+
+### Changed
+
+- Expanded the `find-prompt` router and deterministic routing cases from 20 to 22 cases.
+- Updated MCP guidance to distinguish the official registry from security review and to state that MCP reference servers are educational examples, not automatic production recommendations.
+- Added current native plugin-eval guidance and repository-root marketplace behavior to the plugin prompt.
+- Repaired `AGENTS.md` paths and names so non-Claude agents resolve the actual Claude-focused library instead of nonexistent `.Codex/` files; `.agents/skills/find-prompt` now delegates to one canonical routing table.
+- Updated README, repository map, indexes, `llms.txt`, project instructions, and plugin metadata for the new prompt, guide, skill, marketplace, and eval suite.
+
 ## [2.1.0] - 2026-09-05
 
 Closes gaps identified by an external technical audit (composition-rule contradiction, no conflict policy, no installable packaging) and, separately, closes a gap found through primary research into competing skill libraries: every well-regarded competitor (anthropics/skills, obra/superpowers, wshobson/agents) ships *guidance* skills, and none ship well-tested *deterministic-validation* skills — scripts that produce a ground-truth answer at zero model cost. This library now ships four of the latter, tested against real input including this repo's own history and files, plus the Skill Discovery Optimization methodology (verified against a real, well-regarded production skill) that this library's own skill-authoring prompt was missing.
