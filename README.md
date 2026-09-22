@@ -13,7 +13,7 @@ Production-ready prompt library for Claude AI and coding agents, built on the **
 2. Add specialist prompts by tier — 1 for a single-domain task (the default), 2 only when the task spans two genuinely independent domains, Multi-Agent Orchestration when units of work need isolation. See [Composition Tiers](prompts/english/workflows/prompt-selector-guide.md#composition-tiers-source-of-truth).
 3. Validate outputs against explicit success criteria.
 
-Five skills ship in `.claude/skills/` — they load automatically when you run Claude Code from this repo:
+Six skills ship in `.claude/skills/` — they load automatically when you run Claude Code from this repo:
 
 | Skill | Use when | File |
 |---|---|---|
@@ -22,13 +22,24 @@ Five skills ship in `.claude/skills/` — they load automatically when you run C
 | `changelog-from-commits` | Cutting a release — Conventional Commits parsed into a categorized changelog | [View](.claude/skills/changelog-from-commits/SKILL.md) |
 | `doc-link-audit` | Before publishing docs — internal links, heading anchors, and orphan pages, GitHub-accurate slug matching | [View](.claude/skills/doc-link-audit/SKILL.md) |
 | `skill-audit` | Reviewing a skills directory — frontmatter validity, description quality (SDO), body size, cross-scope name collisions | [View](.claude/skills/skill-audit/SKILL.md) |
+| `capability-audit` | Evaluating a GitHub-hosted skill, plugin, MCP server, or agent toolkit before installation — read-only repository evidence without cloning | [View](.claude/skills/capability-audit/SKILL.md) |
 
-Each is a real script, not a prompt describing one — see [Repository Structure](#repository-structure) below. This repo is also an installable plugin ([`.claude-plugin/plugin.json`](.claude-plugin/plugin.json)):
+These are operational skills rather than catalog-only examples: five include executable scripts, while `/find-prompt` is the routing layer. See [Repository Structure](#repository-structure) below. This repo is also an installable plugin ([`.claude-plugin/plugin.json`](.claude-plugin/plugin.json)):
 
 ```bash
 claude --plugin-dir /path/to/Claude-Code-Promts     # try it for one session
-claude plugin validate /path/to/Claude-Code-Promts  # check the manifest
+claude plugin validate /path/to/Claude-Code-Promts/.claude-plugin/plugin.json
+claude plugin validate /path/to/Claude-Code-Promts/.claude-plugin/marketplace.json
 ```
+
+The repository also ships [a marketplace manifest](.claude-plugin/marketplace.json), so it can be installed without remembering a local `--plugin-dir` path:
+
+```text
+/plugin marketplace add Rtur2003/Claude-Code-Promts-Skills
+/plugin install claude-code-prompts@claude-code-prompts
+```
+
+Marketplace installation is intentionally left as a user action because it changes Claude Code's persistent plugin state.
 
 Installing as a plugin additionally wires two deterministic safety hooks (block destructive commands, block writing live-looking credentials) — see [Claude Code Plugins](prompts/english/agents/claude-code-plugins-prompt.md#worked-example-this-repository).
 
@@ -69,6 +80,8 @@ Coverage of the current Claude Code / Claude ecosystem (models, Skills, Plugins,
 | Thinking depth, effort, plan mode | [Thinking & Planning](prompts/english/agents/claude-code-modes-prompt.md) |
 | Build an agent programmatically | [Agent SDK Guide](prompts/english/workflows/agent-sdk-guide.md) |
 | The sources behind this library + cross-tool `AGENTS.md` + adjacent agents | [Reference Resources](prompts/english/workflows/reference-resources.md) |
+| Evaluate skills, plugins, MCP servers, and agent toolkits | [Capability Ecosystem Discovery](prompts/english/workflows/ecosystem-discovery-guide.md) |
+| Research consequential questions beyond coding | [Evidence-Driven Research](prompts/english/agents/evidence-driven-research-prompt.md) |
 
 ---
 
@@ -111,6 +124,7 @@ Coverage of the current Claude Code / Claude ecosystem (models, Skills, Plugins,
 | Developer Experience & Tooling | Linting/hooks/onboarding/DX | Feature logic changes only | [View](prompts/english/agents/developer-experience-tooling-prompt.md) |
 | Database Design & Optimization | Schema/index/query tuning | No persistent data layer exists | [View](prompts/english/agents/database-optimization-prompt.md) |
 | UI/UX & Design Systems | Design tokens/components/theming | API/backend-only task | [View](prompts/english/agents/ui-design-systems-prompt.md) |
+| Evidence-Driven Research | Source-verified research, comparisons, and consequential recommendations | A primary source already answers a simple fact | [View](prompts/english/agents/evidence-driven-research-prompt.md) |
 
 ---
 
