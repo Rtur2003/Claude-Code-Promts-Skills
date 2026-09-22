@@ -33,6 +33,7 @@ Thumbs.db
 # Testing
 coverage/
 .pytest_cache/
+plugin-evals/results/
 
 # Temporary files
 *.tmp
