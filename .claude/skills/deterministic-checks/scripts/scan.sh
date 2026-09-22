@@ -10,17 +10,19 @@ FOUND=0
 report() { printf '%s\n' "$1"; FOUND=1; }
 
 # Respect .gitignore when git is available; otherwise scan everything under ROOT.
+# Set SCAN_NO_GIT=1 when repository policy forbids even read-only Git commands.
 # Excludes this script's own directory (its source contains the patterns it looks for)
 # and any path matching *.example.* / *fixtures* / *test-data* — extend via SCAN_EXCLUDE
 # (a grep -Ev pattern) for docs directories with intentional example markers.
 list_files() {
-  if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  if [ "${SCAN_NO_GIT:-0}" != "1" ] && git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
     git ls-files --cached --others --exclude-standard
   else
     find . -type f \
       -not -path '*/node_modules/*' -not -path '*/.git/*' \
+      -not -path '*/.claude/worktrees/*' \
       -not -path '*/dist/*' -not -path '*/build/*' -not -path '*/vendor/*'
-  fi | grep -Ev '(^|/)\.claude/skills/deterministic-checks/scripts/'
+  fi | grep -Ev '(^|/)\.(claude|agents)/skills/deterministic-checks/scripts/'
 }
 
 FILES="$(list_files)"
