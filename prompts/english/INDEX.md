@@ -22,6 +22,7 @@ Selection logic source: [workflows/prompt-selector-guide.md](workflows/prompt-se
 | Automate on a lifecycle event | [agents/hooks-automation-prompt.md](agents/hooks-automation-prompt.md) |
 | Build an agent programmatically | [workflows/agent-sdk-guide.md](workflows/agent-sdk-guide.md) |
 | Find the source behind a recommendation / make one config serve every tool | [workflows/reference-resources.md](workflows/reference-resources.md) |
+| Evaluate or install a skill, plugin, MCP server, or agent toolkit | [workflows/ecosystem-discovery-guide.md](workflows/ecosystem-discovery-guide.md) |
 
 ### Building software
 
@@ -68,6 +69,7 @@ Selection logic source: [workflows/prompt-selector-guide.md](workflows/prompt-se
 | Structure a monorepo | [agents/monorepo-complex-projects-prompt.md](agents/monorepo-complex-projects-prompt.md) |
 | Write documentation | [agents/documentation-prompt.md](agents/documentation-prompt.md) |
 | Design a UI component system | [agents/ui-design-systems-prompt.md](agents/ui-design-systems-prompt.md) |
+| Research a consequential question or compare products/services with source verification | [agents/evidence-driven-research-prompt.md](agents/evidence-driven-research-prompt.md) |
 
 ## Catalogs
 
@@ -106,3 +108,4 @@ Selection logic source: [workflows/prompt-selector-guide.md](workflows/prompt-se
 - Prompt review checklist: [workflows/prompt-review-checklist.md](workflows/prompt-review-checklist.md)
 - Portfolio maintenance: [workflows/portfolio-maintenance-guide.md](workflows/portfolio-maintenance-guide.md)
 - Reference resources (Anthropic canon, AGENTS.md, adjacent tools): [workflows/reference-resources.md](workflows/reference-resources.md)
+- Skill, plugin, and MCP ecosystem discovery: [workflows/ecosystem-discovery-guide.md](workflows/ecosystem-discovery-guide.md)
