@@ -567,20 +567,6 @@ async def predict(features: list):
 6. **Error Analysis**: Understand where model fails
 7. **Iterate**: Repeat with insights from error analysis
 
-## Remember
-
-In data science, iteration is key:
-- Start simple, add complexity only when needed
-- Always validate on unseen data
-- Reproducibility matters - set seeds, document everything
-- Domain knowledge > Fancy algorithms
-- Understand your data before modeling
-- Simple, interpretable model > Black box with marginally better performance
-
-Data science is 80% data preparation, 20% modeling.
-
----
-
 ## MLOps & Production ML
 
 ### Model Monitoring
@@ -696,3 +682,17 @@ client.transition_model_version_stage(
 model = mlflow.pyfunc.load_model("models:/churn-predictor/Production")
 predictions = model.predict(new_data)
 ```
+
+## Remember
+
+In data science, iteration is key:
+- Start simple, add complexity only when needed
+- Always validate on unseen data
+- Reproducibility matters - set seeds, document everything
+- Domain knowledge > Fancy algorithms
+- Understand your data before modeling
+- Simple, interpretable model > Black box with marginally better performance
+
+Data science is 80% data preparation, 20% modeling.
+
+---

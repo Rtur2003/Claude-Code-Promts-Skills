@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Unreleased]
+
+### Added
+
+- **`prompt-audit` skill** — deterministic checks for prompt structure, agent metadata, catalog registration, retired model identifiers, and generic filler language in both Claude and cross-agent skill layouts.
+
+### Fixed
+
+- Deterministic conflict-marker scanning now ignores markers inside fenced code blocks, removing the Git version-control example false positive without disabling real conflict checks.
+- The quality gate now runs prompt audits in CI alongside Markdown, links, skills, routing, and plugin validation.
+
 ## [2.2.0] - 2026-09-22
 
 Adds evidence-driven research and pre-install capability inspection without expanding the default context for unrelated coding tasks.

@@ -28,16 +28,17 @@
 ├── hooks/
 │   ├── hooks.json          # PreToolUse wiring
 │   └── scripts/            # block-destructive-commands.sh, block-secret-writes.sh
-├── .claude/skills/         # 6 skills (routing + 4 deterministic checks + capability audit)
+├── .claude/skills/         # 7 skills (routing + 4 deterministic checks + capability audit + prompt audit)
 │   ├── find-prompt/
 │   ├── deterministic-checks/
 │   ├── changelog-from-commits/
 │   ├── doc-link-audit/
 │   ├── skill-audit/
-│   └── capability-audit/
+│   ├── capability-audit/
+│   └── prompt-audit/
 ├── evals/                  # find-prompt routing-accuracy regression tests (static + live tiers)
 ├── .github/workflows/
-│   └── quality-gate.yml    # CI: lint, link audit, skill audit, deterministic-checks, plugin validate, routing eval
+│   └── quality-gate.yml    # CI: lint, link audit, skill audit, prompt audit, deterministic-checks, plugin validate, routing eval
 └── prompts/
     └── english/
         ├── INDEX.md           # Global task -> file router
@@ -130,7 +131,7 @@ No build system for the prompts themselves. The bundled skill/hook scripts under
 
 ## Bundled skills and scripts
 
-`.claude/skills/` ships 6 skills: `find-prompt`, 4 deterministic repository checks (`deterministic-checks`, `changelog-from-commits`, `doc-link-audit`, `skill-audit`), and `capability-audit`, a read-only GitHub evidence collector for third-party skills, plugins, MCP servers, and agent toolkits. `hooks/` ships 2 `PreToolUse` safety scripts wired via `hooks/hooks.json`. Keep this section, `README.md`, `REPOSITORY-MAP.md`, `llms.txt`, the routing table, and eval cases in sync. Test every script against real input before documenting it as working.
+`.claude/skills/` ships 7 skills: `find-prompt`, 4 deterministic repository checks (`deterministic-checks`, `changelog-from-commits`, `doc-link-audit`, `skill-audit`), `capability-audit`, and `prompt-audit`. `hooks/` ships 2 `PreToolUse` safety scripts wired via `hooks/hooks.json`. Keep this section, `README.md`, `REPOSITORY-MAP.md`, `llms.txt`, the routing table, and eval cases in sync. Test every script against real input before documenting it as working.
 
 ## Common Tasks
 
