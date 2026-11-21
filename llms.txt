@@ -21,6 +21,7 @@ Do not read every file. Resolve your task to one file below, open it, act.
 - Check Markdown links/anchors/orphan pages: ./.claude/skills/doc-link-audit/
 - Audit a skills directory for collisions and description quality: ./.claude/skills/skill-audit/
 - Audit a GitHub-hosted skill/plugin/MCP candidate without cloning or installing it: ./.claude/skills/capability-audit/
+- Audit prompt structure, claims, links, and catalog consistency: ./.claude/skills/prompt-audit/
 
 ## Running Claude Code
 - Pick a model / effort level: ./prompts/english/workflows/model-selection-guide.md

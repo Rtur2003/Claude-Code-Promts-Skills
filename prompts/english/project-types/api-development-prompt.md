@@ -517,18 +517,6 @@ When optimizing APIs:
 7. **Monitor Impact**: Compare before/after metrics
 8. **Iterate**: Continue until performance targets met
 
-## Remember
-
-APIs are contracts with clients. Backward compatibility matters:
-- Version your API
-- Deprecate gradually
-- Document changes
-- Communicate with API consumers
-
-Build APIs that are secure, performant, and maintainable.
-
----
-
 ## Modern API Tooling Quick Reference
 
 Verify current versions before pinning.
@@ -685,3 +673,15 @@ async function deliverWebhook(url: string, payload: object, secret: string): Pro
   return false;
 }
 ```
+
+## Remember
+
+APIs are contracts with clients. Backward compatibility matters:
+- Version your API
+- Deprecate gradually
+- Document changes
+- Communicate with API consumers
+
+Build APIs that are secure, performant, and maintainable.
+
+---

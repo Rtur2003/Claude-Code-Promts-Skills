@@ -13,7 +13,7 @@ Production-ready prompt library for Claude AI and coding agents, built on the **
 2. Add specialist prompts by tier — 1 for a single-domain task (the default), 2 only when the task spans two genuinely independent domains, Multi-Agent Orchestration when units of work need isolation. See [Composition Tiers](prompts/english/workflows/prompt-selector-guide.md#composition-tiers-source-of-truth).
 3. Validate outputs against explicit success criteria.
 
-Six skills ship in `.claude/skills/` — they load automatically when you run Claude Code from this repo:
+Seven skills ship in `.claude/skills/` — they load automatically when you run Claude Code from this repo:
 
 | Skill | Use when | File |
 |---|---|---|
@@ -23,8 +23,9 @@ Six skills ship in `.claude/skills/` — they load automatically when you run Cl
 | `doc-link-audit` | Before publishing docs — internal links, heading anchors, and orphan pages, GitHub-accurate slug matching | [View](.claude/skills/doc-link-audit/SKILL.md) |
 | `skill-audit` | Reviewing a skills directory — frontmatter validity, description quality (SDO), body size, cross-scope name collisions | [View](.claude/skills/skill-audit/SKILL.md) |
 | `capability-audit` | Evaluating a GitHub-hosted skill, plugin, MCP server, or agent toolkit before installation — read-only repository evidence without cloning | [View](.claude/skills/capability-audit/SKILL.md) |
+| `prompt-audit` | Auditing prompt structure, agent metadata, retired model references, and catalog registration | [View](.claude/skills/prompt-audit/SKILL.md) |
 
-These are operational skills rather than catalog-only examples: five include executable scripts, while `/find-prompt` is the routing layer. See [Repository Structure](#repository-structure) below. This repo is also an installable plugin ([`.claude-plugin/plugin.json`](.claude-plugin/plugin.json)):
+These are operational skills rather than catalog-only examples: six include executable scripts, while `/find-prompt` is the routing layer. See [Repository Structure](#repository-structure) below. This repo is also an installable plugin ([`.claude-plugin/plugin.json`](.claude-plugin/plugin.json)):
 
 ```bash
 claude --plugin-dir /path/to/Claude-Code-Promts     # try it for one session
@@ -217,4 +218,4 @@ prompts/
 - [Prompt Selector Guide](prompts/english/workflows/prompt-selector-guide.md)
 - [Prompt Review Checklist](prompts/english/workflows/prompt-review-checklist.md)
 - [Evals](evals/README.md) — routing-accuracy regression tests, run in CI on every PR
-- [CI workflow](.github/workflows/quality-gate.yml) — markdownlint, link audit, skill audit, deterministic-checks, plugin validation, routing eval
+- [CI workflow](.github/workflows/quality-gate.yml) — markdownlint, link audit, skill audit, prompt audit, deterministic-checks, plugin validation, routing eval

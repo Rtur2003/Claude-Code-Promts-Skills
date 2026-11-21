@@ -29,17 +29,18 @@
 ├── hooks/
 │   ├── hooks.json          # PreToolUse wiring
 │   └── scripts/            # block-destructive-commands.sh, block-secret-writes.sh
-├── .claude/skills/        # 6 Claude Code skills
+├── .claude/skills/        # 7 Claude Code skills
 │   ├── find-prompt/
 │   ├── deterministic-checks/
 │   ├── changelog-from-commits/
 │   ├── doc-link-audit/
 │   ├── skill-audit/
-│   └── capability-audit/
+│   ├── capability-audit/
+│   └── prompt-audit/
 ├── .agents/skills/        # Cross-agent adapters / mirrored deterministic skills
 ├── evals/                  # find-prompt routing-accuracy regression tests (static + live tiers)
 ├── .github/workflows/
-│   └── quality-gate.yml    # CI: lint, link audit, skill audit, deterministic-checks, plugin validate, routing eval
+│   └── quality-gate.yml    # CI: lint, link audit, skill audit, prompt audit, deterministic-checks, plugin validate, routing eval
 └── prompts/
     └── english/
         ├── INDEX.md           # Global task -> file router
@@ -130,7 +131,7 @@ No build system for the prompts themselves. The bundled skill/hook scripts under
 
 ## Bundled skills and scripts
 
-`.claude/skills/` ships 6 skills: `find-prompt`, 4 deterministic repository checks, and `capability-audit`. `.agents/skills/` exposes the library to other agent hosts without maintaining a second routing table. `hooks/` ships 2 `PreToolUse` safety scripts. Keep the catalogs, adapters, routing cases, and scripts synchronized; test scripts against real input before documenting them as working.
+`.claude/skills/` ships 7 skills: `find-prompt`, 4 deterministic repository checks, `capability-audit`, and `prompt-audit`. `.agents/skills/` exposes the library to other agent hosts without maintaining a second routing table. `hooks/` ships 2 `PreToolUse` safety scripts. Keep the catalogs, adapters, routing cases, and scripts synchronized; test scripts against real input before documenting them as working.
 
 ## Common Tasks
 

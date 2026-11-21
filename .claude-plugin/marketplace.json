@@ -8,7 +8,7 @@
   "plugins": [
     {
       "name": "claude-code-prompts",
-      "description": "Routes Claude Code tasks to focused prompts and adds deterministic documentation, skill, release, safety, and capability-audit workflows.",
+      "description": "Routes Claude Code tasks to focused prompts and adds deterministic documentation, prompt, skill, release, safety, and capability-audit workflows.",
       "source": ".",
       "category": "development",
       "tags": ["prompts", "agent-skills", "research", "mcp", "quality"],

@@ -4,7 +4,7 @@ Regression protection for the `find-prompt` routing table — the thing every au
 
 ## What's here
 
-- `cases/find-prompt-routing.jsonl` — 20 realistic tasks, one drawn from most rows of the routing table in `.claude/skills/find-prompt/SKILL.md`, each with the file that row should resolve to.
+- `cases/find-prompt-routing.jsonl` — 22 realistic tasks, one drawn from most rows of the routing table in `.claude/skills/find-prompt/SKILL.md`, each with the file that row should resolve to.
 - `run_routing_eval.py` — runs two tiers:
   1. **Static** (always runs, no dependencies): confirms every case's `expected_specialist` file actually exists. This is the failure mode that happens in practice — a prompt gets renamed or archived and the routing table isn't updated to match. Catches it deterministically, in under a second, with no API cost.
   2. **Live** (runs only if `ANTHROPIC_API_KEY` is set): sends each task to `claude-haiku-4-5` with the routing table as context and checks whether the model's answer matches the expected file. This is the actual trigger-accuracy measurement — static tier alone can't catch "routes to a file that exists but is the wrong one."

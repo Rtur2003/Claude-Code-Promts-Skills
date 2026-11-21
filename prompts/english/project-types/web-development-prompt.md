@@ -336,17 +336,6 @@ For complex web delivery:
 3. Use MCP for live repo/CI/issue state and external platform truth.
 4. Verify rapidly changing framework/platform behavior from trusted web sources.
 
-## Remember
-
-Web development is iterative. Start with a working version, then optimize:
-1. Make it work
-2. Make it right
-3. Make it fast
-
-Prioritize user experience above all else.
-
----
-
 ## Modern Web Tooling Quick Reference
 
 Verify current versions before pinning — the web ecosystem moves fast.
@@ -515,3 +504,14 @@ Bundle size:
   {statusMessage}
 </div>
 ```
+
+## Remember
+
+Web development is iterative. Start with a working version, then optimize:
+1. Make it work
+2. Make it right
+3. Make it fast
+
+Prioritize user experience above all else.
+
+---

@@ -362,19 +362,6 @@ When optimizing game performance:
 4. **Validate**: Confirm improvement with benchmarks
 5. **Iterate**: Repeat until targets met on lowest-spec target hardware
 
-## Remember
-
-Game development is uniquely demanding — code runs 30-60+ times per second under strict time budgets:
-- **Frame budget is king**: Every millisecond matters
-- **Feel over correctness**: Responsive controls beat physical accuracy
-- **Profile before optimizing**: Measure, don't guess
-- **Playtest relentlessly**: Fun cannot be unit tested
-- **Ship iteratively**: A playable prototype beats a perfect design document
-
-Build games that players can't put down.
-
----
-
 ## Modern Game Development Quick Reference
 
 ### Recommended Tools by Engine
@@ -407,3 +394,16 @@ OLD → NEW:
 ├── Waterfall design → Rapid prototyping + playtesting
 └── Platform-specific code → Abstraction layers + input remapping
 ```
+
+## Remember
+
+Game development is uniquely demanding — code runs 30-60+ times per second under strict time budgets:
+- **Frame budget is king**: Every millisecond matters
+- **Feel over correctness**: Responsive controls beat physical accuracy
+- **Profile before optimizing**: Measure, don't guess
+- **Playtest relentlessly**: Fun cannot be unit tested
+- **Ship iteratively**: A playable prototype beats a perfect design document
+
+Build games that players can't put down.
+
+---

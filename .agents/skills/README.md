@@ -8,5 +8,6 @@ Adapters and mirrored deterministic skills for agent hosts that discover `.agent
 - [Changelog from Commits](changelog-from-commits/SKILL.md)
 - [Documentation Link Audit](doc-link-audit/SKILL.md)
 - [Skill Audit](skill-audit/SKILL.md)
+- [Prompt Audit](prompt-audit/SKILL.md)
 
 The canonical Claude Code implementations live in [`.claude/skills/`](../../.claude/skills/). Do not maintain a second routing table here.

@@ -30,8 +30,19 @@ if [ -n "${SCAN_EXCLUDE:-}" ]; then
   FILES="$(printf '%s\n' "$FILES" | grep -Ev "$SCAN_EXCLUDE" || true)"
 fi
 
-# 1. Unresolved merge conflict markers
-CONFLICTS="$(printf '%s\n' "$FILES" | xargs -r grep -lE '^(<<<<<<<|=======|>>>>>>>)( |$)' 2>/dev/null || true)"
+# 1. Unresolved merge conflict markers (ignore marker examples in fenced code blocks)
+CONFLICTS=""
+while IFS= read -r f; do
+  [ -f "$f" ] || continue
+  if awk '
+    /^```|^~~~/ { fenced = !fenced; next }
+    !fenced && /^(<<<<<<<|=======|>>>>>>>)([[:space:]]|$)/ { found=1 }
+    END { exit(found ? 0 : 1) }
+  ' "$f"; then
+    CONFLICTS="${CONFLICTS}${CONFLICTS:+
+}${f}"
+  fi
+done <<< "$FILES"
 if [ -n "$CONFLICTS" ]; then
   report "CONFLICT MARKERS:"
   printf '%s\n' "$CONFLICTS" | sed 's/^/  /'
@@ -56,8 +67,25 @@ if [ -n "$DEBUG" ]; then
 fi
 
 # 4. Untracked TODO/FIXME with no ticket reference (heuristic: no #NNN or [A-Z]+-[0-9]+ nearby)
-UNTRACKED_TODOS="$(printf '%s\n' "$FILES" | xargs -r grep -nE '(TODO|FIXME|XXX)(:|\s)' 2>/dev/null \
-  | grep -vE '(TODO|FIXME|XXX)[^\n]*(#[0-9]+|[A-Z]{2,}-[0-9]+)' || true)"
+UNTRACKED_TODOS=""
+while IFS= read -r f; do
+  [ -f "$f" ] || continue
+  case "$f" in
+    *.js|*.jsx|*.ts|*.tsx|*.py|*.go|*.rb|*.rs|*.java|*.c|*.cc|*.cpp|*.h|*.hpp|*.sh|*.bash|*.zsh)
+      matches="$(awk '
+        /^```|^~~~/ { fenced = !fenced; next }
+        !fenced && /(TODO|FIXME|XXX)(:|\s)/ && $0 !~ /(#[0-9]+|[A-Z]{2,}-[0-9]+)/ {
+          print FNR ":" $0
+        }
+      ' "$f")"
+      if [ -n "$matches" ]; then
+        UNTRACKED_TODOS="${UNTRACKED_TODOS}${UNTRACKED_TODOS:+
+}${f}
+${matches}"
+      fi
+      ;;
+  esac
+done <<< "$FILES"
 if [ -n "$UNTRACKED_TODOS" ]; then
   report "UNTRACKED TODO/FIXME (no ticket ref):"
   printf '%s\n' "$UNTRACKED_TODOS" | sed 's/^/  /' | head -30
